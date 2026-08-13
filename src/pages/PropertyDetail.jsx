@@ -219,18 +219,36 @@ const PropertyDetail = () => {
             <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 h-full min-h-[400px] flex flex-col">
               <h3 className="text-xl font-bold text-charcoal-900 mb-4">Location Map</h3>
               {property.mapUrl ? (
-                <div className="flex-grow rounded-lg overflow-hidden w-full h-[300px]">
-                  <iframe
-                    src={property.mapUrl}
-                    width="100%"
-                    height="100%"
-                    style={{ border: 0 }}
-                    allowFullScreen=""
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                    title="Location Map"
-                  ></iframe>
-                </div>
+                (property.mapUrl.includes('embed') || property.mapUrl.includes('<iframe')) ? (
+                  <div className="flex-grow rounded-lg overflow-hidden w-full h-[300px]">
+                    <iframe
+                      src={property.mapUrl.match(/src="([^"]+)"/)?.[1] || property.mapUrl}
+                      width="100%"
+                      height="100%"
+                      style={{ border: 0 }}
+                      allowFullScreen=""
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      title="Location Map"
+                    ></iframe>
+                  </div>
+                ) : (
+                  <div className="flex-grow rounded-lg bg-gray-50 border border-gray-100 flex flex-col items-center justify-center min-h-[300px] p-6 text-center">
+                    <div className="w-16 h-16 bg-primary-50 rounded-full flex items-center justify-center mb-4">
+                      <MapPin size={32} className="text-primary-600" />
+                    </div>
+                    <h4 className="text-lg font-bold text-charcoal-900 mb-2">Location Available</h4>
+                    <p className="text-sm text-gray-500 mb-6">Click below to view the exact property location on Google Maps.</p>
+                    <a 
+                      href={property.mapUrl} 
+                      target="_blank" 
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-2 bg-primary-900 text-white px-6 py-3 rounded-lg font-bold hover:bg-primary-800 transition-colors shadow-lg"
+                    >
+                      <MapPin size={18} /> View on Google Maps
+                    </a>
+                  </div>
+                )
               ) : (
                 <div className="flex-grow rounded-lg bg-gray-100 flex items-center justify-center min-h-[300px]">
                   <p className="text-gray-500 font-medium flex flex-col items-center gap-2">
