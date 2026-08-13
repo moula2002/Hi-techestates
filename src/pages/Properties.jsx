@@ -1,109 +1,218 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import PropertyCard from '../components/property/PropertyCard';
-import { properties, locations, propertyTypes, budgetRanges } from '../data/properties';
-import { Filter } from 'lucide-react';
+import { properties, locations, propertyTypes, bhkOptions, budgetRanges, rentalBudgetRanges, furnishOptions, statusOptions } from '../data/properties';
+import { ChevronRight, ChevronLeft, Filter } from 'lucide-react';
 
 const Properties = () => {
+  const { search } = useLocation();
+  const queryParams = new URLSearchParams(search);
+
   const [filter, setFilter] = useState({
-    location: '',
-    type: '',
-    status: '',
+    location: queryParams.get('location') || '',
+    type: queryParams.get('type') || 'All Type',
+    bhk: queryParams.get('bhk') || '',
+    budget: queryParams.get('budget') || '',
+    status: 'All', // Sale/Rent
+    furnishing: '',
   });
 
-  // Simple client-side filtering
+  const [showFilters, setShowFilters] = useState(false);
+
+  // Client-side filtering logic
   const filteredProperties = properties.filter(p => {
     if (filter.location && p.location !== filter.location) return false;
-    if (filter.type && p.type !== filter.type) return false;
-    if (filter.status && p.status !== filter.status) return false;
+    if (filter.type !== 'All Type' && filter.type !== '' && p.type !== filter.type) return false;
+    if (filter.bhk && `${p.bhk} BHK` !== filter.bhk && (filter.bhk !== '4+ BHK' || p.bhk < 4)) return false;
+    if (filter.status !== 'All' && p.status !== filter.status) return false;
+    if (filter.furnishing && p.furnishing !== filter.furnishing) return false;
+    
+    // Simplistic Budget Filter (for mockup purposes)
+    if (filter.budget) {
+      if (filter.budget === 'Below 50 Lacs' && (!p.price.includes('Lacs') || parseInt(p.price.replace(/\D/g, '')) > 50)) return false;
+      if (filter.budget.includes('Cr') && p.price.includes('Lacs')) return false;
+    }
+
     return true;
   });
 
-  return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Hero Banner */}
-      <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 flex flex-col justify-center items-center overflow-hidden mb-12">
-        <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-charcoal-900/70 z-10"></div>
-          <img
-            src="/assets/images/img-18.jpg"
-            alt="Our Properties"
-            className="w-full h-full object-cover"
-          />
-        </div>
-        <div className="relative z-20 text-center px-4 max-w-4xl mx-auto">
-          <p className="text-primary-500 font-bold tracking-widest uppercase mb-4 text-sm">Find Your Next Home</p>
-          <h1 className="text-4xl md:text-6xl font-black text-white mb-6 font-serif">Properties</h1>
-          <div className="w-24 h-1.5 bg-primary-500 mx-auto rounded-full mb-8"></div>
-          <p className="text-lg md:text-xl text-gray-200 leading-relaxed drop-shadow-md">
-            Discover our hand-picked selection of premium properties.
-          </p>
-        </div>
-      </section>
+  const allPropertyTypes = ['All Type', ...propertyTypes];
+  const allStatus = ['All', ...statusOptions];
 
+  return (
+    <div className="min-h-screen bg-gray-50 pt-24 font-sans pb-20">
+      <Helmet>
+        <title>Properties for Sale & Rent in Bangalore | Hi-Tech Estates</title>
+        <meta name="description" content="Browse the best properties for sale and rent in Bangalore. Use our advanced filters to find your perfect home or investment." />
+      </Helmet>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Filter Bar */}
-        <div className="mb-10">
-          
-          <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col md:flex-row gap-4 items-center">
-            <div className="flex items-center gap-2 text-charcoal-900 font-bold w-full md:w-auto px-4 border-r border-gray-100">
-              <Filter size={20} className="text-primary-500" />
-              Filters
+        {/* Header / Breadcrumbs */}
+        <div className="mb-8 flex justify-between items-end" data-aos="fade-up">
+          <div>
+            <h1 className="text-3xl font-bold text-charcoal-900 mb-2">Properties</h1>
+            <div className="text-sm text-gray-500 font-medium">
+              Home / Properties
             </div>
-            
-            <select 
-              className="w-full md:w-auto flex-1 p-3 bg-gray-50 rounded-lg outline-none focus:ring-2 focus:ring-primary-500 font-medium"
-              value={filter.status}
-              onChange={(e) => setFilter({...filter, status: e.target.value})}
-            >
-              <option value="">Any Status (Buy/Rent)</option>
-              <option value="For Sale">For Sale</option>
-              <option value="For Rent">For Rent</option>
-            </select>
-
-            <select 
-              className="w-full md:w-auto flex-1 p-3 bg-gray-50 rounded-lg outline-none focus:ring-2 focus:ring-primary-500 font-medium"
-              value={filter.location}
-              onChange={(e) => setFilter({...filter, location: e.target.value})}
-            >
-              <option value="">Any Location</option>
-              {locations.map(loc => <option key={loc} value={loc}>{loc}</option>)}
-            </select>
-
-            <select 
-              className="w-full md:w-auto flex-1 p-3 bg-gray-50 rounded-lg outline-none focus:ring-2 focus:ring-primary-500 font-medium"
-              value={filter.type}
-              onChange={(e) => setFilter({...filter, type: e.target.value})}
-            >
-              <option value="">Any Property Type</option>
-              {propertyTypes.map(type => <option key={type} value={type}>{type}</option>)}
-            </select>
           </div>
+          <button 
+            className="lg:hidden p-2 bg-white border border-gray-200 rounded text-charcoal-900 font-bold flex gap-2 items-center"
+            onClick={() => setShowFilters(!showFilters)}
+          >
+            <Filter size={18} /> Filters
+          </button>
         </div>
 
-        {/* Results */}
-        <div className="mb-6 flex justify-between items-center text-sm font-bold text-gray-500">
-          <span>Showing {filteredProperties.length} properties</span>
-        </div>
+        <div className="flex flex-col lg:flex-row gap-8">
+          {/* Left Sidebar Filters */}
+          <div className={`w-full lg:w-1/4 ${showFilters ? 'block' : 'hidden lg:block'}`} data-aos="fade-right">
+            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="font-bold text-charcoal-900 text-lg">Filters</h3>
+                <button 
+                  onClick={() => setFilter({location: '', type: 'All Type', bhk: '', budget: '', status: 'All', furnishing: ''})}
+                  className="text-xs text-primary-600 font-bold hover:underline"
+                >
+                  Clear All
+                </button>
+              </div>
 
-        {filteredProperties.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredProperties.map((property) => (
-              <PropertyCard key={property.id} property={property} />
-            ))}
+              {/* Status (Buy/Rent) */}
+              <div className="mb-6">
+                <div className="flex p-1 bg-gray-100 rounded-lg">
+                  {allStatus.map(status => (
+                    <button
+                      key={status}
+                      className={`flex-1 py-1.5 text-xs font-bold rounded-md transition-colors ${filter.status === status ? 'bg-white shadow-sm text-primary-900' : 'text-charcoal-600'}`}
+                      onClick={() => setFilter({...filter, status})}
+                    >
+                      {status}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Location */}
+              <div className="mb-6">
+                <label className="block text-xs font-bold text-charcoal-600 uppercase mb-2">Location</label>
+                <select 
+                  className="w-full p-2.5 border border-gray-200 rounded text-sm focus:outline-none focus:border-primary-500 bg-gray-50"
+                  value={filter.location}
+                  onChange={(e) => setFilter({...filter, location: e.target.value})}
+                >
+                  <option value="">Any Location</option>
+                  {locations.map(loc => <option key={loc} value={loc}>{loc}</option>)}
+                </select>
+              </div>
+
+              {/* Property Type */}
+              <div className="mb-6">
+                <label className="block text-xs font-bold text-charcoal-600 uppercase mb-2">Property Type</label>
+                <div className="space-y-2">
+                  {allPropertyTypes.map((type) => (
+                    <label key={type} className="flex items-center gap-3 cursor-pointer group">
+                      <input 
+                        type="radio" 
+                        name="propertyType" 
+                        value={type}
+                        checked={filter.type === type}
+                        onChange={(e) => setFilter({...filter, type: e.target.value})}
+                        className="w-4 h-4 text-primary-900 focus:ring-primary-900 border-gray-300"
+                      />
+                      <span className={`text-sm ${filter.type === type ? 'font-bold text-charcoal-900' : 'text-charcoal-600 group-hover:text-charcoal-900'}`}>{type}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* BHK */}
+              <div className="mb-6">
+                <label className="block text-xs font-bold text-charcoal-600 uppercase mb-2">BHK</label>
+                <select 
+                  className="w-full p-2.5 border border-gray-200 rounded text-sm focus:outline-none focus:border-primary-500 bg-gray-50"
+                  value={filter.bhk}
+                  onChange={(e) => setFilter({...filter, bhk: e.target.value})}
+                >
+                  <option value="">Any BHK</option>
+                  {bhkOptions.map(bhk => <option key={bhk} value={bhk}>{bhk}</option>)}
+                </select>
+              </div>
+
+              {/* Budget */}
+              <div className="mb-6">
+                <label className="block text-xs font-bold text-charcoal-600 uppercase mb-2">Budget</label>
+                <select 
+                  className="w-full p-2.5 border border-gray-200 rounded text-sm focus:outline-none focus:border-primary-500 bg-gray-50"
+                  value={filter.budget}
+                  onChange={(e) => setFilter({...filter, budget: e.target.value})}
+                >
+                  <option value="">Any Budget</option>
+                  {(filter.status === 'For Rent' || filter.status === 'For Lease' ? rentalBudgetRanges : budgetRanges).map(budget => (
+                    <option key={budget} value={budget}>{budget}</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Furnishing */}
+              <div className="mb-6">
+                <label className="block text-xs font-bold text-charcoal-600 uppercase mb-2">Furnishing</label>
+                <select 
+                  className="w-full p-2.5 border border-gray-200 rounded text-sm focus:outline-none focus:border-primary-500 bg-gray-50"
+                  value={filter.furnishing}
+                  onChange={(e) => setFilter({...filter, furnishing: e.target.value})}
+                >
+                  <option value="">Any Furnishing</option>
+                  {furnishOptions.map(f => <option key={f} value={f}>{f}</option>)}
+                </select>
+              </div>
+
+            </div>
           </div>
-        ) : (
-          <div className="bg-white p-12 text-center rounded-2xl shadow-sm border border-gray-100">
-            <h3 className="text-2xl font-bold text-charcoal-900 mb-2">No properties found</h3>
-            <p className="text-charcoal-600">Try adjusting your filters to find what you're looking for.</p>
-            <button 
-              onClick={() => setFilter({location:'', type:'', status:''})}
-              className="mt-6 px-6 py-2 bg-primary-500 text-white rounded-lg font-bold hover:bg-primary-600 transition-colors"
-            >
-              Clear Filters
-            </button>
+
+          {/* Right Side Results */}
+          <div className="w-full lg:w-3/4">
+            <div className="mb-4 flex justify-between items-center text-sm font-medium text-gray-500">
+              <span>Showing {filteredProperties.length} results</span>
+            </div>
+
+            {filteredProperties.length > 0 ? (
+              <>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+                  {filteredProperties.map((property, idx) => (
+                    <div key={property.id} data-aos="fade-up" data-aos-delay={(idx % 6) * 100}>
+                      <PropertyCard property={property} />
+                    </div>
+                  ))}
+                </div>
+                
+                {/* Pagination */}
+                {filteredProperties.length > 6 && (
+                  <div className="mt-12 flex justify-center items-center gap-2">
+                    <button className="w-10 h-10 flex items-center justify-center rounded border border-gray-300 text-charcoal-900 hover:bg-gray-100 disabled:opacity-50" disabled>
+                      <ChevronLeft size={16} />
+                    </button>
+                    <button className="w-10 h-10 flex items-center justify-center rounded bg-primary-900 text-white font-bold">1</button>
+                    <button className="w-auto px-4 h-10 flex items-center justify-center rounded border border-gray-300 text-charcoal-900 hover:bg-gray-100 text-sm font-bold gap-1">
+                      Next <ChevronRight size={16} />
+                    </button>
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="bg-white p-12 text-center rounded-lg shadow-sm border border-gray-100 flex flex-col items-center justify-center min-h-[400px]">
+                <h3 className="text-2xl font-bold text-charcoal-900 mb-3">No properties found</h3>
+                <p className="text-gray-500 mb-6 max-w-md">We couldn't find any properties matching your current filters. Try adjusting them to see more results.</p>
+                <button 
+                  onClick={() => setFilter({location: '', type: 'All Type', bhk: '', budget: '', status: 'All', furnishing: ''})}
+                  className="px-6 py-2 bg-primary-900 text-white font-bold rounded hover:bg-primary-800 transition-colors"
+                >
+                  Clear All Filters
+                </button>
+              </div>
+            )}
           </div>
-        )}
+        </div>
       </div>
     </div>
   );

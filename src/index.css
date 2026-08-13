@@ -1,33 +1,33 @@
 @import "tailwindcss";
 
 @theme {
-  --color-charcoal-50: #f6f7f9;
-  --color-charcoal-100: #ecedf1;
-  --color-charcoal-200: #d5d9e1;
-  --color-charcoal-300: #b1b9c8;
-  --color-charcoal-400: #8893a9;
-  --color-charcoal-500: #69758f;
-  --color-charcoal-600: #535c75;
-  --color-charcoal-700: #434a5f;
-  --color-charcoal-800: #393e50;
-  --color-charcoal-900: #333644;
-  --color-charcoal-950: #22242c;
+  --color-charcoal-50: #f8fafc;
+  --color-charcoal-100: #f1f5f9;
+  --color-charcoal-200: #e2e8f0;
+  --color-charcoal-300: #cbd5e1;
+  --color-charcoal-400: #94a3b8;
+  --color-charcoal-500: #64748b;
+  --color-charcoal-600: #475569;
+  --color-charcoal-700: #334155;
+  --color-charcoal-800: #1e293b;
+  --color-charcoal-900: #0f172a;
+  --color-charcoal-950: #020617;
 
-  /* Deep Blue based on Logo */
-  --color-primary-50: #f0f7fe;
-  --color-primary-100: #e0eefd;
-  --color-primary-200: #b9dffa;
-  --color-primary-300: #7cc3f6;
-  --color-primary-400: #37a3f0;
-  --color-primary-500: #0a88d6;
-  --color-primary-600: #026bb4;
-  --color-primary-700: #035693;
-  --color-primary-800: #064a7c;
-  --color-primary-900: #0a4c86; /* Logo Deep Blue Match */
-  --color-primary-950: #072a4d;
-  
-  --font-sans: 'Inter', sans-serif;
-  --font-serif: 'Playfair Display', serif;
+  /* Deep Blue based on Mockup */
+  --color-primary-50: #f0f6fc;
+  --color-primary-100: #dceaf8;
+  --color-primary-200: #bedcf3;
+  --color-primary-300: #93c5ec;
+  --color-primary-400: #60a5e2;
+  --color-primary-500: #3b82d6;
+  --color-primary-600: #2563c0;
+  --color-primary-700: #1e4f9a;
+  --color-primary-800: #1e427d;
+  --color-primary-900: #082a5c; /* Main dark blue */
+  --color-primary-950: #051a3d;
+
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-serif: 'Playfair Display', serif; /* Use logo font for headings */
 
   --animate-fade-in-up: fade-in-up 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   --animate-slow-zoom: slow-zoom 20s linear infinite alternate;
@@ -38,6 +38,7 @@
     opacity: 0;
     transform: translateY(30px);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0);
@@ -48,17 +49,27 @@
   0% {
     transform: scale(1);
   }
+
   100% {
     transform: scale(1.1);
   }
 }
 
 @layer base {
-  body {
-    @apply bg-white text-charcoal-900 font-sans antialiased selection:bg-primary-500 selection:text-white;
+  html {
+    scroll-behavior: smooth;
   }
-  
-  h1, h2, h3, h4, h5, h6 {
+
+  body {
+    @apply bg-[#f0f8ff] text-charcoal-900 font-sans antialiased selection:bg-primary-500 selection:text-white;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply font-serif;
   }
 }

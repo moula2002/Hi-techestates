@@ -13,8 +13,11 @@ export const properties = [
     facing: "East",
     parking: "2 Covered",
     image: "/assets/images/img-1.jpg",
-    features: ["Swimming Pool", "Gymnasium", "24/7 Security", "Club House"],
-    featured: true
+    video: "https://www.youtube.com/embed/dQw4w9WgXcQ", // Placeholder
+    mapUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3889.3090605990263!2d77.59546021535496!3d12.887858990911048!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae153e30095879%3A0xc3f8373b8dfdc1ea!2sBannerghatta%20Road!5e0!3m2!1sen!2sin!4v1689617300000!5m2!1sen!2sin",
+    features: ["Swimming Pool", "Gymnasium", "24/7 Security", "Club House", "Power Backup"],
+    featured: true,
+    furnishing: "Semi-furnished"
   },
   {
     id: 2,
@@ -30,8 +33,11 @@ export const properties = [
     facing: "North",
     parking: "4 Reserved",
     image: "/assets/images/img-2.jpg",
+    video: null,
+    mapUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3889.8732156828556!2d77.6593539153545!3d12.846505990938634!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae6c888d3d98fb%3A0x6b69b596dbdc3e48!2sElectronic%20City!5e0!3m2!1sen!2sin!4v1689617300000!5m2!1sen!2sin",
     features: ["Central AC", "Power Backup", "Cafeteria", "Conference Rooms"],
-    featured: true
+    featured: true,
+    furnishing: "Fully-furnished"
   },
   {
     id: 3,
@@ -47,8 +53,11 @@ export const properties = [
     facing: "North-East",
     parking: "3 Covered",
     image: "/assets/images/img-3.jpg",
-    features: ["Private Garden", "Home Theater", "Servant Room", "Smart Home"],
-    featured: true
+    video: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    mapUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.625841444158!2d77.62002301535544!3d12.93175899088191!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae144e59074bf1%3A0x28634e062638f32!2sKoramangala!5e0!3m2!1sen!2sin!4v1689617300000!5m2!1sen!2sin",
+    features: ["Private Garden", "Home Theater", "Servant Room", "Smart Home", "Private Pool"],
+    featured: true,
+    furnishing: "Unfurnished"
   },
   {
     id: 4,
@@ -64,8 +73,11 @@ export const properties = [
     facing: "East",
     parking: "1 Covered",
     image: "/assets/images/img-4.jpg",
+    video: null,
+    mapUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.895123984606!2d77.58557341535528!3d12.91444999089279!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae1508db8c0dc1%3A0x1d37a78377abeb01!2sJ.%20P.%20Nagar!5e0!3m2!1sen!2sin!4v1689617300000!5m2!1sen!2sin",
     features: ["Modular Kitchen", "Wardrobes", "Balcony", "Power Backup"],
-    featured: false
+    featured: false,
+    furnishing: "Semi-furnished"
   },
   {
     id: 5,
@@ -81,8 +93,11 @@ export const properties = [
     facing: "East",
     parking: null,
     image: "/assets/images/img-5.jpg",
+    video: null,
+    mapUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3889.7042079075773!2d77.62534061535467!3d12.862304990928045!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae6b3e8c8b417d%3A0xc331e8c679a9cc71!2sBegur!5e0!3m2!1sen!2sin!4v1689617300000!5m2!1sen!2sin",
     features: ["Gated Community", "Water Connection", "Clear Title", "Park Facing"],
-    featured: false
+    featured: false,
+    furnishing: "Unfurnished"
   },
   {
     id: 6,
@@ -98,12 +113,18 @@ export const properties = [
     facing: "North",
     parking: "2 Covered",
     image: "/assets/images/img-6.jpg",
-    features: ["Private Terrace", "Jacuzzi", "Premium Fittings", "City View"],
-    featured: true
+    video: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    mapUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3889.378904791552!2d77.59600121535492!3d12.883161990914285!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae154784a958e1%3A0x6b6b77c3fb3c631c!2sHulimavu!5e0!3m2!1sen!2sin!4v1689617300000!5m2!1sen!2sin",
+    features: ["Private Terrace", "Jacuzzi", "Premium Fittings", "City View", "Smart Home"],
+    featured: true,
+    furnishing: "Fully-furnished"
   }
 ];
 
 export const locations = ["Bannerghatta Road", "Koramangala", "JP Nagar", "Electronic City", "Begur", "Hulimavu", "Arakere", "Mylasandra"];
 export const propertyTypes = ["Apartment", "Villa", "Plot", "Commercial", "Penthouse"];
 export const bhkOptions = ["1 BHK", "2 BHK", "3 BHK", "4+ BHK"];
-export const budgetRanges = ["Below 50 Lacs", "50 Lacs - 1 Cr", "1 Cr - 3 Cr", "Above 3 Cr", "Rent < 20K", "Rent 20K - 50K", "Rent > 50K"];
+export const budgetRanges = ["Below 50 Lacs", "50 Lacs - 1 Cr", "1 Cr - 3 Cr", "Above 3 Cr"];
+export const rentalBudgetRanges = ["Rent < 20K", "Rent 20K - 50K", "Rent > 50K"];
+export const furnishOptions = ["Fully-furnished", "Semi-furnished", "Unfurnished"];
+export const statusOptions = ["For Sale", "For Rent", "For Lease"];
