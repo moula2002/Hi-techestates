@@ -28,7 +28,7 @@ const Properties = () => {
     const fetchProperties = async () => {
       try {
         setLoading(true);
-        const response = await fetch('http://localhost:5000/api/properties');
+        const response = await fetch('https://hi-techserver.onrender.com/api/properties');
         if (!response.ok) throw new Error('Failed to fetch properties');
         const data = await response.json();
         
