@@ -13,9 +13,13 @@ const PropertyDetail = () => {
     const fetchProperty = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`https://hi-techserver.onrender.com/api/properties/${id}`);
-        if (!response.ok) throw new Error('Failed to fetch property');
-        const p = await response.json();
+        // Temporary fix: Fetch all properties (since this route exists on Render) and find the matching one
+        const response = await fetch(`https://hi-techserver.onrender.com/api/properties`);
+        if (!response.ok) throw new Error('Failed to fetch property list');
+        const properties = await response.json();
+        const p = properties.find(prop => (prop._id || prop.id) === id);
+        
+        if (!p) throw new Error('Property not found');
 
         const mappedProperty = {
           id: p._id || p.id,
