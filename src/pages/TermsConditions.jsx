@@ -65,9 +65,10 @@ const TermsConditions = () => {
               </p>
               <p className="mt-4 font-semibold text-charcoal-900">
                 Hi-Tech Estates & Interiors<br />
-                #45, 1st Main Road, JP Nagar 7th Phase,<br />
-                Bangalore - 560078<br />
-                Phone: +91 99000 00494
+                # 1&2, 1st Floor, 4th Main<br />
+                4th Cross, Arekere, B.G Road,<br />
+                Bangalore - 560076<br />
+                Phone: 080-4132 3523
               </p>
             </section>
           </div>

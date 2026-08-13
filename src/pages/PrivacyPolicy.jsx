@@ -18,7 +18,7 @@ const PrivacyPolicy = () => {
             <section>
               <h2 className="text-2xl font-bold text-charcoal-900 mb-4">1. Introduction</h2>
               <p>
-                Welcome to Hi-Tech Estates & Interiors ("we," "our," or "us"). We are committed to protecting your personal information and your right to privacy. If you have any questions or concerns about our policy, or our practices with regards to your personal information, please contact us at info@hitachestates.com.
+                Welcome to Hi-Tech Estates & Interiors ("we," "our," or "us"). We are committed to protecting your personal information and your right to privacy. If you have any questions or concerns about our policy, or our practices with regards to your personal information, please contact us at hitechestatesjj@gmail.com.
               </p>
             </section>
 
@@ -60,12 +60,13 @@ const PrivacyPolicy = () => {
             <section>
               <h2 className="text-2xl font-bold text-charcoal-900 mb-4">6. Contact Us</h2>
               <p>
-                If you have questions or comments about this policy, you may email us at <strong>info@hitachestates.com</strong> or by post to:
+                If you have questions or comments about this policy, you may email us at <strong>hitechestatesjj@gmail.com</strong> or by post to:
               </p>
               <p className="mt-4 font-semibold text-charcoal-900">
                 Hi-Tech Estates & Interiors<br />
-                #45, 1st Main Road, JP Nagar 7th Phase,<br />
-                Bangalore - 560078
+                # 1&2, 1st Floor, 4th Main<br />
+                4th Cross, Arekere, B.G Road,<br />
+                Bangalore - 560076
               </p>
             </section>
           </div>

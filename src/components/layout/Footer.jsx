@@ -112,17 +112,20 @@ const Footer = () => {
             <ul className="space-y-4">
               <li className="flex items-start gap-3">
                 <MapPin className="text-gray-300 shrink-0 mt-1" size={18} />
-                <span className="text-sm text-gray-300">#45, 1st Main Road, JP Nagar 7th Phase,<br />Bangalore - 560078</span>
+                <span className="text-sm text-gray-300"># 1&2, 1st Floor, 4th Main<br />4th Cross, Arekere, B.G Road,<br />Bangalore - 560076</span>
               </li>
               <li className="flex items-start gap-3">
                 <Phone className="text-gray-300 shrink-0 mt-1" size={18} />
                 <div className="flex flex-col">
-                  <a href="tel:+919900000494" className="text-sm text-gray-300 hover:text-white">+91 99000 00494</a>
+                  <a href="tel:08041323523" className="text-sm text-gray-300 hover:text-white">080-4132 3523</a>
                 </div>
               </li>
-              <li className="flex items-center gap-3">
-                <Mail className="text-gray-300 shrink-0" size={18} />
-                <a href="mailto:info@hitachestates.com" className="text-sm text-gray-300 hover:text-white">info@hitachestates.com</a>
+              <li className="flex items-start gap-3">
+                <Mail className="text-gray-300 shrink-0 mt-1" size={18} />
+                <div className="flex flex-col">
+                  <a href="mailto:hitechestatesjj@gmail.com" className="text-sm text-gray-300 hover:text-white">hitechestatesjj@gmail.com</a>
+                  <a href="mailto:hitechinteriorsjj@gmail.com" className="text-sm text-gray-300 hover:text-white mt-1">hitechinteriorsjj@gmail.com</a>
+                </div>
               </li>
             </ul>
           </div>

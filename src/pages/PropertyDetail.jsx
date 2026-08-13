@@ -1,23 +1,68 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { properties } from '../data/properties';
-import { MapPin, BedDouble, Bath, Square, Compass, Car, CheckCircle, Phone, ArrowLeft } from 'lucide-react';
+import { MapPin, BedDouble, Bath, Square, Compass, Car, CheckCircle, Phone, ArrowLeft, Loader2 } from 'lucide-react';
 
 const PropertyDetail = () => {
   const { id } = useParams();
   const [property, setProperty] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const found = properties.find(p => p.id === parseInt(id));
-    setProperty(found);
-    window.scrollTo(0, 0);
+    const fetchProperty = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(`https://hi-techserver.onrender.com/api/properties/${id}`);
+        if (!response.ok) throw new Error('Failed to fetch property');
+        const p = await response.json();
+
+        const mappedProperty = {
+          id: p._id || p.id,
+          title: p.title,
+          location: p.location?.area || p.location?.city || '',
+          city: p.location?.city || '',
+          type: p.type,
+          status: p.purpose === 'Sale' ? 'For Sale' : (p.purpose === 'Rent' ? 'For Rent' : p.purpose),
+          price: p.pricing?.price || '',
+          bhk: p.specifications?.bedrooms || null,
+          bathrooms: p.specifications?.bathrooms || null,
+          area: p.specifications?.totalArea || p.specifications?.builtUpArea || '',
+          facing: p.specifications?.facing || '',
+          parking: p.specifications?.parkingSpaces || '',
+          image: p.images?.featured || "",
+          video: p.images?.videoUrl || null,
+          features: p.amenities || [],
+          featured: p.highlights?.featuredProperty || false,
+          furnishing: p.specifications?.furnishing || "",
+          description: p.description?.full || p.description?.short || "",
+          mapUrl: p.location?.googleMapLink || ""
+        };
+        setProperty(mappedProperty);
+      } catch (err) {
+        console.error("Error fetching property:", err);
+        setError("Failed to load property details.");
+      } finally {
+        setLoading(false);
+        window.scrollTo(0, 0);
+      }
+    };
+    fetchProperty();
   }, [id]);
 
-  if (!property) {
+  if (loading) {
     return (
       <div className="min-h-screen pt-32 pb-20 flex flex-col items-center justify-center bg-gray-50">
-        <h2 className="text-2xl font-bold text-charcoal-900 mb-4">Property Not Found</h2>
+        <Loader2 className="w-12 h-12 text-primary-900 animate-spin mb-4" />
+        <h2 className="text-xl font-bold text-charcoal-900">Loading Property Details...</h2>
+      </div>
+    );
+  }
+
+  if (error || !property) {
+    return (
+      <div className="min-h-screen pt-32 pb-20 flex flex-col items-center justify-center bg-gray-50">
+        <h2 className="text-2xl font-bold text-charcoal-900 mb-4">{error || "Property Not Found"}</h2>
         <Link to="/properties" className="px-6 py-2 bg-primary-900 text-white rounded font-bold hover:bg-primary-800 transition-colors">
           Back to Properties
         </Link>
@@ -27,7 +72,7 @@ const PropertyDetail = () => {
 
   const handleWhatsApp = () => {
     const message = `Hi, I'm interested in the property: ${property.title} (${property.price}) located at ${property.location}. Could you provide more details?`;
-    window.open(`https://wa.me/919900000494?text=${encodeURIComponent(message)}`, '_blank');
+    window.open(`https://wa.me/918041323523?text=${encodeURIComponent(message)}`, '_blank');
   };
 
   return (
@@ -37,11 +82,11 @@ const PropertyDetail = () => {
         <meta name="description" content={`Check out this ${property.type} at ${property.location}. ${property.price}. Find more details and schedule a site visit.`} />
       </Helmet>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
+
         {/* Breadcrumb */}
         <div className="mb-6 flex items-center gap-2 text-sm font-medium text-gray-500">
-          <Link to="/" className="hover:text-primary-900 transition-colors">Home</Link> / 
-          <Link to="/properties" className="hover:text-primary-900 transition-colors">Properties</Link> / 
+          <Link to="/" className="hover:text-primary-900 transition-colors">Home</Link> /
+          <Link to="/properties" className="hover:text-primary-900 transition-colors">Properties</Link> /
           <span className="text-charcoal-900 truncate">{property.title}</span>
         </div>
 
@@ -68,8 +113,8 @@ const PropertyDetail = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10">
           <div className="lg:col-span-2 h-[400px] md:h-[500px] rounded-xl overflow-hidden shadow-md">
             {property.video ? (
-              <iframe 
-                src={property.video} 
+              <iframe
+                src={property.video}
                 title="Property Video"
                 className="w-full h-full object-cover border-0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -79,51 +124,51 @@ const PropertyDetail = () => {
               <img src={property.image} alt={property.title} className="w-full h-full object-cover" />
             )}
           </div>
-          
+
           <div className="bg-white p-6 rounded-xl shadow-md border border-gray-100 flex flex-col">
             <h3 className="text-xl font-bold text-charcoal-900 mb-6 border-b pb-4">Key Information</h3>
-            
+
             <div className="grid grid-cols-2 gap-y-6 gap-x-4 flex-grow">
               {property.bhk && (
                 <div>
-                  <p className="text-xs text-gray-500 font-bold uppercase mb-1 flex items-center gap-1"><BedDouble size={14}/> Bedrooms</p>
+                  <p className="text-xs text-gray-500 font-bold uppercase mb-1 flex items-center gap-1"><BedDouble size={14} /> Bedrooms</p>
                   <p className="font-bold text-charcoal-900">{property.bhk} BHK</p>
                 </div>
               )}
               {property.bathrooms && (
                 <div>
-                  <p className="text-xs text-gray-500 font-bold uppercase mb-1 flex items-center gap-1"><Bath size={14}/> Bathrooms</p>
+                  <p className="text-xs text-gray-500 font-bold uppercase mb-1 flex items-center gap-1"><Bath size={14} /> Bathrooms</p>
                   <p className="font-bold text-charcoal-900">{property.bathrooms}</p>
                 </div>
               )}
               {property.area && (
                 <div>
-                  <p className="text-xs text-gray-500 font-bold uppercase mb-1 flex items-center gap-1"><Square size={14}/> Built-up Area</p>
+                  <p className="text-xs text-gray-500 font-bold uppercase mb-1 flex items-center gap-1"><Square size={14} /> Built-up Area</p>
                   <p className="font-bold text-charcoal-900">{property.area}</p>
                 </div>
               )}
               {property.facing && (
                 <div>
-                  <p className="text-xs text-gray-500 font-bold uppercase mb-1 flex items-center gap-1"><Compass size={14}/> Facing</p>
+                  <p className="text-xs text-gray-500 font-bold uppercase mb-1 flex items-center gap-1"><Compass size={14} /> Facing</p>
                   <p className="font-bold text-charcoal-900">{property.facing}</p>
                 </div>
               )}
               {property.parking && (
                 <div>
-                  <p className="text-xs text-gray-500 font-bold uppercase mb-1 flex items-center gap-1"><Car size={14}/> Parking</p>
+                  <p className="text-xs text-gray-500 font-bold uppercase mb-1 flex items-center gap-1"><Car size={14} /> Parking</p>
                   <p className="font-bold text-charcoal-900">{property.parking}</p>
                 </div>
               )}
               {property.furnishing && (
                 <div>
-                  <p className="text-xs text-gray-500 font-bold uppercase mb-1 flex items-center gap-1"><CheckCircle size={14}/> Furnishing</p>
+                  <p className="text-xs text-gray-500 font-bold uppercase mb-1 flex items-center gap-1"><CheckCircle size={14} /> Furnishing</p>
                   <p className="font-bold text-charcoal-900">{property.furnishing}</p>
                 </div>
               )}
             </div>
 
             <div className="mt-8 space-y-3">
-              <button 
+              <button
                 onClick={handleWhatsApp}
                 className="w-full bg-[#25D366] text-white font-bold py-3 px-4 rounded hover:bg-[#1ebd5a] transition-colors flex items-center justify-center gap-2 shadow-lg"
               >
@@ -132,8 +177,8 @@ const PropertyDetail = () => {
                 </svg>
                 WhatsApp Us
               </button>
-              <a 
-                href="tel:+919900000494"
+              <a
+                href="tel:08041323523"
                 className="w-full bg-charcoal-900 text-white font-bold py-3 px-4 rounded hover:bg-charcoal-800 transition-colors flex items-center justify-center gap-2"
               >
                 <Phone size={20} />
@@ -148,11 +193,8 @@ const PropertyDetail = () => {
           <div className="lg:col-span-2 space-y-8">
             <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100">
               <h3 className="text-2xl font-bold text-charcoal-900 mb-4">Property Description</h3>
-              <p className="text-gray-600 leading-relaxed mb-4">
-                This beautiful {property.type.toLowerCase()} located in the heart of {property.location} offers a perfect blend of luxury and comfort. Designed with modern architecture and premium fittings, it ensures a superior lifestyle for you and your family.
-              </p>
-              <p className="text-gray-600 leading-relaxed">
-                Enjoy excellent connectivity to major IT hubs, educational institutions, and hospitals. The property is well-ventilated, Vaastu compliant, and comes with state-of-the-art amenities.
+              <p className="text-gray-600 leading-relaxed mb-4 whitespace-pre-line">
+                {property.description || `This beautiful ${property.type?.toLowerCase() || 'property'} located in the heart of ${property.location} offers a perfect blend of luxury and comfort. Designed with modern architecture and premium fittings, it ensures a superior lifestyle for you and your family.\n\nEnjoy excellent connectivity to major IT hubs, educational institutions, and hospitals. The property is well-ventilated, Vaastu compliant, and comes with state-of-the-art amenities.`}
               </p>
             </div>
 
@@ -174,13 +216,13 @@ const PropertyDetail = () => {
               <h3 className="text-xl font-bold text-charcoal-900 mb-4">Location Map</h3>
               {property.mapUrl ? (
                 <div className="flex-grow rounded-lg overflow-hidden w-full h-[300px]">
-                  <iframe 
-                    src={property.mapUrl} 
-                    width="100%" 
-                    height="100%" 
-                    style={{border:0}} 
-                    allowFullScreen="" 
-                    loading="lazy" 
+                  <iframe
+                    src={property.mapUrl}
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    allowFullScreen=""
+                    loading="lazy"
                     referrerPolicy="no-referrer-when-downgrade"
                     title="Location Map"
                   ></iframe>

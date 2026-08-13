@@ -68,8 +68,9 @@ const Contact = () => {
                 <div>
                   <h4 className="font-bold text-charcoal-900 mb-1">Address</h4>
                   <p className="text-charcoal-600 text-sm leading-relaxed">
-                    123, Mettur Road,<br />
-                    Erode, Tamil Nadu - 638001
+                    # 1&2, 1st Floor, 4th Main<br />
+                    4th Cross, Arekere, B.G Road,<br />
+                    Bangalore - 560076
                   </p>
                 </div>
               </div>
@@ -81,8 +82,7 @@ const Contact = () => {
                 <div>
                   <h4 className="font-bold text-charcoal-900 mb-1">Phone</h4>
                   <p className="text-charcoal-600 text-sm leading-relaxed">
-                    +91 12345 67890<br />
-                    +91 98765 43210
+                    080-4132 3523
                   </p>
                 </div>
               </div>
@@ -94,7 +94,8 @@ const Contact = () => {
                 <div>
                   <h4 className="font-bold text-charcoal-900 mb-1">Email</h4>
                   <p className="text-charcoal-600 text-sm leading-relaxed">
-                    info@hitachestates.com
+                    hitechestatesjj@gmail.com<br />
+                    hitechinteriorsjj@gmail.com
                   </p>
                 </div>
               </div>

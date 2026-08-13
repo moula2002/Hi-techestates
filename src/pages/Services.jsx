@@ -53,7 +53,7 @@ const Services = () => {
                   {service.desc}
                 </p>
                 <div className="mt-auto">
-                  <a href="https://wa.me/919900000494" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-primary-600 font-bold text-sm hover:text-primary-900 transition-colors group/link">
+                  <a href="https://wa.me/918041323523" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-primary-600 font-bold text-sm hover:text-primary-900 transition-colors group/link">
                     Enquire Now <ArrowRight size={16} className="group-hover/link:translate-x-1 transition-transform" />
                   </a>
                 </div>

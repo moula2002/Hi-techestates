@@ -362,7 +362,7 @@ const Home = () => {
                   </div>
                   <div>
                     <label className="block text-sm font-bold text-charcoal-700 mb-2">Phone Number *</label>
-                    <input type="tel" required className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition-colors" placeholder="+91 99000 00000" />
+                    <input type="tel" required className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition-colors" placeholder="080-4132 3523" />
                   </div>
                 </div>
 

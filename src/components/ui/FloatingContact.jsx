@@ -5,7 +5,7 @@ const FloatingContact = () => {
   return (
     <div className="fixed bottom-6 right-6 z-50 flex flex-col gap-4">
       <a
-        href="tel:+919900000494"
+        href="tel:08041323523"
         className="w-14 h-14 md:w-16 md:h-16 bg-charcoal-900 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-primary-500 transition-all hover:scale-110 group relative"
         aria-label="Call Us"
       >
@@ -16,7 +16,7 @@ const FloatingContact = () => {
       </a>
 
       <a
-        href="https://wa.me/919900000494"
+        href="https://wa.me/918041323523"
         target="_blank"
         rel="noreferrer"
         className="w-14 h-14 md:w-16 md:h-16 bg-[#25D366] text-white rounded-full flex items-center justify-center shadow-lg hover:bg-[#1ebd5a] transition-all hover:scale-110 group relative"
