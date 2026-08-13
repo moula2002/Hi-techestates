@@ -1,13 +1,52 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, CheckCircle, Search, Building2, Users, Trophy, MapPin, Star, ChevronRight } from 'lucide-react';
 import PropertyCard from '../components/property/PropertyCard';
-import { properties, locations, propertyTypes, bhkOptions, budgetRanges } from '../data/properties';
+import { locations, propertyTypes, bhkOptions, budgetRanges } from '../data/properties';
 
 const Home = () => {
   const navigate = useNavigate();
-  
+
+  const [apiProperties, setApiProperties] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProperties = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/properties');
+        if (!response.ok) throw new Error('Failed to fetch properties');
+        const data = await response.json();
+        
+        const mappedProperties = (Array.isArray(data) ? data : []).map(p => ({
+          id: p.id,
+          title: p.title,
+          location: p.location?.area || p.location?.city || '',
+          city: p.location?.city || '',
+          type: p.type,
+          status: p.purpose === 'Sale' ? 'For Sale' : (p.purpose === 'Rent' ? 'For Rent' : p.purpose),
+          price: p.pricing?.price || '',
+          bhk: p.specifications?.bedrooms || null,
+          bathrooms: p.specifications?.bathrooms || null,
+          area: p.specifications?.totalArea || p.specifications?.builtUpArea || '',
+          facing: p.specifications?.facing || '',
+          parking: p.specifications?.parkingSpaces || '',
+          image: p.images?.featured || "",
+          video: p.images?.videoUrl || null,
+          features: p.amenities || [],
+          featured: p.highlights?.featuredProperty || false,
+          furnishing: p.specifications?.furnishing || ""
+        }));
+        setApiProperties(mappedProperties);
+      } catch (err) {
+        console.error("Error fetching properties:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProperties();
+  }, []);
+
   // Search State
   const [searchParams, setSearchParams] = useState({
     location: '',
@@ -23,12 +62,12 @@ const Home = () => {
     if (searchParams.type) query.set('type', searchParams.type);
     if (searchParams.bhk) query.set('bhk', searchParams.bhk);
     if (searchParams.budget) query.set('budget', searchParams.budget);
-    
+
     navigate(`/properties?${query.toString()}`);
   };
 
-  const featuredProperties = properties.filter(p => p.featured).slice(0, 3);
-  const latestProperties = [...properties].reverse().slice(0, 3);
+  const featuredProperties = apiProperties.filter(p => p.featured).slice(0, 3);
+  const latestProperties = [...apiProperties].slice(0, 3); // Backend already sorts by newest first
 
   return (
     <div className="w-full font-sans">
@@ -57,7 +96,7 @@ const Home = () => {
             <p className="text-lg text-charcoal-700 mb-8 font-medium">
               Find a Property That Feels Like Home.
             </p>
-            
+
             {/* Quick Action Buttons */}
             <div className="flex flex-wrap gap-4 mb-8">
               {['Buy', 'Sell', 'Rent', 'Lease'].map((action) => (
@@ -75,10 +114,10 @@ const Home = () => {
         <div className="bg-white rounded-lg shadow-xl p-6 flex flex-col md:flex-row gap-4 items-end border border-gray-100">
           <div className="flex-1 w-full">
             <label className="block text-xs font-bold text-charcoal-600 uppercase mb-2">Location</label>
-            <select 
+            <select
               className="w-full p-3 border border-gray-200 rounded text-charcoal-700 focus:outline-none focus:border-primary-500 font-medium"
               value={searchParams.location}
-              onChange={(e) => setSearchParams({...searchParams, location: e.target.value})}
+              onChange={(e) => setSearchParams({ ...searchParams, location: e.target.value })}
             >
               <option value="">Any Location</option>
               {locations.map(loc => <option key={loc} value={loc}>{loc}</option>)}
@@ -86,10 +125,10 @@ const Home = () => {
           </div>
           <div className="flex-1 w-full">
             <label className="block text-xs font-bold text-charcoal-600 uppercase mb-2">Property Type</label>
-            <select 
+            <select
               className="w-full p-3 border border-gray-200 rounded text-charcoal-700 focus:outline-none focus:border-primary-500 font-medium"
               value={searchParams.type}
-              onChange={(e) => setSearchParams({...searchParams, type: e.target.value})}
+              onChange={(e) => setSearchParams({ ...searchParams, type: e.target.value })}
             >
               <option value="">Any Type</option>
               {propertyTypes.map(type => <option key={type} value={type}>{type}</option>)}
@@ -97,10 +136,10 @@ const Home = () => {
           </div>
           <div className="flex-1 w-full">
             <label className="block text-xs font-bold text-charcoal-600 uppercase mb-2">BHK</label>
-            <select 
+            <select
               className="w-full p-3 border border-gray-200 rounded text-charcoal-700 focus:outline-none focus:border-primary-500 font-medium"
               value={searchParams.bhk}
-              onChange={(e) => setSearchParams({...searchParams, bhk: e.target.value})}
+              onChange={(e) => setSearchParams({ ...searchParams, bhk: e.target.value })}
             >
               <option value="">Any BHK</option>
               {bhkOptions.map(bhk => <option key={bhk} value={bhk}>{bhk}</option>)}
@@ -108,17 +147,17 @@ const Home = () => {
           </div>
           <div className="flex-1 w-full">
             <label className="block text-xs font-bold text-charcoal-600 uppercase mb-2">Budget</label>
-            <select 
+            <select
               className="w-full p-3 border border-gray-200 rounded text-charcoal-700 focus:outline-none focus:border-primary-500 font-medium"
               value={searchParams.budget}
-              onChange={(e) => setSearchParams({...searchParams, budget: e.target.value})}
+              onChange={(e) => setSearchParams({ ...searchParams, budget: e.target.value })}
             >
               <option value="">Any Budget</option>
               {budgetRanges.map(budget => <option key={budget} value={budget}>{budget}</option>)}
             </select>
           </div>
           <div className="w-full md:w-auto">
-            <button 
+            <button
               onClick={handleSearch}
               className="w-full md:w-48 p-3 bg-primary-900 text-white font-bold rounded hover:bg-primary-800 transition-colors flex items-center justify-center gap-2 shadow-lg"
             >
@@ -176,9 +215,9 @@ const Home = () => {
             ].map((srv, idx) => (
               <div key={idx} className="bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-colors overflow-hidden flex flex-col group" data-aos="fade-up" data-aos-delay={idx * 100}>
                 <div className="h-40 overflow-hidden relative">
-                  <img 
-                    src={srv.img} 
-                    alt={srv.title} 
+                  <img
+                    src={srv.img}
+                    alt={srv.title}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     onError={(e) => { e.target.src = "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" }}
                   />
@@ -208,7 +247,7 @@ const Home = () => {
             <div className="flex-1" data-aos="fade-right">
               <h2 className="text-xl font-bold tracking-widest text-primary-600 uppercase mb-2">Our Advantage</h2>
               <h3 className="text-3xl font-black text-charcoal-900 mb-8 leading-tight">Why Choose Hi-Tech Estates</h3>
-              
+
               <div className="space-y-6">
                 {[
                   { icon: <CheckCircle className="text-primary-600" size={24} />, title: 'Quality Construction', desc: 'Uncompromising standards and premium materials in every project.' },
@@ -268,8 +307,8 @@ const Home = () => {
           <h3 className="text-3xl font-black text-charcoal-900 mb-12">Areas We Serve</h3>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {locations.map((loc, idx) => (
-              <Link 
-                key={loc} 
+              <Link
+                key={loc}
                 to={`/locality/${loc.toLowerCase().replace(/ /g, '-')}`}
                 className="group relative bg-white p-5 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden flex items-center justify-between"
                 data-aos="fade-up" data-aos-delay={(idx % 4) * 100}
@@ -292,13 +331,13 @@ const Home = () => {
       <section className="py-20 bg-white border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden flex flex-col lg:flex-row">
-            
+
             {/* Left Side: Image */}
             <div className="lg:w-5/12 relative hidden md:block" data-aos="fade-right">
               <div className="absolute inset-0 bg-primary-900/40 z-10"></div>
-              <img 
-                src="/assets/images/img-10.jpg" 
-                alt="Contact Us" 
+              <img
+                src="/assets/images/img-10.jpg"
+                alt="Contact Us"
                 className="w-full h-full object-cover"
                 onError={(e) => { e.target.src = "https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" }}
               />
@@ -314,7 +353,7 @@ const Home = () => {
                 <h2 className="text-xl font-bold tracking-widest text-primary-600 uppercase mb-2">Get In Touch</h2>
                 <h3 className="text-3xl font-black text-charcoal-900">Have Any Questions?</h3>
               </div>
-              
+
               <form className="space-y-6" onSubmit={(e) => { e.preventDefault(); alert('Message sent successfully!'); }}>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div>
@@ -326,7 +365,7 @@ const Home = () => {
                     <input type="tel" required className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition-colors" placeholder="+91 99000 00000" />
                   </div>
                 </div>
-                
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-bold text-charcoal-700 mb-2">Email Address</label>

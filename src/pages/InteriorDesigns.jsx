@@ -1,0 +1,154 @@
+import React, { useState, useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
+import { Link } from 'react-router-dom';
+import { Paintbrush, LayoutDashboard, Sofa, Ruler, ArrowRight, Star } from 'lucide-react';
+
+const InteriorDesigns = () => {
+  const [portfolio, setPortfolio] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchDesigns = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/interiordesigns');
+        if (!response.ok) throw new Error('Failed to fetch interior designs');
+        const data = await response.json();
+        
+        const mappedPortfolio = (Array.isArray(data) ? data : []).map(d => ({
+          id: d.id,
+          img: d.image,
+          title: d.title,
+          category: d.category
+        }));
+        
+        setPortfolio(mappedPortfolio);
+      } catch (err) {
+        console.error("Error fetching interior designs:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchDesigns();
+  }, []);
+
+  return (
+    <div className="min-h-screen bg-gray-50 font-sans pb-20 overflow-hidden">
+      <Helmet>
+        <title>Interior Designs | Hi-Tech Estates</title>
+        <meta name="description" content="Turnkey interior design services for residential and commercial spaces." />
+      </Helmet>
+      
+      {/* Cinematic Hero Section */}
+      <section className="relative h-[70vh] min-h-[600px] flex items-center justify-center pt-20">
+        <div className="absolute inset-0 z-0">
+          <img
+            src="/assets/images/img-7.jpg"
+            alt="Luxury Interior Design"
+            className="w-full h-full object-cover"
+            onError={(e) => { e.target.src = "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80" }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-charcoal-900 via-charcoal-900/60 to-charcoal-900/40"></div>
+          {/* White gradient at top so the dark transparent navbar is legible */}
+          <div className="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-white/90 via-white/50 to-transparent"></div>
+        </div>
+
+        <div data-aos="fade-up" 
+          className="relative z-10 text-center px-4 max-w-4xl text-white"
+        >
+          <div data-aos="fade-up" className="w-20 h-20 bg-primary-900/50 backdrop-blur-md rounded-full flex items-center justify-center mx-auto mb-8 border border-white/10">
+            <Paintbrush size={32} className="text-primary-400" />
+          </div>
+          <h2 data-aos="fade-up" className="text-xl font-bold tracking-widest text-primary-400 uppercase mb-4">
+            Hi-Tech Interiors
+          </h2>
+          <h1 data-aos="fade-up" className="text-5xl md:text-7xl font-black font-serif mb-6 leading-tight">
+            Crafting Spaces That <br />Inspire
+          </h1>
+          <p data-aos="fade-up" className="text-lg text-gray-300 max-w-2xl mx-auto mb-10">
+            Elevate your living and working environments with our bespoke, turnkey interior design solutions tailored to your unique lifestyle.
+          </p>
+        </div>
+      </section>
+
+      {/* Our Process Timeline */}
+      <section className="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-16">
+          <h2 className="text-xl font-bold tracking-widest text-primary-600 uppercase mb-2">How We Work</h2>
+          <h3 className="text-3xl md:text-5xl font-black font-serif text-charcoal-900">The Design Process</h3>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          {[
+            { step: '01', icon: <Sofa size={28} />, title: 'Consultation', desc: 'Understanding your vision, lifestyle, and spatial requirements.' },
+            { step: '02', icon: <LayoutDashboard size={28} />, title: 'Concept & 3D', desc: 'Detailed layouts, material selection, and 3D visualizations.' },
+            { step: '03', icon: <Ruler size={28} />, title: 'Execution', desc: 'Precision craftsmanship and on-site project management.' },
+            { step: '04', icon: <Star size={28} />, title: 'Handover', desc: 'Final walkthrough and delivery of your dream space.' }
+          ].map((item, idx) => (
+            <div data-aos="fade-up" 
+              key={idx}
+              className="relative p-8 bg-white border border-gray-100 shadow-xl rounded-3xl hover:-translate-y-2 transition-transform duration-300 group"
+            >
+              <div className="text-6xl font-black text-gray-100 absolute top-4 right-6 group-hover:text-primary-100 transition-colors">{item.step}</div>
+              <div className="w-14 h-14 bg-primary-50 rounded-2xl flex items-center justify-center text-primary-600 mb-6 relative z-10 group-hover:bg-primary-600 group-hover:text-white transition-colors">
+                {item.icon}
+              </div>
+              <h4 className="text-xl font-bold mb-3 font-serif relative z-10 text-charcoal-900">{item.title}</h4>
+              <p className="text-gray-600 text-sm leading-relaxed relative z-10">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Design Portfolio */}
+      <section className="py-24 bg-white text-charcoal-900">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+            <div>
+              <h2 className="text-xl font-bold tracking-widest text-primary-600 uppercase mb-2">Our Portfolio</h2>
+              <h3 className="text-4xl md:text-5xl font-black font-serif">Featured Designs</h3>
+            </div>
+            <p className="max-w-md text-gray-500 font-medium">
+              Explore our curated gallery of residential and commercial spaces transformed by our expert design team.
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {portfolio.map((item, idx) => (
+              <div data-aos="fade-up" 
+                key={item.id}
+                className="group relative h-[400px] rounded-3xl overflow-hidden cursor-pointer shadow-lg"
+              >
+                <img 
+                  src={item.img} 
+                  alt={item.title} 
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-charcoal-900/90 via-charcoal-900/20 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="absolute bottom-0 left-0 right-0 p-8 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                  <div className="text-xs font-bold text-primary-400 uppercase tracking-widest mb-2">{item.category}</div>
+                  <h4 className="text-2xl font-bold text-white font-serif">{item.title}</h4>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-24 relative overflow-hidden">
+        <div className="absolute inset-0 z-0 opacity-20 pointer-events-none">
+           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary-600 rounded-full blur-[120px]"></div>
+        </div>
+        <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
+          <h2 className="text-4xl md:text-6xl font-black font-serif mb-6 text-charcoal-900">Ready to Transform Your Space?</h2>
+          <p className="text-xl text-gray-600 mb-10">Book a free consultation with our lead interior designers today.</p>
+          <Link to="/contact" className="inline-flex items-center justify-center gap-3 px-10 py-5 bg-primary-900 text-white font-black rounded-full hover:bg-primary-800 transition-colors shadow-xl hover:shadow-2xl text-lg">
+            Schedule a Consultation <ArrowRight size={24} className="text-white" />
+          </Link>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+export default InteriorDesigns;

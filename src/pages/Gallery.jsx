@@ -10,7 +10,7 @@ const Gallery = () => {
     { id: 2, category: 'Interiors', url: '/assets/gallery/gallery-2.jpg', alt: 'Luxury Living Room' },
     { id: 3, category: 'Commercial', url: '/assets/gallery/gallery-3.jpg', alt: 'Premium Office Space' },
     { id: 4, category: 'Exteriors', url: '/assets/gallery/gallery-4.jpg', alt: 'Contemporary Home' },
-    { id: 5, category: 'Interiors', url: '/assets/gallery/gallery-5.jpg', alt: 'Modern Kitchen' },
+    { id: 5, category: 'Interiors', url: '/assets/gallery/kitchen.jpg', alt: 'Modern Kitchen' },
     { id: 6, category: 'Ongoing Projects', url: '/assets/gallery/gallery-6.jpg', alt: 'Construction Site' },
     { id: 7, category: 'Interiors', url: '/assets/gallery/gallery-7.jpg', alt: 'Elegant Bathroom' },
     { id: 8, category: 'Commercial', url: '/assets/gallery/gallery-8.jpg', alt: 'Co-working Space' },

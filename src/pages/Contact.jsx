@@ -5,7 +5,7 @@ const Contact = () => {
   return (
     <div className="min-h-screen bg-gray-50 pt-24 font-sans pb-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
+
         {/* Header / Breadcrumbs */}
         <div className="mb-12 text-center md:text-left">
           <h1 className="text-3xl font-bold text-charcoal-900 mb-2">Contact Us</h1>
@@ -15,41 +15,41 @@ const Contact = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 bg-white p-8 rounded-lg shadow-sm border border-gray-100 mb-12">
-          
+
           {/* Left Column: Get In Touch Form */}
           <div>
             <h2 className="text-2xl font-bold text-charcoal-900 mb-8">Get In Touch</h2>
             <form className="space-y-6">
               <div>
-                <input 
-                  type="text" 
-                  placeholder="Your Name" 
+                <input
+                  type="text"
+                  placeholder="Your Name"
                   className="w-full p-4 border border-gray-200 rounded focus:outline-none focus:border-primary-900 text-charcoal-700 bg-gray-50"
                 />
               </div>
               <div>
-                <input 
-                  type="email" 
-                  placeholder="Your Email" 
+                <input
+                  type="email"
+                  placeholder="Your Email"
                   className="w-full p-4 border border-gray-200 rounded focus:outline-none focus:border-primary-900 text-charcoal-700 bg-gray-50"
                 />
               </div>
               <div>
-                <input 
-                  type="tel" 
-                  placeholder="Your Phone" 
+                <input
+                  type="tel"
+                  placeholder="Your Phone"
                   className="w-full p-4 border border-gray-200 rounded focus:outline-none focus:border-primary-900 text-charcoal-700 bg-gray-50"
                 />
               </div>
               <div>
-                <textarea 
-                  rows="4" 
-                  placeholder="Your Message" 
+                <textarea
+                  rows="4"
+                  placeholder="Your Message"
                   className="w-full p-4 border border-gray-200 rounded focus:outline-none focus:border-primary-900 text-charcoal-700 bg-gray-50"
                 ></textarea>
               </div>
-              <button 
-                type="button" 
+              <button
+                type="button"
                 className="w-full md:w-auto px-8 py-3 bg-primary-900 text-white font-bold rounded hover:bg-primary-800 transition-colors"
               >
                 Send Message
@@ -117,13 +117,13 @@ const Contact = () => {
 
         {/* Map Section */}
         <div className="w-full h-96 rounded-lg overflow-hidden shadow-sm border border-gray-100 bg-white">
-          <iframe 
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1m2!1m3!1d15632.610582697858!2d77.7051307!3d11.3347915!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba96f4a861d81eb%3A0x6fb2aeb7dbb69f6e!2sErode%2C%20Tamil%20Nadu!5e0!3m2!1sen!2sin!4v1716382023561!5m2!1sen!2sin" 
-            width="100%" 
-            height="100%" 
-            style={{ border: 0 }} 
-            allowFullScreen="" 
-            loading="lazy" 
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1m2!1m3!1d15632.610582697858!2d77.7051307!3d11.3347915!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba96f4a861d81eb%3A0x6fb2aeb7dbb69f6e!2sErode%2C%20Tamil%20Nadu!5e0!3m2!1sen!2sin!4v1716382023561!5m2!1sen!2sin"
+            width="100%"
+            height="100%"
+            style={{ border: 0 }}
+            allowFullScreen=""
+            loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
             title="Google Map"
           ></iframe>

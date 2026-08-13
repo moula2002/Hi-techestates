@@ -2,12 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import PropertyCard from '../components/property/PropertyCard';
-import { properties, locations, propertyTypes, bhkOptions, budgetRanges, rentalBudgetRanges, furnishOptions, statusOptions } from '../data/properties';
+import { locations, propertyTypes, bhkOptions, budgetRanges, rentalBudgetRanges, furnishOptions, statusOptions } from '../data/properties';
 import { ChevronRight, ChevronLeft, Filter } from 'lucide-react';
 
 const Properties = () => {
   const { search } = useLocation();
   const queryParams = new URLSearchParams(search);
+
+  const [apiProperties, setApiProperties] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const [filter, setFilter] = useState({
     location: queryParams.get('location') || '',
@@ -20,16 +24,68 @@ const Properties = () => {
 
   const [showFilters, setShowFilters] = useState(false);
 
+  useEffect(() => {
+    const fetchProperties = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('http://localhost:5000/api/properties');
+        if (!response.ok) throw new Error('Failed to fetch properties');
+        const data = await response.json();
+        
+        // Map backend schema to frontend structure so PropertyCard works without breaking
+        const mappedProperties = (Array.isArray(data) ? data : []).map(p => ({
+          id: p.id,
+          title: p.title,
+          location: p.location?.area || p.location?.city || '',
+          city: p.location?.city || '',
+          type: p.type,
+          status: p.purpose === 'Sale' ? 'For Sale' : (p.purpose === 'Rent' ? 'For Rent' : p.purpose),
+          price: p.pricing?.price || '',
+          bhk: p.specifications?.bedrooms || null,
+          bathrooms: p.specifications?.bathrooms || null,
+          area: p.specifications?.totalArea || p.specifications?.builtUpArea || '',
+          facing: p.specifications?.facing || '',
+          parking: p.specifications?.parkingSpaces || '',
+          image: p.images?.featured || "",
+          video: p.images?.videoUrl || null,
+          features: p.amenities || [],
+          featured: p.highlights?.featuredProperty || false,
+          furnishing: p.specifications?.furnishing || ""
+        }));
+        
+        setApiProperties(mappedProperties);
+        setError(null);
+      } catch (err) {
+        console.error("Error fetching properties:", err);
+        setError("Failed to load properties. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchProperties();
+  }, []);
+
   // Client-side filtering logic
-  const filteredProperties = properties.filter(p => {
+  const filteredProperties = apiProperties.filter(p => {
     if (filter.location && p.location !== filter.location) return false;
     if (filter.type !== 'All Type' && filter.type !== '' && p.type !== filter.type) return false;
-    if (filter.bhk && `${p.bhk} BHK` !== filter.bhk && (filter.bhk !== '4+ BHK' || p.bhk < 4)) return false;
+    
+    if (filter.bhk) {
+      const pBhkNum = parseInt(p.bhk);
+      if (filter.bhk === '4+ BHK') {
+        if (!pBhkNum || pBhkNum < 4) return false;
+      } else {
+        const filterBhkNum = parseInt(filter.bhk);
+        if (pBhkNum !== filterBhkNum) return false;
+      }
+    }
+
     if (filter.status !== 'All' && p.status !== filter.status) return false;
     if (filter.furnishing && p.furnishing !== filter.furnishing) return false;
     
     // Simplistic Budget Filter (for mockup purposes)
-    if (filter.budget) {
+    if (filter.budget && p.price) {
       if (filter.budget === 'Below 50 Lacs' && (!p.price.includes('Lacs') || parseInt(p.price.replace(/\D/g, '')) > 50)) return false;
       if (filter.budget.includes('Cr') && p.price.includes('Lacs')) return false;
     }
@@ -37,7 +93,10 @@ const Properties = () => {
     return true;
   });
 
-  const allPropertyTypes = ['All Type', ...propertyTypes];
+  // Combine static types with any new dynamic types from the API
+  const dynamicTypes = apiProperties.map(p => p.type).filter(Boolean);
+  const uniqueTypes = [...new Set([...propertyTypes, ...dynamicTypes])];
+  const allPropertyTypes = ['All Type', ...uniqueTypes];
   const allStatus = ['All', ...statusOptions];
 
   return (
@@ -176,7 +235,17 @@ const Properties = () => {
               <span>Showing {filteredProperties.length} results</span>
             </div>
 
-            {filteredProperties.length > 0 ? (
+            {loading ? (
+              <div className="bg-white p-12 text-center rounded-lg shadow-sm border border-gray-100 flex flex-col items-center justify-center min-h-[400px]">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-900 mb-4"></div>
+                <h3 className="text-xl font-bold text-charcoal-900">Loading properties...</h3>
+              </div>
+            ) : error ? (
+              <div className="bg-white p-12 text-center rounded-lg shadow-sm border border-gray-100 flex flex-col items-center justify-center min-h-[400px]">
+                <h3 className="text-xl font-bold text-red-600 mb-3">Error</h3>
+                <p className="text-gray-500">{error}</p>
+              </div>
+            ) : filteredProperties.length > 0 ? (
               <>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
                   {filteredProperties.map((property, idx) => (
