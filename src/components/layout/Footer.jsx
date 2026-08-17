@@ -60,7 +60,7 @@ const Footer = () => {
               <img
                 src={logoImg}
                 alt="Hi-Tech Estates Logo"
-                className="h-16 object-contain"
+                className="h-20 object-contain"
               />
             </div>
             <p className="text-sm text-gray-300 leading-relaxed max-w-sm">

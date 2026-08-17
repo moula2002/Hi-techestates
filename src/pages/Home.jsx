@@ -9,43 +9,64 @@ const Home = () => {
   const navigate = useNavigate();
 
   const [apiProperties, setApiProperties] = useState([]);
+  const [banners, setBanners] = useState([]);
+  const [currentBannerIdx, setCurrentBannerIdx] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchProperties = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch('https://hi-techserver.onrender.com/api/properties');
-        if (!response.ok) throw new Error('Failed to fetch properties');
-        const data = await response.json();
+        const [propRes, bannerRes] = await Promise.all([
+          fetch('https://hi-techserver.onrender.com/api/properties'),
+          fetch('https://hi-techserver.onrender.com/api/banners').catch(() => null)
+        ]);
         
-        const mappedProperties = (Array.isArray(data) ? data : []).map(p => ({
-          id: p.id,
-          title: p.title,
-          location: p.location?.area || p.location?.city || '',
-          city: p.location?.city || '',
-          type: p.type,
-          status: p.purpose === 'Sale' ? 'For Sale' : (p.purpose === 'Rent' ? 'For Rent' : p.purpose),
-          price: p.pricing?.price || '',
-          bhk: p.specifications?.bedrooms || null,
-          bathrooms: p.specifications?.bathrooms || null,
-          area: p.specifications?.totalArea || p.specifications?.builtUpArea || '',
-          facing: p.specifications?.facing || '',
-          parking: p.specifications?.parkingSpaces || '',
-          image: p.images?.featured || "",
-          video: p.images?.videoUrl || null,
-          features: p.amenities || [],
-          featured: p.highlights?.featuredProperty || false,
-          furnishing: p.specifications?.furnishing || ""
-        }));
-        setApiProperties(mappedProperties);
+        if (propRes.ok) {
+          const data = await propRes.json();
+          const mappedProperties = (Array.isArray(data) ? data : []).map(p => ({
+            id: p.id,
+            title: p.title,
+            location: p.location?.area || p.location?.city || '',
+            city: p.location?.city || '',
+            type: p.type,
+            status: p.purpose === 'Sale' ? 'For Sale' : (p.purpose === 'Rent' ? 'For Rent' : p.purpose),
+            price: p.pricing?.price || '',
+            bhk: p.specifications?.bedrooms || null,
+            bathrooms: p.specifications?.bathrooms || null,
+            area: p.specifications?.totalArea || p.specifications?.builtUpArea || '',
+            facing: p.specifications?.facing || '',
+            parking: p.specifications?.parkingSpaces || '',
+            image: p.images?.featured || "",
+            video: p.images?.videoUrl || null,
+            features: p.amenities || [],
+            featured: p.highlights?.featuredProperty || false,
+            furnishing: p.specifications?.furnishing || ""
+          }));
+          setApiProperties(mappedProperties);
+        }
+
+        if (bannerRes && bannerRes.ok) {
+          const bData = await bannerRes.json();
+          setBanners(Array.isArray(bData) ? bData : []);
+        }
       } catch (err) {
-        console.error("Error fetching properties:", err);
+        console.error("Error fetching data:", err);
       } finally {
         setLoading(false);
       }
     };
-    fetchProperties();
+    fetchData();
   }, []);
+
+  // Banner carousel logic
+  useEffect(() => {
+    if (banners.length > 1) {
+      const interval = setInterval(() => {
+        setCurrentBannerIdx(prev => (prev + 1) % banners.length);
+      }, 5000);
+      return () => clearInterval(interval);
+    }
+  }, [banners]);
 
   // Search State
   const [searchParams, setSearchParams] = useState({
@@ -78,11 +99,24 @@ const Home = () => {
       {/* 1. Hero Section */}
       <section className="relative h-[650px] flex items-center pt-20">
         <div className="absolute inset-0 z-0">
-          <img
-            src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2075&q=80"
-            alt="Modern Luxury Home"
-            className="w-full h-full object-cover"
-          />
+          {banners.length > 0 ? (
+            banners.map((banner, idx) => (
+              <img
+                key={banner.id}
+                src={banner.image}
+                alt="Banner"
+                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
+                  idx === currentBannerIdx ? 'opacity-100' : 'opacity-0'
+                }`}
+              />
+            ))
+          ) : (
+            <img
+              src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2075&q=80"
+              alt="Modern Luxury Home"
+              className="w-full h-full object-cover"
+            />
+          )}
           {/* Subtle gradient overlay to make text readable */}
           <div className="absolute inset-0 bg-gradient-to-r from-white/90 via-white/50 to-transparent"></div>
         </div>

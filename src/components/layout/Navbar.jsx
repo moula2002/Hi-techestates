@@ -45,7 +45,7 @@ const Navbar = () => {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white shadow-md py-3 border-b border-gray-200' : 'bg-transparent py-4'
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white shadow-md py-2 border-b border-gray-200' : 'bg-transparent py-4'
         }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -59,7 +59,7 @@ const Navbar = () => {
             <img
               src={logoImg}
               alt="Hi-Tech Estates Logo"
-              className="h-14 md:h-16 object-contain transition-all duration-300"
+              className={`${isScrolled ? 'h-12 md:h-14' : 'h-16 md:h-20'} object-contain transition-all duration-300`}
             />
           </Link>
 
