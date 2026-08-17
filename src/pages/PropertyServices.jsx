@@ -11,7 +11,7 @@ const PropertyServices = () => {
   useEffect(() => {
     const fetchProperties = async () => {
       try {
-        const response = await fetch('https://hi-techserver.onrender.com/api/properties');
+        const response = await fetch('https://hi-techserver-zd1d.onrender.com/api/properties');
         if (!response.ok) throw new Error('Failed to fetch properties');
         const data = await response.json();
         

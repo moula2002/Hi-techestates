@@ -14,7 +14,7 @@ const PropertyDetail = () => {
       try {
         setLoading(true);
         // Temporary fix: Fetch all properties (since this route exists on Render) and find the matching one
-        const response = await fetch(`https://hi-techserver.onrender.com/api/properties`);
+        const response = await fetch(`https://hi-techserver-zd1d.onrender.com/api/properties`);
         if (!response.ok) throw new Error('Failed to fetch property list');
         const properties = await response.json();
         const p = properties.find(prop => (prop._id || prop.id) === id);
@@ -40,7 +40,9 @@ const PropertyDetail = () => {
           featured: p.highlights?.featuredProperty || false,
           furnishing: p.specifications?.furnishing || "",
           description: p.description?.full || p.description?.short || "",
-          mapUrl: p.location?.googleMapLink || ""
+          mapUrl: p.location?.googleMapLink || "",
+          gallery: p.gallery || p.images?.gallery || [],
+          fullAddress: p.location?.fullAddress || ""
         };
         setProperty(mappedProperty);
       } catch (err) {
@@ -115,17 +117,35 @@ const PropertyDetail = () => {
 
         {/* Media Section */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10">
-          <div className="lg:col-span-2 h-[400px] md:h-[500px] rounded-xl overflow-hidden shadow-md">
-            {property.video ? (
-              <iframe
-                src={property.video}
-                title="Property Video"
-                className="w-full h-full object-cover border-0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              ></iframe>
-            ) : (
-              <img src={property.image} alt={property.title} className="w-full h-full object-cover" />
+          <div className="lg:col-span-2 flex flex-col gap-4">
+            <div className="h-[400px] md:h-[500px] rounded-xl overflow-hidden shadow-md w-full">
+              {property.video ? (
+                <iframe
+                  src={property.video}
+                  title="Property Video"
+                  className="w-full h-full object-cover border-0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                ></iframe>
+              ) : (
+                <img src={property.image} alt={property.title} className="w-full h-full object-cover" />
+              )}
+            </div>
+            
+            {/* Thumbnail Gallery Section */}
+            {property.gallery && property.gallery.length > 0 && (
+              <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-3">
+                {property.gallery.map((img, idx) => (
+                  <div key={idx} className="h-20 sm:h-24 md:h-28 rounded-xl overflow-hidden shadow-sm border border-gray-100">
+                    <img 
+                      src={img} 
+                      alt={`${property.title} Gallery ${idx + 1}`} 
+                      className="w-full h-full object-cover hover:scale-110 transition-transform duration-500 cursor-pointer" 
+                      onError={(e) => { e.target.src = "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" }}
+                    />
+                  </div>
+                ))}
+              </div>
             )}
           </div>
 
@@ -218,43 +238,32 @@ const PropertyDetail = () => {
           <div className="lg:col-span-1">
             <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 h-full min-h-[400px] flex flex-col">
               <h3 className="text-xl font-bold text-charcoal-900 mb-4">Location Map</h3>
-              {property.mapUrl ? (
-                (property.mapUrl.includes('embed') || property.mapUrl.includes('<iframe')) ? (
-                  <div className="flex-grow rounded-lg overflow-hidden w-full h-[300px]">
-                    <iframe
-                      src={property.mapUrl.match(/src="([^"]+)"/)?.[1] || property.mapUrl}
-                      width="100%"
-                      height="100%"
-                      style={{ border: 0 }}
-                      allowFullScreen=""
-                      loading="lazy"
-                      referrerPolicy="no-referrer-when-downgrade"
-                      title="Location Map"
-                    ></iframe>
-                  </div>
-                ) : (
-                  <div className="flex-grow rounded-lg bg-gray-50 border border-gray-100 flex flex-col items-center justify-center min-h-[300px] p-6 text-center">
-                    <div className="w-16 h-16 bg-primary-50 rounded-full flex items-center justify-center mb-4">
-                      <MapPin size={32} className="text-primary-600" />
-                    </div>
-                    <h4 className="text-lg font-bold text-charcoal-900 mb-2">Location Available</h4>
-                    <p className="text-sm text-gray-500 mb-6">Click below to view the exact property location on Google Maps.</p>
-                    <a 
-                      href={property.mapUrl} 
-                      target="_blank" 
-                      rel="noreferrer"
-                      className="inline-flex items-center gap-2 bg-primary-900 text-white px-6 py-3 rounded-lg font-bold hover:bg-primary-800 transition-colors shadow-lg"
-                    >
-                      <MapPin size={18} /> View on Google Maps
-                    </a>
-                  </div>
-                )
-              ) : (
-                <div className="flex-grow rounded-lg bg-gray-100 flex items-center justify-center min-h-[300px]">
-                  <p className="text-gray-500 font-medium flex flex-col items-center gap-2">
-                    <MapPin size={32} className="text-gray-400" />
-                    Map not available
-                  </p>
+              <div className="flex-grow rounded-lg overflow-hidden w-full h-[300px] relative bg-gray-100">
+                <iframe
+                  src={property.mapUrl && (property.mapUrl.includes('embed') || property.mapUrl.includes('<iframe')) 
+                    ? (property.mapUrl.match(/src="([^"]+)"/)?.[1] || property.mapUrl)
+                    : `https://maps.google.com/maps?q=${encodeURIComponent(property.fullAddress || (property.location + ', ' + property.city))}&t=&z=14&ie=UTF8&iwloc=&output=embed`}
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen=""
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="Location Map"
+                  className="absolute inset-0"
+                ></iframe>
+              </div>
+              
+              {property.mapUrl && !property.mapUrl.includes('embed') && !property.mapUrl.includes('<iframe') && (
+                <div className="mt-6 text-center">
+                  <a 
+                    href={property.mapUrl} 
+                    target="_blank" 
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-2 bg-primary-50 text-primary-900 px-6 py-3 rounded-lg font-bold hover:bg-primary-100 transition-colors w-full justify-center"
+                  >
+                    <MapPin size={18} /> Open in Google Maps App
+                  </a>
                 </div>
               )}
             </div>

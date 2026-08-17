@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowRight, CheckCircle, Search, Building2, Users, Trophy, MapPin, Star, ChevronRight } from 'lucide-react';
+import { ArrowRight, CheckCircle, Search, Building2, Users, Trophy, MapPin, Star, ChevronRight, Play } from 'lucide-react';
 import PropertyCard from '../components/property/PropertyCard';
-import { locations, propertyTypes, bhkOptions, budgetRanges } from '../data/properties';
+import { properties as defaultProperties, locations, propertyTypes, bhkOptions, budgetRanges } from '../data/properties';
+import aboutImage from '../assets/image.png';
 
 const Home = () => {
   const navigate = useNavigate();
 
   const [apiProperties, setApiProperties] = useState([]);
+  const [apiCategories, setApiCategories] = useState([]);
   const [banners, setBanners] = useState([]);
   const [currentBannerIdx, setCurrentBannerIdx] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -16,15 +18,16 @@ const Home = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [propRes, bannerRes] = await Promise.all([
-          fetch('https://hi-techserver.onrender.com/api/properties'),
-          fetch('https://hi-techserver.onrender.com/api/banners').catch(() => null)
+        const [propRes, bannerRes, catRes] = await Promise.all([
+          fetch('https://hi-techserver-zd1d.onrender.com/api/properties'),
+          fetch('https://hi-techserver-zd1d.onrender.com/api/banners').catch(() => null),
+          fetch('https://hi-techserver-zd1d.onrender.com/api/categories').catch(() => null)
         ]);
-        
+
         if (propRes.ok) {
           const data = await propRes.json();
           const mappedProperties = (Array.isArray(data) ? data : []).map(p => ({
-            id: p.id,
+            id: p._id || p.id,
             title: p.title,
             location: p.location?.area || p.location?.city || '',
             city: p.location?.city || '',
@@ -39,7 +42,7 @@ const Home = () => {
             image: p.images?.featured || "",
             video: p.images?.videoUrl || null,
             features: p.amenities || [],
-            featured: p.highlights?.featuredProperty || false,
+            featured: p.highlights?.featuredProperty || p.highlights?.premiumProperty || p.highlights?.hotProperty || p.featured || false,
             furnishing: p.specifications?.furnishing || ""
           }));
           setApiProperties(mappedProperties);
@@ -48,6 +51,10 @@ const Home = () => {
         if (bannerRes && bannerRes.ok) {
           const bData = await bannerRes.json();
           setBanners(Array.isArray(bData) ? bData : []);
+        }
+        if (catRes && catRes.ok) {
+          const cData = await catRes.json();
+          setApiCategories(Array.isArray(cData) ? cData : []);
         }
       } catch (err) {
         console.error("Error fetching data:", err);
@@ -87,8 +94,10 @@ const Home = () => {
     navigate(`/properties?${query.toString()}`);
   };
 
-  const featuredProperties = apiProperties.filter(p => p.featured).slice(0, 3);
-  const latestProperties = [...apiProperties].slice(0, 3); // Backend already sorts by newest first
+  // Use API properties if available, otherwise gracefully fallback to local data
+  const sourceProperties = apiProperties.length > 0 ? apiProperties : defaultProperties;
+  const featuredProperties = sourceProperties.filter(p => p.featured).slice(0, 3);
+  const latestProperties = [...sourceProperties].slice(0, 3);
 
   return (
     <div className="w-full font-sans">
@@ -99,32 +108,40 @@ const Home = () => {
       {/* 1. Hero Section */}
       <section className="relative h-[650px] flex items-center pt-20">
         <div className="absolute inset-0 z-0">
-          {banners.length > 0 ? (
+          {banners.length > 0 && (
             banners.map((banner, idx) => (
-              <img
-                key={banner.id}
-                src={banner.image}
-                alt="Banner"
-                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
-                  idx === currentBannerIdx ? 'opacity-100' : 'opacity-0'
-                }`}
-              />
+              banner.video ? (
+                <video
+                  key={banner.id}
+                  src={banner.video}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${idx === currentBannerIdx ? 'opacity-100 animate-slow-zoom' : 'opacity-0'
+                    }`}
+                />
+              ) : (
+                <img
+                  key={banner.id}
+                  src={banner.image}
+                  alt="Banner"
+                  className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 origin-center ${idx === currentBannerIdx ? 'opacity-100 animate-slow-zoom' : 'opacity-0 scale-100'
+                    }`}
+                />
+              )
             ))
-          ) : (
-            <img
-              src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2075&q=80"
-              alt="Modern Luxury Home"
-              className="w-full h-full object-cover"
-            />
           )}
-          {/* Subtle gradient overlay to make text readable */}
-          <div className="absolute inset-0 bg-gradient-to-r from-white/90 via-white/50 to-transparent"></div>
+          {/* Subtle gradient overlays to make text readable */}
+          <div className="absolute inset-0 bg-gradient-to-r from-white/70 via-white/30 to-transparent"></div>
+          {/* Top gradient specifically for Navbar and Logo visibility */}
+          <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-white/80 via-white/40 to-transparent"></div>
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
           <div className="max-w-xl" data-aos="fade-up">
-            <h2 className="text-xl font-bold tracking-widest text-primary-600 uppercase mb-2">Hi-Tech Estates</h2>
-            <h1 className="text-5xl md:text-6xl font-black text-charcoal-900 leading-tight mb-6">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-primary-900 uppercase mb-4 drop-shadow-sm">Hi-Tech Estates</h2>
+            <h1 className="text-3xl md:text-4xl font-black text-charcoal-900 leading-tight mb-6">
               Design Your <br />Dreams
             </h1>
             <p className="text-lg text-charcoal-700 mb-8 font-medium">
@@ -220,17 +237,80 @@ const Home = () => {
         </div>
       </section>
 
-      {/* 4. Latest Listings */}
-      <section className="py-20 bg-white border-t border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center" data-aos="fade-up">
-          <h2 className="text-xl font-bold tracking-widest text-primary-600 uppercase mb-2">New On Market</h2>
-          <h3 className="text-3xl font-black text-charcoal-900 mb-12">Latest Listings</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-10 text-left">
-            {latestProperties.map((property, idx) => (
-              <div key={property.id} data-aos="fade-up" data-aos-delay={idx * 100}>
-                <PropertyCard property={property} />
+      {/* 6.5 Property Categories UI Redesign */}
+      <section className="py-24 bg-white overflow-hidden relative">
+        {/* Subtle background circular glow */}
+        <div className="absolute left-[-10%] top-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#f0f7fb] rounded-full mix-blend-multiply filter blur-3xl opacity-70 z-0 pointer-events-none"></div>
+        
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="flex flex-col lg:flex-row gap-16 items-start">
+            
+            {/* Left Side: Typography */}
+            <div className="lg:w-[30%] pt-12" data-aos="fade-right">
+              <h2 className="text-4xl md:text-5xl font-sans text-charcoal-900 mb-3 leading-tight tracking-tight">
+                Residential<br />Properties
+              </h2>
+              <h3 className="text-3xl md:text-4xl text-gray-400 font-sans font-normal leading-tight">
+                In a good<br />locations
+              </h3>
+            </div>
+
+            {/* Right Side: Masonry Grid */}
+            <div className="lg:w-[70%] w-full">
+              <div className="columns-1 sm:columns-2 gap-8 space-y-8">
+                {(apiCategories.length > 0 ? apiCategories : propertyTypes.map(t => ({name: t}))).map((cat, idx) => {
+                  // Pre-defined heights for masonry stagger effect
+                  const heights = ['h-[320px]', 'h-[480px]', 'h-[400px]', 'h-[320px]', 'h-[380px]'];
+                  const cardHeight = heights[idx % heights.length];
+                  
+                  // Calculate exact, dynamic property count
+                  const exactCount = apiProperties.filter(p => {
+                    const pType = (p.type || '').toLowerCase();
+                    const cName = (cat.name || '').toLowerCase();
+                    return pType === cName || cName.includes(pType) || pType.includes(cName.replace(/s$/, ''));
+                  }).length;
+                  
+                  return (
+                    <Link
+                      key={cat.id || cat._id || cat.name}
+                      to={`/properties?category=${cat.slug || cat.name.toLowerCase()}`}
+                      className={`group relative block w-full overflow-hidden rounded-sm break-inside-avoid shadow-lg hover:shadow-2xl transition-all duration-500 ${cardHeight}`}
+                      data-aos="fade-up" data-aos-delay={idx * 100}
+                    >
+                      {/* Background Image */}
+                      <img 
+                        src={cat.image || 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'} 
+                        alt={cat.name} 
+                        className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                        onError={(e) => { e.target.src = "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" }}
+                      />
+                      
+                      {/* Gradient Overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-b from-charcoal-900/60 via-transparent to-charcoal-900/80 group-hover:via-charcoal-900/20 transition-colors duration-500"></div>
+                      
+                      {/* Content */}
+                      <div className="absolute inset-0 p-6 sm:p-8 flex flex-col justify-between text-white z-10">
+                        {/* Top: Property Count & Category Name */}
+                        <div>
+                          <p className="text-[11px] font-medium text-gray-200 mb-1.5 tracking-wider uppercase opacity-90">
+                            {exactCount} Properties
+                          </p>
+                          <h4 className="text-2xl sm:text-3xl font-normal tracking-wide text-white drop-shadow-sm">{cat.name}</h4>
+                        </div>
+                        
+                        {/* Bottom: More Details & Icon */}
+                        <div className="flex justify-between items-end opacity-90 group-hover:opacity-100 transition-opacity">
+                          <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-widest text-white/90">
+                            More Details
+                          </span>
+                          <Play size={20} strokeWidth={1.5} className="text-white drop-shadow-md group-hover:scale-110 transition-transform" />
+                        </div>
+                      </div>
+                    </Link>
+                  );
+                })}
               </div>
-            ))}
+            </div>
           </div>
         </div>
       </section>
@@ -274,6 +354,21 @@ const Home = () => {
         </div>
       </section>
 
+      {/* 4. Latest Listings */}
+      <section className="py-20 bg-white border-t border-gray-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center" data-aos="fade-up">
+          <h2 className="text-xl font-bold tracking-widest text-primary-600 uppercase mb-2">New On Market</h2>
+          <h3 className="text-3xl font-black text-charcoal-900 mb-12">Latest Listings</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-10 text-left">
+            {latestProperties.map((property, idx) => (
+              <div key={property.id} data-aos="fade-up" data-aos-delay={idx * 100}>
+                <PropertyCard property={property} />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* 6. Why Choose Us */}
       <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -300,10 +395,10 @@ const Home = () => {
             </div>
             <div className="flex-1" data-aos="fade-left">
               <img
-                src="/assets/images/img-11.jpg"
-                alt="About Building"
+                src={aboutImage}
+                alt="Tall Residential Building"
                 className="w-full h-[500px] object-cover rounded-2xl shadow-xl border-4 border-white"
-                onError={(e) => { e.target.src = "https://images.unsplash.com/photo-1570129477492-45c003edd2be?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" }}
+                onError={(e) => { e.target.src = "/assets/images/img-1.jpg" }}
               />
             </div>
           </div>
@@ -311,7 +406,7 @@ const Home = () => {
       </section>
 
       {/* 7. Client Testimonials */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center" data-aos="fade-up">
           <h2 className="text-xl font-bold tracking-widest text-primary-600 uppercase mb-2">Reviews</h2>
           <h3 className="text-3xl font-black text-charcoal-900 mb-12">Client Testimonials</h3>

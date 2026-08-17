@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { Target, Lightbulb, CheckCircle, MapPin, Building2, Star } from 'lucide-react';
 import { locations } from '../data/properties';
 import { Link } from 'react-router-dom';
+import aboutImage from '../assets/image.png';
 
 const About = () => {
   return (
@@ -26,13 +27,16 @@ const About = () => {
               <p className="text-charcoal-700 mb-6 leading-relaxed text-lg">
                 Hi-Tech Estates & Interiors is a premier real estate consultancy and interior design firm based in Bangalore. With over a decade of industry experience, we specialize in helping clients navigate the complex real estate market with ease and confidence.
               </p>
-              <p className="text-charcoal-700 mb-8 leading-relaxed text-lg">
+              <p className="text-charcoal-700 mb-6 leading-relaxed text-lg">
                 Whether you are buying your first home, looking for a lucrative investment, or designing your dream interior, our team of experts provides end-to-end solutions tailored to your unique needs.
+              </p>
+              <p className="text-charcoal-700 mb-8 leading-relaxed text-lg">
+                Our philosophy is built on transparency, innovation, and an unwavering commitment to quality. From conceptualizing modern living spaces to closing high-value commercial deals, we pride ourselves on delivering excellence and forging relationships that last generations.
               </p>
             </div>
             <div className="flex-1" data-aos="fade-left">
               <img
-                src="/assets/images/img-11.jpg"
+                src={aboutImage}
                 alt="Building"
                 className="w-full h-auto object-cover rounded-2xl shadow-xl border-4 border-white"
                 onError={(e) => { e.target.src = "https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" }}

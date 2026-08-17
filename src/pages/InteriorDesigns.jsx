@@ -10,7 +10,7 @@ const InteriorDesigns = () => {
   useEffect(() => {
     const fetchDesigns = async () => {
       try {
-        const response = await fetch('https://hi-techserver.onrender.com/api/interiordesigns');
+        const response = await fetch('https://hi-techserver-zd1d.onrender.com/api/interiordesigns');
         if (!response.ok) throw new Error('Failed to fetch interior designs');
         const data = await response.json();
         
