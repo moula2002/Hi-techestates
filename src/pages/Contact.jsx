@@ -256,7 +256,7 @@ const Contact = () => {
           <div className="absolute inset-0 bg-charcoal-950/5 group-hover:opacity-0 transition-opacity duration-700 pointer-events-none z-10"></div>
 
           <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1m2!1m3!1d15632.610582697858!2d77.7051307!3d11.3347915!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba96f4a861d81eb%3A0x6fb2aeb7dbb69f6e!2sErode%2C%20Tamil%20Nadu!5e0!3m2!1sen!2sin!4v1716382023561!5m2!1sen!2sin"
+            src="https://maps.google.com/maps?q=Arekere,%20B.G%20Road,%20Bangalore&t=&z=15&ie=UTF8&iwloc=&output=embed"
             width="100%"
             height="100%"
             style={{ border: 0 }}

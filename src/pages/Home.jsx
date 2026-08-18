@@ -446,41 +446,72 @@ const Home = () => {
         </div>
       </section>
 
-      {/* 8. Areas We Serve */}
-      <section className="py-20 bg-gray-50 border-t border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center" data-aos="fade-up">
-          <h2 className="text-xl font-bold tracking-widest text-primary-600 uppercase mb-2">Locations</h2>
-          <h3 className="text-3xl font-black text-charcoal-900 mb-12">Areas We Serve</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              { label: 'East Bangalore', image: 'https://images.unsplash.com/photo-1449844908441-8829872d2607?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' },
-              { label: 'West Bangalore', image: 'https://images.unsplash.com/photo-1519999482648-25049ddd37b1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' },
-              { label: 'North Bangalore', image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' },
-              { label: 'South Bangalore', image: 'https://images.unsplash.com/photo-1460317442991-0ec209397118?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' }
-            ].map((region, idx) => (
-              <Link
-                key={region.label}
-                to={`/properties?location=${region.label}`}
-                className="group relative h-[300px] rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500"
-                data-aos="fade-up" data-aos-delay={(idx % 4) * 100}
-              >
-                <img 
-                  src={region.image} 
-                  alt={region.label} 
-                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out" 
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-charcoal-900/90 via-charcoal-900/30 to-transparent"></div>
-                <div className="absolute inset-x-0 bottom-0 p-6 flex flex-col items-center text-center">
-                  <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white mb-3 group-hover:bg-primary-600 transition-colors duration-300 border border-white/30">
-                    <MapPin size={24} />
-                  </div>
-                  <h4 className="text-xl font-bold text-white tracking-wide">{region.label}</h4>
-                  <p className="text-sm text-gray-200 mt-2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 font-medium">
-                    View Properties
-                  </p>
-                </div>
-              </Link>
-            ))}
+      {/* 8. Areas We Serve (Redesigned from image) */}
+      <section className="py-24 bg-white overflow-hidden relative">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="flex flex-col lg:flex-row gap-8 items-start">
+            
+            {/* Left Side: Typography */}
+            <div className="lg:w-[25%] pt-4" data-aos="fade-right">
+              <h2 className="text-4xl md:text-5xl font-sans text-charcoal-900 mb-3 leading-tight tracking-tight">
+                Explore<br />Locations
+              </h2>
+              <p className="text-lg text-gray-500 font-sans font-normal leading-relaxed pr-4">
+                What the area has to offer and make a well-informed decision about your real estate investment.
+              </p>
+            </div>
+
+            {/* Right Side: Grid */}
+            <div className="lg:w-[75%] w-full">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {[
+                  { label: 'East Bangalore', image: 'https://images.unsplash.com/photo-1449844908441-8829872d2607?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80' },
+                  { label: 'West Bangalore', image: 'https://images.unsplash.com/photo-1519999482648-25049ddd37b1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80' },
+                  { label: 'North Bangalore', image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80' },
+                  { label: 'South Bangalore', image: 'https://images.unsplash.com/photo-1460317442991-0ec209397118?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80' }
+                ].map((region, idx) => {
+                  // Fallback count based on image if database has no properties matching the location yet
+                  const exactCount = apiProperties.filter(p => (p.location || '').toLowerCase() === region.label.toLowerCase()).length;
+                  const displayCount = exactCount > 0 ? exactCount : (idx === 0 ? 8 : idx === 1 ? 7 : idx === 2 ? 22 : 17);
+
+                  return (
+                    <Link
+                      key={region.label}
+                      to={`/properties?location=${region.label}`}
+                      className="group relative h-[280px] w-full overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 block"
+                      data-aos="fade-up" data-aos-delay={idx * 100}
+                    >
+                      {/* Background Image */}
+                      <img 
+                        src={region.image} 
+                        alt={region.label} 
+                        className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700 ease-out" 
+                      />
+                      
+                      {/* Dark Gradient Overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-b from-charcoal-900/60 via-transparent to-charcoal-900/80 group-hover:via-charcoal-900/30 transition-colors duration-500"></div>
+
+                      {/* Content */}
+                      <div className="absolute inset-0 p-4 flex flex-col justify-between z-10">
+                        {/* Top Content */}
+                        <div>
+                          <p className="text-[10px] font-medium text-gray-200 mb-1 tracking-wider opacity-90">{displayCount} Properties</p>
+                          <h4 className="text-xl font-normal text-white tracking-wide">{region.label}</h4>
+                        </div>
+                        
+                        {/* Bottom Content */}
+                        <div className="flex justify-between items-end opacity-90 group-hover:opacity-100 transition-opacity">
+                          <span className="text-[10px] font-semibold uppercase tracking-widest text-white/90">
+                            More<br/>Details
+                          </span>
+                          <Play size={20} strokeWidth={1.5} className="text-white group-hover:scale-110 transition-transform" />
+                        </div>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         </div>
       </section>
