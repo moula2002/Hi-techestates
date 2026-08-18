@@ -451,22 +451,34 @@ const Home = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center" data-aos="fade-up">
           <h2 className="text-xl font-bold tracking-widest text-primary-600 uppercase mb-2">Locations</h2>
           <h3 className="text-3xl font-black text-charcoal-900 mb-12">Areas We Serve</h3>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {locations.map((loc, idx) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              { label: 'East Bangalore', image: 'https://images.unsplash.com/photo-1449844908441-8829872d2607?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' },
+              { label: 'West Bangalore', image: 'https://images.unsplash.com/photo-1519999482648-25049ddd37b1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' },
+              { label: 'North Bangalore', image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' },
+              { label: 'South Bangalore', image: 'https://images.unsplash.com/photo-1460317442991-0ec209397118?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' }
+            ].map((region, idx) => (
               <Link
-                key={loc}
-                to={`/locality/${loc.toLowerCase().replace(/ /g, '-')}`}
-                className="group relative bg-white p-5 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden flex items-center justify-between"
+                key={region.label}
+                to={`/properties?location=${region.label}`}
+                className="group relative h-[300px] rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500"
                 data-aos="fade-up" data-aos-delay={(idx % 4) * 100}
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-primary-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div className="relative z-10 flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-primary-50 text-primary-600 flex items-center justify-center group-hover:bg-primary-600 group-hover:text-white transition-colors duration-300 shadow-inner">
-                    <MapPin size={18} />
+                <img 
+                  src={region.image} 
+                  alt={region.label} 
+                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out" 
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-charcoal-900/90 via-charcoal-900/30 to-transparent"></div>
+                <div className="absolute inset-x-0 bottom-0 p-6 flex flex-col items-center text-center">
+                  <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white mb-3 group-hover:bg-primary-600 transition-colors duration-300 border border-white/30">
+                    <MapPin size={24} />
                   </div>
-                  <span className="font-bold text-charcoal-800 group-hover:text-primary-900 transition-colors duration-300 text-sm sm:text-base">{loc}</span>
+                  <h4 className="text-xl font-bold text-white tracking-wide">{region.label}</h4>
+                  <p className="text-sm text-gray-200 mt-2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 font-medium">
+                    View Properties
+                  </p>
                 </div>
-                <ChevronRight size={18} className="text-gray-300 group-hover:text-primary-600 relative z-10 transform group-hover:translate-x-1 transition-all duration-300" />
               </Link>
             ))}
           </div>

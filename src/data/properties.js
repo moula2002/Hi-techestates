@@ -121,7 +121,7 @@ export const properties = [
   }
 ];
 
-export const locations = ["Bannerghatta Road", "Koramangala", "JP Nagar", "Electronic City", "Begur", "Hulimavu", "Arakere", "Mylasandra"];
+export const locations = ["East Bangalore", "West Bangalore", "North Bangalore", "South Bangalore"];
 export const propertyTypes = ["Apartment", "Villa", "Plot", "Commercial", "Penthouse"];
 export const bhkOptions = ["1 BHK", "2 BHK", "3 BHK", "4+ BHK"];
 export const budgetRanges = ["Below 50 Lacs", "50 Lacs - 1 Cr", "1 Cr - 3 Cr", "Above 3 Cr"];

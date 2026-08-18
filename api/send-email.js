@@ -7,14 +7,14 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { 
-      name = 'Not Provided', 
-      email = 'Not Provided', 
-      phone = 'Not Provided', 
-      interestedIn = 'Not Provided', 
-      message = 'No message provided',
-      formSource = 'Website Form' // e.g., 'Contact Page', 'Home Page'
-    } = req.body;
+    let { name, email, phone, interestedIn, message, formSource } = req.body;
+    
+    name = name || 'Not Provided';
+    email = email || 'Not Provided';
+    phone = phone || 'Not Provided';
+    interestedIn = interestedIn || 'Not Provided';
+    message = message || 'No message provided';
+    formSource = formSource || 'Website Form';
 
     // Check if SMTP credentials are still set to the dummy values or are missing
     if (!process.env.SMTP_USER || process.env.SMTP_USER === 'your_email@gmail.com' || !process.env.SMTP_PASS) {
