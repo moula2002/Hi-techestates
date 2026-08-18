@@ -48,8 +48,8 @@ export const useApiCache = (url, key, ttl = 3600000) => {
           console.warn('SessionStorage access failed', e);
         }
 
-        // 3. Fetch from API if no valid cache
-        const response = await fetch(url);
+        // 3. Fetch from API if no valid cache (bypass browser HTTP cache)
+        const response = await fetch(url, { cache: 'no-store' });
         if (!response.ok) throw new Error(`Failed to fetch from ${url}`);
         const result = await response.json();
 
