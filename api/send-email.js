@@ -117,6 +117,17 @@ export default async function handler(req, res) {
       html: htmlContent,
     });
 
+    // Save to Database simultaneously
+    try {
+      await fetch('https://hi-techserver-zd1d.onrender.com/api/enquiries', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, phone, message, interestedIn, formSource })
+      });
+    } catch (dbError) {
+      console.error('Failed to save enquiry to database:', dbError);
+    }
+
     return res.status(200).json({ success: true, message: 'Email sent successfully!' });
 
   } catch (error) {
