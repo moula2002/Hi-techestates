@@ -1,11 +1,18 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Target, Lightbulb, CheckCircle, MapPin, Building2, Star } from 'lucide-react';
-import { locations } from '../data/properties';
 import { Link } from 'react-router-dom';
 import aboutImage from '../assets/image.png';
+import { useApiCache } from '../hooks/useApiCache';
 
 const About = () => {
+  const { data: propertiesData } = useApiCache('https://hi-techserver-zd1d.onrender.com/api/properties', 'hi-tech-properties');
+  
+  const locations = React.useMemo(() => {
+    if (!propertiesData || !Array.isArray(propertiesData)) return [];
+    return [...new Set(propertiesData.map(p => p.location?.area || p.location?.city).filter(Boolean))].sort();
+  }, [propertiesData]);
+
   return (
     <div className="w-full font-sans bg-white pb-24">
       <Helmet>

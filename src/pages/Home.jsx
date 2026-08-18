@@ -3,15 +3,18 @@ import { Helmet } from 'react-helmet-async';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, CheckCircle, Search, Building2, Users, Trophy, MapPin, Star, ChevronRight, Play } from 'lucide-react';
 import PropertyCard from '../components/property/PropertyCard';
-import { properties as defaultProperties, locations, propertyTypes, bhkOptions, budgetRanges } from '../data/properties';
-import aboutImage from '../assets/image.png';
-import { useApiCache } from '../hooks/useApiCache';
 import { mapApiPropertyToClient } from '../utils/propertyMapper';
+import { useApiCache } from '../hooks/useApiCache';
+import aboutImage from '../assets/image.png';
 
 const Home = () => {
   const navigate = useNavigate();
 
   const [currentBannerIdx, setCurrentBannerIdx] = useState(0);
+
+  // Standard static ranges for filter UI
+  const bhkOptions = ['1 BHK', '2 BHK', '3 BHK', '4 BHK', '4+ BHK', '5 BHK', 'Villa', 'Plot'];
+  const budgetRanges = ['Below 50 Lacs', '50 Lacs - 1 Cr', '1 Cr - 2 Cr', '2 Cr - 5 Cr', 'Above 5 Cr'];
 
   const { data: propertiesData, loading: propsLoading } = useApiCache('https://hi-techserver-zd1d.onrender.com/api/properties', 'hi-tech-properties');
   const { data: bannersData, loading: bannersLoading } = useApiCache('https://hi-techserver-zd1d.onrender.com/api/banners', 'hi-tech-banners');
@@ -111,10 +114,13 @@ const Home = () => {
     navigate(`/properties?${query.toString()}`);
   };
 
-  // Use API properties if available, otherwise gracefully fallback to local data
-  const sourceProperties = apiProperties.length > 0 ? apiProperties : defaultProperties;
+  const sourceProperties = apiProperties;
   const featuredProperties = sourceProperties.filter(p => p.featured).slice(0, 3);
   const latestProperties = [...sourceProperties].slice(0, 3);
+
+  // Dynamically extract options from fetched properties
+  const dynamicLocations = [...new Set(apiProperties.map(p => p.location).filter(Boolean))].sort();
+  const dynamicPropertyTypes = [...new Set(apiProperties.map(p => p.type).filter(Boolean))].sort();
 
   return (
     <div className="w-full font-sans">
@@ -188,7 +194,7 @@ const Home = () => {
               onChange={(e) => setSearchParams({ ...searchParams, location: e.target.value })}
             >
               <option value="">Any Location</option>
-              {locations.map(loc => <option key={loc} value={loc}>{loc}</option>)}
+              {dynamicLocations.map(loc => <option key={loc} value={loc}>{loc}</option>)}
             </select>
           </div>
           <div className="flex-1 w-full">
@@ -199,7 +205,7 @@ const Home = () => {
               onChange={(e) => setSearchParams({ ...searchParams, type: e.target.value })}
             >
               <option value="">Any Type</option>
-              {propertyTypes.map(type => <option key={type} value={type}>{type}</option>)}
+              {dynamicPropertyTypes.map(type => <option key={type} value={type}>{type}</option>)}
             </select>
           </div>
           <div className="flex-1 w-full">
@@ -275,7 +281,7 @@ const Home = () => {
             {/* Right Side: Masonry Grid */}
             <div className="lg:w-[70%] w-full">
               <div className="columns-1 sm:columns-2 gap-8 space-y-8">
-                {(apiCategories.length > 0 ? apiCategories : propertyTypes.map(t => ({ name: t }))).map((cat, idx) => {
+                {apiCategories.map((cat, idx) => {
                   // Pre-defined heights for masonry stagger effect
                   const heights = ['h-[320px]', 'h-[480px]', 'h-[400px]', 'h-[320px]', 'h-[380px]'];
                   const cardHeight = heights[idx % heights.length];
@@ -284,7 +290,7 @@ const Home = () => {
                   const exactCount = apiProperties.filter(p => {
                     const pType = (p.type || '').toLowerCase();
                     const cName = (cat.name || '').toLowerCase();
-                    return pType === cName || cName.includes(pType) || pType.includes(cName.replace(/s$/, ''));
+                    return pType === cName || cName.includes(pType) || pType.includes(cName.replace(/s$/, '')) || cName.replace(/st$/, 't') === pType;
                   }).length;
 
                   return (
@@ -450,7 +456,7 @@ const Home = () => {
       <section className="py-24 bg-white overflow-hidden relative">
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="flex flex-col lg:flex-row gap-8 items-start">
-            
+
             {/* Left Side: Typography */}
             <div className="lg:w-[25%] pt-4" data-aos="fade-right">
               <h2 className="text-4xl md:text-5xl font-serif font-bold text-primary-900 mb-3 leading-tight tracking-tight">
@@ -482,12 +488,12 @@ const Home = () => {
                       data-aos="fade-up" data-aos-delay={idx * 100}
                     >
                       {/* Background Image */}
-                      <img 
-                        src={region.image} 
-                        alt={region.label} 
-                        className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700 ease-out" 
+                      <img
+                        src={region.image}
+                        alt={region.label}
+                        className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700 ease-out"
                       />
-                      
+
                       {/* Dark Gradient Overlay */}
                       <div className="absolute inset-0 bg-gradient-to-b from-charcoal-900/60 via-transparent to-charcoal-900/80 group-hover:via-charcoal-900/30 transition-colors duration-500"></div>
 
@@ -498,11 +504,11 @@ const Home = () => {
                           <p className="text-[10px] font-medium text-gray-200 mb-1 tracking-wider opacity-90">{displayCount} Properties</p>
                           <h4 className="text-xl font-normal text-white tracking-wide">{region.label}</h4>
                         </div>
-                        
+
                         {/* Bottom Content */}
                         <div className="flex justify-between items-end opacity-90 group-hover:opacity-100 transition-opacity">
                           <span className="text-[10px] font-semibold uppercase tracking-widest text-white/90">
-                            More<br/>Details
+                            More<br />Details
                           </span>
                           <Play size={20} strokeWidth={1.5} className="text-white group-hover:scale-110 transition-transform" />
                         </div>

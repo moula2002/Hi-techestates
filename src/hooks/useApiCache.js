@@ -1,18 +1,37 @@
 import { useState, useEffect } from 'react';
 
 const memoryCache = new Map();
+const fetchDedupe = new Map(); // For deduping concurrent requests
 
 /**
  * A custom hook to fetch data with caching.
- * It checks sessionStorage first to reduce unnecessary API calls across page navigations.
+ * Implements a Stale-While-Revalidate (SWR) pattern.
+ * Returns cached data immediately for fast loading, but fetches fresh data
+ * in the background to ensure updates from the admin panel reflect instantly.
  * 
  * @param {string} url - The URL to fetch data from
  * @param {string} key - A unique string key for sessionStorage
- * @param {number} ttl - Time to live in milliseconds (default: 1 hour)
  */
-export const useApiCache = (url, key, ttl = 3600000) => {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
+export const useApiCache = (url, key) => {
+  const [data, setData] = useState(() => {
+    // 1. Initialize state synchronously from memory cache if available
+    if (memoryCache.has(key)) {
+      return memoryCache.get(key).data;
+    }
+    // 2. Fallback to sessionStorage synchronously
+    try {
+      const sessionCached = sessionStorage.getItem(key);
+      if (sessionCached) {
+        const { data: cachedData } = JSON.parse(sessionCached);
+        return cachedData;
+      }
+    } catch (e) {
+      console.warn('SessionStorage access failed', e);
+    }
+    return null;
+  });
+
+  const [loading, setLoading] = useState(!data);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -20,57 +39,46 @@ export const useApiCache = (url, key, ttl = 3600000) => {
 
     const fetchData = async () => {
       try {
-        setLoading(true);
-        
-        // 1. Check in-memory cache first (fastest)
-        if (memoryCache.has(key)) {
-          const { data: cachedData, timestamp } = memoryCache.get(key);
-          if (Date.now() - timestamp < ttl) {
-            if (isMounted) setData(cachedData);
-            setLoading(false);
-            return;
-          }
+        if (!data) setLoading(true);
+
+        // Deduplicate concurrent fetch requests for the same URL
+        if (!fetchDedupe.has(url)) {
+          const fetchPromise = fetch(url, { cache: 'no-store' }).then(async (res) => {
+            if (!res.ok) throw new Error(`Failed to fetch from ${url}`);
+            return res.json();
+          });
+          fetchDedupe.set(url, fetchPromise);
         }
 
-        // 2. Check sessionStorage
-        try {
-          const sessionCached = sessionStorage.getItem(key);
-          if (sessionCached) {
-            const { data: cachedData, timestamp } = JSON.parse(sessionCached);
-            if (Date.now() - timestamp < ttl) {
-              memoryCache.set(key, { data: cachedData, timestamp }); // update memory
-              if (isMounted) setData(cachedData);
-              setLoading(false);
-              return;
-            }
-          }
-        } catch (e) {
-          console.warn('SessionStorage access failed', e);
-        }
+        const result = await fetchDedupe.get(url);
 
-        // 3. Fetch from API if no valid cache (bypass browser HTTP cache)
-        const response = await fetch(url, { cache: 'no-store' });
-        if (!response.ok) throw new Error(`Failed to fetch from ${url}`);
-        const result = await response.json();
-
-        // Save to caches
+        // Update caches
         const cacheObj = { data: result, timestamp: Date.now() };
         memoryCache.set(key, cacheObj);
         try {
           sessionStorage.setItem(key, JSON.stringify(cacheObj));
         } catch (e) {
-          // sessionStorage might be full or disabled, ignore
+          // ignore sessionStorage errors
         }
 
+        // Update state if mounted
         if (isMounted) {
+          // Deep compare if necessary, but setting state with same data usually causes re-render unless primitives.
+          // For simplicity, we update the state to trigger re-render with fresh data.
           setData(result);
           setError(null);
         }
       } catch (err) {
         console.error(`Error fetching ${key}:`, err);
-        if (isMounted) setError(err.message || 'Failed to load data.');
+        if (isMounted) {
+          if (!data) {
+            setError(err.message || 'Failed to load data.');
+          }
+        }
       } finally {
         if (isMounted) setLoading(false);
+        // Clear dedupe promise after a short delay so subsequent renders can fetch again
+        setTimeout(() => fetchDedupe.delete(url), 2000);
       }
     };
 
@@ -81,7 +89,7 @@ export const useApiCache = (url, key, ttl = 3600000) => {
     return () => {
       isMounted = false;
     };
-  }, [url, key, ttl]);
+  }, [url, key]);
 
   return { data, loading, error };
 };

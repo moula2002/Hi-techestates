@@ -2,21 +2,41 @@ import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import PropertyCard from '../components/property/PropertyCard';
-import { properties } from '../data/properties';
-
+import UniqueLoader from '../components/ui/UniqueLoader';
+import { useApiCache } from '../hooks/useApiCache';
+import { mapApiPropertyToClient } from '../utils/propertyMapper';
 const Locality = () => {
   const { areaName } = useParams();
-  
+
   // Format the URL slug back to a readable name
   const formattedAreaName = areaName
     ? areaName.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
     : 'This Locality';
 
-  const localityProperties = properties.filter(
-    p => p.location.toLowerCase() === formattedAreaName.toLowerCase()
+  const { data, loading, error } = useApiCache('https://hi-techserver-zd1d.onrender.com/api/properties', 'hi-tech-properties');
+
+  const [apiProperties, setApiProperties] = React.useState([]);
+
+  React.useEffect(() => {
+    if (data) {
+      const mappedProperties = (Array.isArray(data) ? data : []).map(mapApiPropertyToClient);
+      setApiProperties(mappedProperties);
+    }
+  }, [data]);
+
+  const localityProperties = apiProperties.filter(
+    p => p.location && p.location.toLowerCase() === formattedAreaName.toLowerCase()
   );
 
-  const displayProperties = localityProperties.length > 0 ? localityProperties : properties.slice(0, 3);
+  const displayProperties = localityProperties.length > 0 ? localityProperties : apiProperties.slice(0, 3);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen pt-32 pb-20 flex flex-col items-center justify-center bg-gray-50">
+        <UniqueLoader />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
@@ -40,11 +60,11 @@ const Locality = () => {
           {/* Top white gradient specifically for Navbar visibility */}
           <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-white/90 to-transparent z-10 pointer-events-none"></div>
         </div>
-        
+
         <div className="relative z-20 text-center px-4 max-w-4xl mx-auto pt-16" data-aos="zoom-in">
           <div className="inline-block bg-white/30 backdrop-blur-md px-6 md:px-10 py-6 rounded-2xl shadow-lg border border-white/50">
             <div className="mb-2 text-charcoal-700 font-bold uppercase tracking-wider text-[10px] flex items-center justify-center gap-2">
-              <Link to="/" className="hover:text-primary-700 transition-colors">Home</Link> / 
+              <Link to="/" className="hover:text-primary-700 transition-colors">Home</Link> /
               <span>{formattedAreaName}</span>
             </div>
             <p className="text-primary-700 font-bold tracking-widest uppercase mb-2 text-xs">Location Focus</p>
@@ -78,7 +98,7 @@ const Locality = () => {
         <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
           <h3 className="text-xl font-bold text-charcoal-900 mb-4">Why invest in {formattedAreaName}?</h3>
           <p className="text-charcoal-600 leading-relaxed mb-4">
-            {formattedAreaName} is one of Bangalore's most sought-after real estate destinations, offering excellent connectivity, premium lifestyle amenities, and strong appreciation potential. Whether you are looking for a 3 BHK apartment, a luxury villa, or a commercial office space, {formattedAreaName} provides diverse options to suit every budget and requirement. 
+            {formattedAreaName} is one of Bangalore's most sought-after real estate destinations, offering excellent connectivity, premium lifestyle amenities, and strong appreciation potential. Whether you are looking for a 3 BHK apartment, a luxury villa, or a commercial office space, {formattedAreaName} provides diverse options to suit every budget and requirement.
           </p>
           <p className="text-charcoal-600 leading-relaxed">
             Hi-Tech Estates ensures you get the best deals with zero hassle. We verify every property listing to guarantee you a safe and secure investment. Explore our latest properties for sale in {formattedAreaName} or contact us for personalized assistance.

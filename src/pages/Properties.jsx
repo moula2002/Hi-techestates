@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import PropertyCard from '../components/property/PropertyCard';
-import { locations, propertyTypes, bhkOptions, budgetRanges, rentalBudgetRanges, furnishOptions, statusOptions } from '../data/properties';
+// Removed static properties import
 import { ChevronRight, ChevronLeft, Filter, Search } from 'lucide-react';
 import { useApiCache } from '../hooks/useApiCache';
 import UniqueLoader from '../components/ui/UniqueLoader';
@@ -15,9 +15,16 @@ const Properties = () => {
 
   const [apiProperties, setApiProperties] = useState([]);
 
+  const bhkOptions = ['1 BHK', '2 BHK', '3 BHK', '4 BHK', '4+ BHK', '5 BHK', 'Villa', 'Plot'];
+  const budgetRanges = ['Below 50 Lacs', '50 Lacs - 1 Cr', '1 Cr - 2 Cr', '2 Cr - 5 Cr', 'Above 5 Cr'];
+  const rentalBudgetRanges = ['Below 10k', '10k - 20k', '20k - 50k', '50k - 1 Lakh', 'Above 1 Lakh'];
+  const furnishOptions = ['Fully Furnished', 'Semi Furnished', 'Unfurnished'];
+  const statusOptions = ['For Sale', 'For Rent', 'For Lease'];
+
   const [filter, setFilter] = useState({
     location: queryParams.get('location') || '',
     type: queryParams.get('type') || 'All Type',
+    category: queryParams.get('category') || '',
     bhk: queryParams.get('bhk') || '',
     budget: queryParams.get('budget') || '',
     status: 'All', // Sale/Rent
@@ -39,6 +46,12 @@ const Properties = () => {
   const filteredProperties = apiProperties.filter(p => {
     if (filter.location && p.location !== filter.location) return false;
     if (filter.type !== 'All Type' && filter.type !== '' && p.type !== filter.type) return false;
+    
+    if (filter.category) {
+      const pType = (p.type || '').toLowerCase();
+      const cName = filter.category.toLowerCase();
+      if (pType !== cName && !cName.includes(pType) && !pType.includes(cName.replace(/s$/, '')) && cName.replace(/st$/, 't') !== pType) return false;
+    }
     
     if (filter.bhk) {
       const pBhkNum = parseInt(p.bhk);
@@ -62,9 +75,8 @@ const Properties = () => {
     return true;
   });
 
-  // Combine static types with any new dynamic types from the API
   const dynamicTypes = apiProperties.map(p => p.type).filter(Boolean);
-  const uniqueTypes = [...new Set([...propertyTypes, ...dynamicTypes])];
+  const uniqueTypes = [...new Set(dynamicTypes)];
   const allPropertyTypes = ['All Type', ...uniqueTypes];
   const allStatus = ['All', ...statusOptions];
   
@@ -134,7 +146,7 @@ const Properties = () => {
                   Filters
                 </h3>
                 <button 
-                  onClick={() => setFilter({location: '', type: 'All Type', bhk: '', budget: '', status: 'All', furnishing: ''})}
+                  onClick={() => setFilter({location: '', type: 'All Type', category: '', bhk: '', budget: '', status: 'All', furnishing: ''})}
                   className="text-xs text-primary-700 font-bold hover:text-primary-900 transition-colors uppercase tracking-widest bg-primary-50 px-3 py-1.5 rounded-lg border border-primary-100"
                 >
                   Clear All
@@ -288,7 +300,7 @@ const Properties = () => {
                   We couldn't find any luxury properties matching these specific filters in our exclusive portfolio.
                 </p>
                 <button 
-                  onClick={() => setFilter({location: '', type: 'All Type', bhk: '', budget: '', status: 'All', furnishing: ''})}
+                  onClick={() => setFilter({location: '', type: 'All Type', category: '', bhk: '', budget: '', status: 'All', furnishing: ''})}
                   className="px-8 py-4 bg-primary-900 text-white font-bold rounded-xl hover:bg-primary-800 hover:shadow-[0_10px_30px_rgba(8,42,92,0.25)] transition-all duration-300 transform hover:-translate-y-1"
                 >
                   Explore All Properties
