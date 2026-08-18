@@ -453,7 +453,7 @@ const Home = () => {
             
             {/* Left Side: Typography */}
             <div className="lg:w-[25%] pt-4" data-aos="fade-right">
-              <h2 className="text-4xl md:text-5xl font-sans text-charcoal-900 mb-3 leading-tight tracking-tight">
+              <h2 className="text-4xl md:text-5xl font-serif font-bold text-primary-900 mb-3 leading-tight tracking-tight">
                 Explore<br />Locations
               </h2>
               <p className="text-lg text-gray-500 font-sans font-normal leading-relaxed pr-4">
