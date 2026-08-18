@@ -2,7 +2,43 @@ import React, { useState } from 'react';
 import { X, Send } from 'lucide-react';
 
 const EnquireModal = ({ isOpen, onClose }) => {
+  const [formData, setFormData] = useState({
+    name: '',
+    phone: '',
+    email: '',
+    requirement: 'Buying a Property'
+  });
+  const [status, setStatus] = useState('idle');
+
   if (!isOpen) return null;
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setStatus('loading');
+    try {
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...formData,
+          interestedIn: formData.requirement,
+          formSource: 'Enquire Modal'
+        })
+      });
+      if (response.ok) {
+        setStatus('success');
+        setTimeout(() => {
+          setStatus('idle');
+          setFormData({ name: '', phone: '', email: '', requirement: 'Buying a Property' });
+          onClose();
+        }, 2000);
+      } else {
+        setStatus('error');
+      }
+    } catch (error) {
+      setStatus('error');
+    }
+  };
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
@@ -33,11 +69,13 @@ const EnquireModal = ({ isOpen, onClose }) => {
             Leave your details below and our luxury property consultants will get back to you shortly.
           </p>
 
-          <form className="space-y-4">
+          <form className="space-y-4" onSubmit={handleSubmit}>
             <div>
               <label className="block text-xs font-bold text-charcoal-900 uppercase tracking-widest mb-1">Full Name</label>
               <input 
                 type="text" 
+                value={formData.name}
+                onChange={e => setFormData({...formData, name: e.target.value})}
                 className="w-full px-4 py-3 rounded-lg border border-charcoal-200 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-all bg-charcoal-50 font-medium text-charcoal-900" 
                 placeholder="John Doe" 
                 required 
@@ -48,6 +86,8 @@ const EnquireModal = ({ isOpen, onClose }) => {
               <label className="block text-xs font-bold text-charcoal-900 uppercase tracking-widest mb-1">Phone Number</label>
               <input 
                 type="tel" 
+                value={formData.phone}
+                onChange={e => setFormData({...formData, phone: e.target.value})}
                 className="w-full px-4 py-3 rounded-lg border border-charcoal-200 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-all bg-charcoal-50 font-medium text-charcoal-900" 
                 placeholder="+91 98765 43210" 
                 required 
@@ -58,6 +98,8 @@ const EnquireModal = ({ isOpen, onClose }) => {
               <label className="block text-xs font-bold text-charcoal-900 uppercase tracking-widest mb-1">Email Address (Optional)</label>
               <input 
                 type="email" 
+                value={formData.email}
+                onChange={e => setFormData({...formData, email: e.target.value})}
                 className="w-full px-4 py-3 rounded-lg border border-charcoal-200 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-all bg-charcoal-50 font-medium text-charcoal-900" 
                 placeholder="john@example.com" 
               />
@@ -65,7 +107,11 @@ const EnquireModal = ({ isOpen, onClose }) => {
 
             <div>
               <label className="block text-xs font-bold text-charcoal-900 uppercase tracking-widest mb-1">Requirement</label>
-              <select className="w-full px-4 py-3 rounded-lg border border-charcoal-200 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-all bg-charcoal-50 font-medium text-charcoal-900">
+              <select 
+                value={formData.requirement}
+                onChange={e => setFormData({...formData, requirement: e.target.value})}
+                className="w-full px-4 py-3 rounded-lg border border-charcoal-200 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-all bg-charcoal-50 font-medium text-charcoal-900"
+              >
                 <option>Buying a Property</option>
                 <option>Renting a Property</option>
                 <option>Selling a Property</option>
@@ -73,12 +119,15 @@ const EnquireModal = ({ isOpen, onClose }) => {
               </select>
             </div>
             
+            {status === 'success' && <p className="text-green-600 text-sm font-bold text-center">Enquiry sent successfully!</p>}
+            {status === 'error' && <p className="text-red-600 text-sm font-bold text-center">Failed to send. Please try again.</p>}
+            
             <button 
-              type="button" 
-              onClick={onClose}
-              className="w-full mt-4 py-4 bg-primary-500 text-white rounded-lg font-bold hover:bg-primary-600 transition-colors flex justify-center items-center gap-2 shadow-lg shadow-primary-500/30 uppercase tracking-widest text-sm"
+              type="submit" 
+              disabled={status === 'loading' || status === 'success'}
+              className="w-full mt-4 py-4 bg-primary-500 text-white rounded-lg font-bold hover:bg-primary-600 transition-colors flex justify-center items-center gap-2 shadow-lg shadow-primary-500/30 uppercase tracking-widest text-sm disabled:opacity-70 disabled:cursor-not-allowed"
             >
-              Submit Enquiry <Send size={18} />
+              {status === 'loading' ? 'Sending...' : status === 'success' ? 'Sent!' : <><Send size={18} /> Submit Enquiry</>}
             </button>
           </form>
         </div>

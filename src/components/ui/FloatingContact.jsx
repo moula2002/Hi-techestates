@@ -1,9 +1,44 @@
-import React from 'react';
-import { Phone } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Phone, ArrowUp } from 'lucide-react';
 
 const FloatingContact = () => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const toggleVisibility = () => {
+      if (window.scrollY > 300) {
+        setIsVisible(true);
+      } else {
+        setIsVisible(false);
+      }
+    };
+
+    window.addEventListener('scroll', toggleVisibility);
+    return () => window.removeEventListener('scroll', toggleVisibility);
+  }, []);
+
+  const scrollToTop = () => {
+    if (window.scrollToTop) {
+      window.scrollToTop();
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col gap-4">
+    <div className="fixed bottom-6 right-6 z-50 flex flex-col gap-4 items-end">
+      {/* Scroll to Top Button */}
+      <button
+        onClick={scrollToTop}
+        className={`w-12 h-12 md:w-14 md:h-14 bg-primary-600 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-primary-500 transition-all duration-300 hover:scale-110 group relative ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 pointer-events-none'
+          }`}
+        aria-label="Scroll to Top"
+      >
+        <ArrowUp className="w-5 h-5 md:w-6 md:h-6" />
+        <span className="absolute right-full mr-4 bg-charcoal-900 text-white px-3 py-1 rounded text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-md pointer-events-none">
+          Scroll to Top
+        </span>
+      </button>
       <a
         href="tel:08041323523"
         className="w-14 h-14 md:w-16 md:h-16 bg-charcoal-900 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-primary-500 transition-all hover:scale-110 group relative"

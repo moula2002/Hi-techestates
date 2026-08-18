@@ -1,8 +1,48 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { X, Home, UploadCloud } from 'lucide-react';
 
 const ListPropertyModal = ({ isOpen, onClose }) => {
+  const [formData, setFormData] = useState({
+    name: '',
+    phone: '',
+    intent: 'Sell',
+    type: 'Apartment',
+    location: '',
+    price: ''
+  });
+  const [status, setStatus] = useState('idle');
+
   if (!isOpen) return null;
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setStatus('loading');
+    try {
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.name,
+          phone: formData.phone,
+          interestedIn: `List Property - ${formData.intent} ${formData.type}`,
+          message: `Location: ${formData.location}\nPrice/Rent: ${formData.price}`,
+          formSource: 'List Property Modal'
+        })
+      });
+      if (response.ok) {
+        setStatus('success');
+        setTimeout(() => {
+          setStatus('idle');
+          setFormData({ name: '', phone: '', intent: 'Sell', type: 'Apartment', location: '', price: '' });
+          onClose();
+        }, 2000);
+      } else {
+        setStatus('error');
+      }
+    } catch (error) {
+      setStatus('error');
+    }
+  };
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
@@ -37,7 +77,7 @@ const ListPropertyModal = ({ isOpen, onClose }) => {
         </div>
 
         <div className="p-6 overflow-y-auto custom-scrollbar">
-          <form className="space-y-5">
+          <form className="space-y-5" onSubmit={handleSubmit}>
             
             {/* Contact Details */}
             <div>
@@ -45,11 +85,11 @@ const ListPropertyModal = ({ isOpen, onClose }) => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-bold text-charcoal-600 uppercase mb-1">Full Name</label>
-                  <input type="text" className="w-full px-4 py-2.5 rounded-lg border border-charcoal-200 focus:ring-2 focus:ring-primary-500 outline-none bg-charcoal-50" placeholder="John Doe" required />
+                  <input type="text" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full px-4 py-2.5 rounded-lg border border-charcoal-200 focus:ring-2 focus:ring-primary-500 outline-none bg-charcoal-50" placeholder="John Doe" required />
                 </div>
                 <div>
                   <label className="block text-xs font-bold text-charcoal-600 uppercase mb-1">Phone Number</label>
-                  <input type="tel" className="w-full px-4 py-2.5 rounded-lg border border-charcoal-200 focus:ring-2 focus:ring-primary-500 outline-none bg-charcoal-50" placeholder="+91 98765 43210" required />
+                  <input type="tel" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} className="w-full px-4 py-2.5 rounded-lg border border-charcoal-200 focus:ring-2 focus:ring-primary-500 outline-none bg-charcoal-50" placeholder="+91 98765 43210" required />
                 </div>
               </div>
             </div>
@@ -62,16 +102,16 @@ const ListPropertyModal = ({ isOpen, onClose }) => {
                   <label className="block text-xs font-bold text-charcoal-600 uppercase mb-1">I want to</label>
                   <div className="flex gap-2">
                     <label className="flex-1 flex items-center justify-center gap-2 p-2 border border-charcoal-200 rounded-lg cursor-pointer hover:bg-primary-50 transition-colors">
-                      <input type="radio" name="intent" className="text-primary-500" defaultChecked /> <span className="text-sm font-bold">Sell</span>
+                      <input type="radio" name="intent" value="Sell" checked={formData.intent === 'Sell'} onChange={e => setFormData({...formData, intent: e.target.value})} className="text-primary-500" /> <span className="text-sm font-bold">Sell</span>
                     </label>
                     <label className="flex-1 flex items-center justify-center gap-2 p-2 border border-charcoal-200 rounded-lg cursor-pointer hover:bg-primary-50 transition-colors">
-                      <input type="radio" name="intent" className="text-primary-500" /> <span className="text-sm font-bold">Rent Out</span>
+                      <input type="radio" name="intent" value="Rent Out" checked={formData.intent === 'Rent Out'} onChange={e => setFormData({...formData, intent: e.target.value})} className="text-primary-500" /> <span className="text-sm font-bold">Rent Out</span>
                     </label>
                   </div>
                 </div>
                 <div>
                   <label className="block text-xs font-bold text-charcoal-600 uppercase mb-1">Property Type</label>
-                  <select className="w-full px-4 py-2.5 rounded-lg border border-charcoal-200 focus:ring-2 focus:ring-primary-500 outline-none bg-charcoal-50">
+                  <select value={formData.type} onChange={e => setFormData({...formData, type: e.target.value})} className="w-full px-4 py-2.5 rounded-lg border border-charcoal-200 focus:ring-2 focus:ring-primary-500 outline-none bg-charcoal-50">
                     <option>Apartment</option>
                     <option>Villa</option>
                     <option>Independent House</option>
@@ -84,11 +124,11 @@ const ListPropertyModal = ({ isOpen, onClose }) => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-bold text-charcoal-600 uppercase mb-1">Location / Area</label>
-                  <input type="text" className="w-full px-4 py-2.5 rounded-lg border border-charcoal-200 focus:ring-2 focus:ring-primary-500 outline-none bg-charcoal-50" placeholder="e.g. Indiranagar, Bangalore" required />
+                  <input type="text" value={formData.location} onChange={e => setFormData({...formData, location: e.target.value})} className="w-full px-4 py-2.5 rounded-lg border border-charcoal-200 focus:ring-2 focus:ring-primary-500 outline-none bg-charcoal-50" placeholder="e.g. Indiranagar, Bangalore" required />
                 </div>
                 <div>
                   <label className="block text-xs font-bold text-charcoal-600 uppercase mb-1">Expected Price / Rent (₹)</label>
-                  <input type="text" className="w-full px-4 py-2.5 rounded-lg border border-charcoal-200 focus:ring-2 focus:ring-primary-500 outline-none bg-charcoal-50" placeholder="e.g. 1.5 Cr or 45,000/mo" required />
+                  <input type="text" value={formData.price} onChange={e => setFormData({...formData, price: e.target.value})} className="w-full px-4 py-2.5 rounded-lg border border-charcoal-200 focus:ring-2 focus:ring-primary-500 outline-none bg-charcoal-50" placeholder="e.g. 1.5 Cr or 45,000/mo" required />
                 </div>
               </div>
             </div>
@@ -103,12 +143,15 @@ const ListPropertyModal = ({ isOpen, onClose }) => {
                </div>
             </div>
             
+            {status === 'success' && <p className="text-green-600 text-sm font-bold text-center">Property details sent successfully!</p>}
+            {status === 'error' && <p className="text-red-600 text-sm font-bold text-center">Failed to send. Please try again.</p>}
+            
             <button 
-              type="button" 
-              onClick={onClose}
-              className="w-full mt-2 py-4 bg-primary-600 text-white rounded-xl font-black hover:bg-primary-700 transition-colors flex justify-center items-center gap-2 shadow-lg shadow-primary-500/20 uppercase tracking-widest text-sm"
+              type="submit" 
+              disabled={status === 'loading' || status === 'success'}
+              className="w-full mt-2 py-4 bg-primary-600 text-white rounded-xl font-black hover:bg-primary-700 transition-colors flex justify-center items-center gap-2 shadow-lg shadow-primary-500/20 uppercase tracking-widest text-sm disabled:opacity-70 disabled:cursor-not-allowed"
             >
-              Submit Property Details
+              {status === 'loading' ? 'Submitting...' : status === 'success' ? 'Submitted!' : 'Submit Property Details'}
             </button>
             <p className="text-center text-xs text-charcoal-400 font-medium">
               By submitting, you agree to our Terms of Service & Privacy Policy.

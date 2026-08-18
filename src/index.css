@@ -31,7 +31,7 @@
   --font-serif: 'Playfair Display', serif;
   /* Use logo font for headings */
 
-  --animate-fade-in-up: fade-in-up 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-fade-in-up: fade-in-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   --animate-slow-zoom: slow-zoom 20s linear infinite alternate;
   --animate-pulse-shadow: pulse-shadow 2s infinite;
 }
@@ -74,7 +74,30 @@
 
 @layer base {
   html {
-    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Lenis recommended base styles */
+  html.lenis, html.lenis body {
+    height: auto;
+    width: 100%;
+  }
+
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
+  .lenis.lenis-smooth iframe {
+    pointer-events: none;
   }
 
   body {

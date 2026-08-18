@@ -4,14 +4,15 @@ import { Helmet } from 'react-helmet-async';
 import PropertyCard from '../components/property/PropertyCard';
 import { locations, propertyTypes, bhkOptions, budgetRanges, rentalBudgetRanges, furnishOptions, statusOptions } from '../data/properties';
 import { ChevronRight, ChevronLeft, Filter } from 'lucide-react';
+import { useApiCache } from '../hooks/useApiCache';
+import UniqueLoader from '../components/ui/UniqueLoader';
+import { mapApiPropertyToClient } from '../utils/propertyMapper';
 
 const Properties = () => {
   const { search } = useLocation();
   const queryParams = new URLSearchParams(search);
 
   const [apiProperties, setApiProperties] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   const [filter, setFilter] = useState({
     location: queryParams.get('location') || '',
@@ -24,47 +25,14 @@ const Properties = () => {
 
   const [showFilters, setShowFilters] = useState(false);
 
+  const { data, loading, error } = useApiCache('https://hi-techserver-zd1d.onrender.com/api/properties', 'hi-tech-properties');
+
   useEffect(() => {
-    const fetchProperties = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch('https://hi-techserver-zd1d.onrender.com/api/properties');
-        if (!response.ok) throw new Error('Failed to fetch properties');
-        const data = await response.json();
-        
-        // Map backend schema to frontend structure so PropertyCard works without breaking
-        const mappedProperties = (Array.isArray(data) ? data : []).map(p => ({
-          id: p.id,
-          title: p.title,
-          location: p.location?.area || p.location?.city || '',
-          city: p.location?.city || '',
-          type: p.type,
-          status: p.purpose === 'Sale' ? 'For Sale' : (p.purpose === 'Rent' ? 'For Rent' : p.purpose),
-          price: p.pricing?.price || '',
-          bhk: p.specifications?.bedrooms || null,
-          bathrooms: p.specifications?.bathrooms || null,
-          area: p.specifications?.totalArea || p.specifications?.builtUpArea || '',
-          facing: p.specifications?.facing || '',
-          parking: p.specifications?.parkingSpaces || '',
-          image: p.images?.featured || "",
-          video: p.images?.videoUrl || null,
-          features: p.amenities || [],
-          featured: p.highlights?.featuredProperty || false,
-          furnishing: p.specifications?.furnishing || ""
-        }));
-        
-        setApiProperties(mappedProperties);
-        setError(null);
-      } catch (err) {
-        console.error("Error fetching properties:", err);
-        setError("Failed to load properties. Please try again later.");
-      } finally {
-        setLoading(false);
-      }
-    };
-    
-    fetchProperties();
-  }, []);
+    if (data) {
+      const mappedProperties = (Array.isArray(data) ? data : []).map(mapApiPropertyToClient);
+      setApiProperties(mappedProperties);
+    }
+  }, [data]);
 
   // Client-side filtering logic
   const filteredProperties = apiProperties.filter(p => {
@@ -237,8 +205,7 @@ const Properties = () => {
 
             {loading ? (
               <div className="bg-white p-12 text-center rounded-lg shadow-sm border border-gray-100 flex flex-col items-center justify-center min-h-[400px]">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-900 mb-4"></div>
-                <h3 className="text-xl font-bold text-charcoal-900">Loading properties...</h3>
+                <UniqueLoader />
               </div>
             ) : error ? (
               <div className="bg-white p-12 text-center rounded-lg shadow-sm border border-gray-100 flex flex-col items-center justify-center min-h-[400px]">

@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import { Home, Key, Handshake, TrendingUp, FileText, ArrowRight, CheckCircle } from 'lucide-react';
 import PropertyCard from '../components/property/PropertyCard';
+import { mapApiPropertyToClient } from '../utils/propertyMapper';
 
 const PropertyServices = () => {
   const [apiProperties, setApiProperties] = useState([]);
@@ -14,27 +15,10 @@ const PropertyServices = () => {
         const response = await fetch('https://hi-techserver-zd1d.onrender.com/api/properties');
         if (!response.ok) throw new Error('Failed to fetch properties');
         const data = await response.json();
-        
-        const mappedProperties = (Array.isArray(data) ? data : []).map(p => ({
-          id: p.id,
-          title: p.title,
-          location: p.location?.area || p.location?.city || '',
-          city: p.location?.city || '',
-          type: p.type,
-          status: p.purpose === 'Sale' ? 'For Sale' : (p.purpose === 'Rent' ? 'For Rent' : p.purpose),
-          price: p.pricing?.price || '',
-          bhk: p.specifications?.bedrooms || null,
-          bathrooms: p.specifications?.bathrooms || null,
-          area: p.specifications?.totalArea || p.specifications?.builtUpArea || '',
-          facing: p.specifications?.facing || '',
-          parking: p.specifications?.parkingSpaces || '',
-          image: p.images?.featured || "",
-          video: p.images?.videoUrl || null,
-          features: p.amenities || [],
-          featured: p.highlights?.featuredProperty || false,
-          furnishing: p.specifications?.furnishing || ""
-        }));
-        setApiProperties(mappedProperties);
+        if (data) {
+          const mappedProperties = (Array.isArray(data) ? data : []).map(mapApiPropertyToClient);
+          setApiProperties(mappedProperties);
+        }
       } catch (err) {
         console.error("Error fetching properties:", err);
       } finally {

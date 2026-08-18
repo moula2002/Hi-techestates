@@ -5,65 +5,40 @@ import { ArrowRight, CheckCircle, Search, Building2, Users, Trophy, MapPin, Star
 import PropertyCard from '../components/property/PropertyCard';
 import { properties as defaultProperties, locations, propertyTypes, bhkOptions, budgetRanges } from '../data/properties';
 import aboutImage from '../assets/image.png';
+import { useApiCache } from '../hooks/useApiCache';
+import { mapApiPropertyToClient } from '../utils/propertyMapper';
 
 const Home = () => {
   const navigate = useNavigate();
 
+  const [currentBannerIdx, setCurrentBannerIdx] = useState(0);
+
+  const { data: propertiesData, loading: propsLoading } = useApiCache('https://hi-techserver-zd1d.onrender.com/api/properties', 'hi-tech-properties');
+  const { data: bannersData, loading: bannersLoading } = useApiCache('https://hi-techserver-zd1d.onrender.com/api/banners', 'hi-tech-banners');
+  const { data: categoriesData, loading: catLoading } = useApiCache('https://hi-techserver-zd1d.onrender.com/api/categories', 'hi-tech-categories');
+
   const [apiProperties, setApiProperties] = useState([]);
   const [apiCategories, setApiCategories] = useState([]);
   const [banners, setBanners] = useState([]);
-  const [currentBannerIdx, setCurrentBannerIdx] = useState(0);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [propRes, bannerRes, catRes] = await Promise.all([
-          fetch('https://hi-techserver-zd1d.onrender.com/api/properties'),
-          fetch('https://hi-techserver-zd1d.onrender.com/api/banners').catch(() => null),
-          fetch('https://hi-techserver-zd1d.onrender.com/api/categories').catch(() => null)
-        ]);
+    if (propertiesData) {
+      const mappedProperties = (Array.isArray(propertiesData) ? propertiesData : []).map(mapApiPropertyToClient);
+      setApiProperties(mappedProperties);
+    }
+  }, [propertiesData]);
 
-        if (propRes.ok) {
-          const data = await propRes.json();
-          const mappedProperties = (Array.isArray(data) ? data : []).map(p => ({
-            id: p._id || p.id,
-            title: p.title,
-            location: p.location?.area || p.location?.city || '',
-            city: p.location?.city || '',
-            type: p.type,
-            status: p.purpose === 'Sale' ? 'For Sale' : (p.purpose === 'Rent' ? 'For Rent' : p.purpose),
-            price: p.pricing?.price || '',
-            bhk: p.specifications?.bedrooms || null,
-            bathrooms: p.specifications?.bathrooms || null,
-            area: p.specifications?.totalArea || p.specifications?.builtUpArea || '',
-            facing: p.specifications?.facing || '',
-            parking: p.specifications?.parkingSpaces || '',
-            image: p.images?.featured || "",
-            video: p.images?.videoUrl || null,
-            features: p.amenities || [],
-            featured: p.highlights?.featuredProperty || p.highlights?.premiumProperty || p.highlights?.hotProperty || p.featured || false,
-            furnishing: p.specifications?.furnishing || ""
-          }));
-          setApiProperties(mappedProperties);
-        }
+  useEffect(() => {
+    if (bannersData) {
+      setBanners(Array.isArray(bannersData) ? bannersData : []);
+    }
+  }, [bannersData]);
 
-        if (bannerRes && bannerRes.ok) {
-          const bData = await bannerRes.json();
-          setBanners(Array.isArray(bData) ? bData : []);
-        }
-        if (catRes && catRes.ok) {
-          const cData = await catRes.json();
-          setApiCategories(Array.isArray(cData) ? cData : []);
-        }
-      } catch (err) {
-        console.error("Error fetching data:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
+  useEffect(() => {
+    if (categoriesData) {
+      setApiCategories(Array.isArray(categoriesData) ? categoriesData : []);
+    }
+  }, [categoriesData]);
 
   // Banner carousel logic
   useEffect(() => {
@@ -82,6 +57,48 @@ const Home = () => {
     bhk: '',
     budget: ''
   });
+
+  // Contact Form State
+  const [contactData, setContactData] = useState({
+    name: '',
+    phone: '',
+    email: '',
+    interestedIn: 'Buying a Property',
+    message: ''
+  });
+  const [contactStatus, setContactStatus] = useState('idle');
+  const [contactMessage, setContactMessage] = useState('');
+
+  const handleContactSubmit = async (e) => {
+    e.preventDefault();
+    setContactStatus('loading');
+    
+    try {
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...contactData, formSource: 'Home Page' })
+      });
+      
+      const result = await response.json();
+      
+      if (response.ok) {
+        setContactStatus('success');
+        setContactMessage('Your message has been sent successfully!');
+        setContactData({ name: '', phone: '', email: '', interestedIn: 'Buying a Property', message: '' });
+      } else {
+        throw new Error(result.message || 'Something went wrong');
+      }
+    } catch (error) {
+      setContactStatus('error');
+      setContactMessage(error.message || 'Failed to send message. Please try again.');
+    }
+    
+    setTimeout(() => {
+      setContactStatus('idle');
+      setContactMessage('');
+    }, 5000);
+  };
 
   const handleSearch = () => {
     // Navigate to properties page with search params as query string
@@ -241,10 +258,10 @@ const Home = () => {
       <section className="py-24 bg-white overflow-hidden relative">
         {/* Subtle background circular glow */}
         <div className="absolute left-[-10%] top-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#f0f7fb] rounded-full mix-blend-multiply filter blur-3xl opacity-70 z-0 pointer-events-none"></div>
-        
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="flex flex-col lg:flex-row gap-16 items-start">
-            
+
             {/* Left Side: Typography */}
             <div className="lg:w-[30%] pt-12" data-aos="fade-right">
               <h2 className="text-4xl md:text-5xl font-sans text-charcoal-900 mb-3 leading-tight tracking-tight">
@@ -258,18 +275,18 @@ const Home = () => {
             {/* Right Side: Masonry Grid */}
             <div className="lg:w-[70%] w-full">
               <div className="columns-1 sm:columns-2 gap-8 space-y-8">
-                {(apiCategories.length > 0 ? apiCategories : propertyTypes.map(t => ({name: t}))).map((cat, idx) => {
+                {(apiCategories.length > 0 ? apiCategories : propertyTypes.map(t => ({ name: t }))).map((cat, idx) => {
                   // Pre-defined heights for masonry stagger effect
                   const heights = ['h-[320px]', 'h-[480px]', 'h-[400px]', 'h-[320px]', 'h-[380px]'];
                   const cardHeight = heights[idx % heights.length];
-                  
+
                   // Calculate exact, dynamic property count
                   const exactCount = apiProperties.filter(p => {
                     const pType = (p.type || '').toLowerCase();
                     const cName = (cat.name || '').toLowerCase();
                     return pType === cName || cName.includes(pType) || pType.includes(cName.replace(/s$/, ''));
                   }).length;
-                  
+
                   return (
                     <Link
                       key={cat.id || cat._id || cat.name}
@@ -278,16 +295,16 @@ const Home = () => {
                       data-aos="fade-up" data-aos-delay={idx * 100}
                     >
                       {/* Background Image */}
-                      <img 
-                        src={cat.image || 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'} 
-                        alt={cat.name} 
+                      <img
+                        src={cat.image || 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'}
+                        alt={cat.name}
                         className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
                         onError={(e) => { e.target.src = "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" }}
                       />
-                      
+
                       {/* Gradient Overlay */}
                       <div className="absolute inset-0 bg-gradient-to-b from-charcoal-900/60 via-transparent to-charcoal-900/80 group-hover:via-charcoal-900/20 transition-colors duration-500"></div>
-                      
+
                       {/* Content */}
                       <div className="absolute inset-0 p-6 sm:p-8 flex flex-col justify-between text-white z-10">
                         {/* Top: Property Count & Category Name */}
@@ -297,7 +314,7 @@ const Home = () => {
                           </p>
                           <h4 className="text-2xl sm:text-3xl font-normal tracking-wide text-white drop-shadow-sm">{cat.name}</h4>
                         </div>
-                        
+
                         {/* Bottom: More Details & Icon */}
                         <div className="flex justify-between items-end opacity-90 group-hover:opacity-100 transition-opacity">
                           <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-widest text-white/90">
@@ -483,26 +500,26 @@ const Home = () => {
                 <h3 className="text-3xl font-black text-charcoal-900">Have Any Questions?</h3>
               </div>
 
-              <form className="space-y-6" onSubmit={(e) => { e.preventDefault(); alert('Message sent successfully!'); }}>
+              <form className="space-y-6" onSubmit={handleContactSubmit}>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-bold text-charcoal-700 mb-2">Full Name *</label>
-                    <input type="text" required className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition-colors" placeholder="John Doe" />
+                    <input type="text" value={contactData.name} onChange={e => setContactData({...contactData, name: e.target.value})} required className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition-colors" placeholder="John Doe" />
                   </div>
                   <div>
                     <label className="block text-sm font-bold text-charcoal-700 mb-2">Phone Number *</label>
-                    <input type="tel" required className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition-colors" placeholder="080-4132 3523" />
+                    <input type="tel" value={contactData.phone} onChange={e => setContactData({...contactData, phone: e.target.value})} required className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition-colors" placeholder="080-4132 3523" />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-bold text-charcoal-700 mb-2">Email Address</label>
-                    <input type="email" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition-colors" placeholder="john@example.com" />
+                    <input type="email" value={contactData.email} onChange={e => setContactData({...contactData, email: e.target.value})} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition-colors" placeholder="john@example.com" />
                   </div>
                   <div>
                     <label className="block text-sm font-bold text-charcoal-700 mb-2">Interested In</label>
-                    <select className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition-colors text-charcoal-700">
+                    <select value={contactData.interestedIn} onChange={e => setContactData({...contactData, interestedIn: e.target.value})} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition-colors text-charcoal-700">
                       <option>Buying a Property</option>
                       <option>Selling a Property</option>
                       <option>Renting/Leasing</option>
@@ -514,11 +531,17 @@ const Home = () => {
 
                 <div>
                   <label className="block text-sm font-bold text-charcoal-700 mb-2">Your Message</label>
-                  <textarea rows="4" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition-colors resize-none" placeholder="How can we help you?"></textarea>
+                  <textarea rows="4" value={contactData.message} onChange={e => setContactData({...contactData, message: e.target.value})} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition-colors resize-none" placeholder="How can we help you?"></textarea>
                 </div>
 
-                <button type="submit" className="w-full bg-primary-900 text-white font-bold py-4 rounded-lg hover:bg-primary-800 transition-colors shadow-md hover:shadow-lg">
-                  Send Message
+                {contactMessage && (
+                  <div className={`p-4 rounded-lg font-medium text-sm ${contactStatus === 'success' ? 'bg-green-50 text-green-700 border border-green-200' : 'bg-red-50 text-red-700 border border-red-200'}`}>
+                    {contactMessage}
+                  </div>
+                )}
+
+                <button type="submit" disabled={contactStatus === 'loading'} className="w-full bg-primary-900 text-white font-bold py-4 rounded-lg hover:bg-primary-800 transition-colors shadow-md hover:shadow-lg disabled:opacity-70 disabled:cursor-not-allowed">
+                  {contactStatus === 'loading' ? 'Sending...' : 'Send Message'}
                 </button>
               </form>
             </div>
