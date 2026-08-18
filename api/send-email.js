@@ -35,20 +35,65 @@ export default async function handler(req, res) {
       },
     });
 
-    // Email HTML template
+    // Premium Email HTML template matching website branding
     const htmlContent = `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; padding: 20px; border: 1px solid #eaeaea; border-radius: 10px;">
-        <h2 style="color: #0f2b5b; border-bottom: 2px solid #3b82f6; padding-bottom: 10px;">New Enquiry: ${formSource}</h2>
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Phone:</strong> ${phone}</p>
-        <p><strong>Interested In:</strong> ${interestedIn}</p>
-        <h3 style="color: #4b5563; margin-top: 20px;">Message:</h3>
-        <div style="background-color: #f9fafb; padding: 15px; border-radius: 5px; color: #1f2937;">
-          ${message.replace(/\n/g, '<br/>')}
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <style>
+          body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f8fafc; margin: 0; padding: 0; }
+          .container { max-width: 600px; margin: 40px auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
+          .header { background-color: #0f172a; padding: 35px 30px; text-align: center; border-bottom: 4px solid #3b82f6; }
+          .header h1 { color: #ffffff; margin: 0; font-size: 28px; font-weight: 800; letter-spacing: 1px; }
+          .header p { color: #94a3b8; margin: 12px 0 0 0; font-size: 13px; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; }
+          .content { padding: 40px 35px; }
+          .field { margin-bottom: 25px; border-bottom: 1px solid #f1f5f9; padding-bottom: 16px; }
+          .field:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+          .label { font-size: 12px; color: #64748b; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; margin-bottom: 8px; display: block; }
+          .value { font-size: 16px; color: #0f172a; font-weight: 600; margin: 0; }
+          .message-box { background-color: #f8fafc; border: 1px solid #e2e8f0; padding: 20px; border-radius: 8px; margin-top: 12px; }
+          .message-text { color: #334155; font-size: 15px; line-height: 1.6; margin: 0; white-space: pre-wrap; font-weight: 500; }
+          .footer { background-color: #f1f5f9; padding: 25px; text-align: center; border-top: 1px solid #e2e8f0; }
+          .footer p { margin: 0; color: #64748b; font-size: 13px; font-weight: 500; }
+          .accent { color: #3b82f6; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h1>Hi-Tech <span class="accent">Estates</span></h1>
+            <p>New Enquiry: ${formSource}</p>
+          </div>
+          <div class="content">
+            <div class="field">
+              <span class="label">Full Name</span>
+              <p class="value">${name}</p>
+            </div>
+            <div class="field">
+              <span class="label">Email Address</span>
+              <p class="value"><a href="mailto:${email}" style="color: #3b82f6; text-decoration: none;">${email}</a></p>
+            </div>
+            <div class="field">
+              <span class="label">Phone Number</span>
+              <p class="value"><a href="tel:${phone}" style="color: #0f172a; text-decoration: none;">${phone}</a></p>
+            </div>
+            <div class="field">
+              <span class="label">Interested In</span>
+              <p class="value">${interestedIn}</p>
+            </div>
+            <div class="field">
+              <span class="label">Message</span>
+              <div class="message-box">
+                <p class="message-text">${message}</p>
+              </div>
+            </div>
+          </div>
+          <div class="footer">
+            <p>This is an automated message from the Hi-Tech Estates website system.</p>
+          </div>
         </div>
-        <p style="margin-top: 30px; font-size: 12px; color: #9ca3af;">This email was sent automatically from the Hi-Tech Estates website.</p>
-      </div>
+      </body>
+      </html>
     `;
 
     // Send the email
