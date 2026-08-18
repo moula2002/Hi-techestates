@@ -16,6 +16,15 @@ export default async function handler(req, res) {
       formSource = 'Website Form' // e.g., 'Contact Page', 'Home Page'
     } = req.body;
 
+    // Check if SMTP credentials are still set to the dummy values or are missing
+    if (!process.env.SMTP_USER || process.env.SMTP_USER === 'your_email@gmail.com' || !process.env.SMTP_PASS) {
+      console.error('SMTP Configuration Error: Credentials are missing or set to dummy values.');
+      return res.status(500).json({ 
+        success: false, 
+        message: 'Server Configuration Error: SMTP credentials (Email & App Password) are missing. Please add them to your Vercel Environment Variables or .env.local file.' 
+      });
+    }
+
     // Configure the Nodemailer transporter
     // It relies on Environment Variables set in Vercel (or .env.local for development)
     const transporter = nodemailer.createTransport({
