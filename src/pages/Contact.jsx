@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { MapPin, Phone, Mail, Clock, Send } from 'lucide-react';
-import heroImg from '../assets/image.png'; 
+import heroImg from '../assets/image.png';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -19,7 +19,7 @@ const Contact = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus('loading');
-    
+
     try {
       const response = await fetch('/api/send-email', {
         method: 'POST',
@@ -32,9 +32,9 @@ const Contact = () => {
           formSource: 'Contact Page'
         })
       });
-      
+
       const result = await response.json();
-      
+
       if (response.ok) {
         setStatus('success');
         setStatusMessage('Your message has been sent successfully!');
@@ -46,7 +46,7 @@ const Contact = () => {
       setStatus('error');
       setStatusMessage(error.message || 'Failed to send message. Please try again.');
     }
-    
+
     // Reset status message after 5 seconds
     setTimeout(() => {
       setStatus('idle');
@@ -56,41 +56,42 @@ const Contact = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 font-sans pb-24">
-      
+
       {/* Premium Hero Section */}
-      <div className="relative w-full h-[60vh] min-h-[450px] flex items-center justify-center overflow-hidden">
-        {/* Background Image with Dark Overlay */}
-        <div className="absolute inset-0 w-full h-full">
-          <img 
-            src={heroImg} 
-            alt="Luxury Real Estate Contact" 
+      <div className="relative w-full h-[40vh] min-h-[350px] flex flex-col justify-center items-center overflow-hidden mb-12">
+        <div className="absolute inset-0 w-full h-full bg-gray-200">
+          <img
+            src={heroImg}
+            alt="Luxury Real Estate Contact"
             className="w-full h-full object-cover object-center scale-105 animate-[slow-zoom_20s_linear_infinite_alternate]"
           />
-          {/* Elegant Dark Gradient Overlay for the main image area */}
-          <div className="absolute inset-0 bg-gradient-to-b from-charcoal-950/80 via-charcoal-900/70 to-charcoal-950/95"></div>
-          
-          {/* Top white gradient specifically for Navbar and Logo visibility (matches Home page) */}
-          <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-white/90 via-white/50 to-transparent z-10 pointer-events-none"></div>
+          {/* Very Light Overlay */}
+          <div className="absolute inset-0 bg-white/20"></div>
+
+          {/* Top white gradient specifically for Navbar visibility */}
+          <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-white/90 to-transparent z-10 pointer-events-none"></div>
         </div>
 
         {/* Hero Content */}
-        <div className="relative z-10 text-center px-4" data-aos="fade-up">
-          <h1 className="text-4xl md:text-6xl font-serif font-bold text-white mb-6 tracking-tight drop-shadow-2xl">
-            Let's Start a Conversation
-          </h1>
-          <div className="flex items-center justify-center gap-3 text-white/80 text-sm md:text-base font-medium tracking-wide">
-            <span className="hover:text-white transition-colors cursor-pointer">Home</span>
-            <span className="w-1.5 h-1.5 rounded-full bg-primary-500 shadow-[0_0_10px_rgba(59,130,214,0.8)]"></span>
-            <span className="text-white font-semibold">Contact Us</span>
+        <div className="relative z-20 text-center px-4 max-w-4xl mx-auto pt-16" data-aos="fade-up">
+          <div className="inline-block bg-white/30 backdrop-blur-md px-6 md:px-10 py-6 rounded-2xl shadow-lg border border-white/50">
+            <h1 className="text-3xl md:text-4xl font-serif font-bold text-charcoal-900 mb-4 tracking-tight">
+              Let's Start a Conversation
+            </h1>
+            <div className="flex items-center justify-center gap-3 text-charcoal-700 text-xs md:text-sm font-bold tracking-wide uppercase">
+              <span className="hover:text-primary-600 transition-colors cursor-pointer" onClick={() => window.location.href = '/'}>Home</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-primary-500 shadow-sm"></span>
+              <span className="text-primary-900 font-black">Contact Us</span>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Main Content - Overlapping Card Design */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 -mt-24 md:-mt-32">
-        
+
         <div className="bg-white rounded-3xl shadow-[0_30px_60px_-15px_rgba(0,0,0,0.15)] overflow-hidden border border-gray-100 flex flex-col lg:flex-row" data-aos="fade-up" data-aos-delay="100">
-          
+
           {/* Left Column: Form (White Background) */}
           <div className="w-full lg:w-3/5 p-8 md:p-12 lg:p-16">
             <div className="mb-10">
@@ -129,7 +130,7 @@ const Contact = () => {
                   />
                 </div>
               </div>
-              
+
               <div className="space-y-2">
                 <label className="text-[13px] font-bold text-charcoal-700 uppercase tracking-wide">Phone Number *</label>
                 <input
@@ -184,7 +185,7 @@ const Contact = () => {
               <h3 className="text-2xl md:text-3xl font-serif font-bold mb-10 flex items-center gap-3 tracking-wide">
                 Contact Details
               </h3>
-              
+
               <div className="space-y-10">
                 <div className="flex items-start gap-6 group">
                   <div className="mt-1 bg-white/5 p-4 rounded-2xl text-primary-400 group-hover:bg-primary-500 group-hover:text-white transition-colors duration-300 border border-white/10 shadow-[0_4px_20px_rgba(0,0,0,0.2)]">
@@ -207,7 +208,7 @@ const Contact = () => {
                   <div>
                     <h4 className="font-bold text-white mb-2 text-lg tracking-wide">Direct Line</h4>
                     <p className="text-gray-400 text-[15px] leading-relaxed font-medium">
-                      080-4132 3523
+                      +91 99000 00494
                     </p>
                   </div>
                 </div>
@@ -253,7 +254,7 @@ const Contact = () => {
         <div className="mt-20 w-full h-[500px] rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.1)] border border-gray-200/60 bg-white relative group" data-aos="fade-up" data-aos-delay="200">
           {/* Stylish overlay that disappears on map hover */}
           <div className="absolute inset-0 bg-charcoal-950/5 group-hover:opacity-0 transition-opacity duration-700 pointer-events-none z-10"></div>
-          
+
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1m2!1m3!1d15632.610582697858!2d77.7051307!3d11.3347915!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba96f4a861d81eb%3A0x6fb2aeb7dbb69f6e!2sErode%2C%20Tamil%20Nadu!5e0!3m2!1sen!2sin!4v1716382023561!5m2!1sen!2sin"
             width="100%"

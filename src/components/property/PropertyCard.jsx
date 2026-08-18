@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import { MapPin, BedDouble, Bath, Square, Car, Maximize2 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import QuickViewModal from './QuickViewModal';
 
 const PropertyCard = ({ property }) => {
   const [showQuickView, setShowQuickView] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <>
       <div 
-        onClick={() => setShowQuickView(true)}
+        onClick={() => navigate(`/property/${property.slug || property.id}`)}
         className="bg-white rounded-md shadow-sm border border-gray-200 overflow-hidden group hover:shadow-md transition-all flex flex-col h-full cursor-pointer block"
       >
       {/* Image Section */}
@@ -62,7 +63,11 @@ const PropertyCard = ({ property }) => {
         </div>
         
         <div className="absolute bottom-3 right-3 flex gap-2">
-          <div className="w-8 h-8 flex items-center justify-center bg-black/80 rounded border border-transparent hover:border-white transition-all text-white backdrop-blur-sm">
+          <div 
+            onClick={(e) => { e.stopPropagation(); setShowQuickView(true); }}
+            className="w-8 h-8 flex items-center justify-center bg-black/80 rounded border border-transparent hover:border-white transition-all text-white backdrop-blur-sm"
+            title="Quick View"
+          >
             <Maximize2 size={16} strokeWidth={2.5} />
           </div>
         </div>

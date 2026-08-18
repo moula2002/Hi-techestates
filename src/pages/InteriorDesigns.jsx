@@ -14,12 +14,24 @@ const InteriorDesigns = () => {
         if (!response.ok) throw new Error('Failed to fetch interior designs');
         const data = await response.json();
         
-        const mappedPortfolio = (Array.isArray(data) ? data : []).map(d => ({
+        let mappedPortfolio = (Array.isArray(data) ? data : []).map(d => ({
           id: d.id,
           img: d.image,
           title: d.title,
           category: d.category
         }));
+
+        // Fallback dummy data if the API has no interior designs yet
+        if (mappedPortfolio.length === 0) {
+          mappedPortfolio = [
+            { id: '1', img: '/assets/gallery/gallery-2.jpg', title: 'Modern Minimalist Living', category: 'Residential' },
+            { id: '2', img: '/assets/gallery/kitchen.jpg', title: 'Contemporary Kitchen', category: 'Residential' },
+            { id: '3', img: '/assets/gallery/gallery-3.jpg', title: 'Executive Office Space', category: 'Commercial' },
+            { id: '4', img: '/assets/gallery/gallery-7.jpg', title: 'Luxury Spa Bathroom', category: 'Residential' },
+            { id: '5', img: '/assets/gallery/gallery-8.jpg', title: 'Creative Co-working Hub', category: 'Commercial' },
+            { id: '6', img: '/assets/gallery/gallery-1.jpg', title: 'Boutique Retail Store', category: 'Commercial' }
+          ];
+        }
         
         setPortfolio(mappedPortfolio);
       } catch (err) {
@@ -39,34 +51,35 @@ const InteriorDesigns = () => {
       </Helmet>
       
       {/* Cinematic Hero Section */}
-      <section className="relative h-[70vh] min-h-[600px] flex items-center justify-center pt-20">
-        <div className="absolute inset-0 z-0">
+      <section className="relative w-full h-[60vh] min-h-[500px] flex flex-col justify-center items-center overflow-hidden mb-12">
+        <div className="absolute inset-0 w-full h-full bg-gray-200">
           <img
             src="/assets/images/img-7.jpg"
             alt="Luxury Interior Design"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover object-center scale-105 animate-[slow-zoom_20s_linear_infinite_alternate]"
             onError={(e) => { e.target.src = "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80" }}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-charcoal-900 via-charcoal-900/60 to-charcoal-900/40"></div>
-          {/* White gradient at top so the dark transparent navbar is legible */}
-          <div className="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-white/90 via-white/50 to-transparent"></div>
+          {/* Very Light Overlay */}
+          <div className="absolute inset-0 bg-white/20"></div>
+          {/* Top white gradient specifically for Navbar visibility */}
+          <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-white/90 to-transparent z-10 pointer-events-none"></div>
         </div>
 
-        <div data-aos="fade-up" 
-          className="relative z-10 text-center px-4 max-w-4xl text-white"
-        >
-          <div data-aos="fade-up" className="w-20 h-20 bg-primary-900/50 backdrop-blur-md rounded-full flex items-center justify-center mx-auto mb-8 border border-white/10">
-            <Paintbrush size={32} className="text-primary-400" />
+        <div data-aos="fade-up" className="relative z-20 text-center px-4 max-w-4xl mx-auto pt-16">
+          <div className="inline-block bg-white/30 backdrop-blur-md px-6 md:px-10 py-6 md:py-8 rounded-2xl shadow-lg border border-white/50">
+            <div data-aos="fade-up" className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm">
+              <Paintbrush size={24} className="text-primary-600" />
+            </div>
+            <h2 data-aos="fade-up" className="text-xs md:text-sm font-bold tracking-widest text-primary-700 uppercase mb-2">
+              Hi-Tech Interiors
+            </h2>
+            <h1 data-aos="fade-up" className="text-3xl md:text-4xl font-black font-serif text-charcoal-900 mb-4 leading-tight">
+              Crafting Spaces That <br />Inspire
+            </h1>
+            <p data-aos="fade-up" className="text-sm md:text-base text-charcoal-900 font-bold max-w-xl mx-auto">
+              Elevate your living and working environments with our bespoke, turnkey interior design solutions tailored to your unique lifestyle.
+            </p>
           </div>
-          <h2 data-aos="fade-up" className="text-xl font-bold tracking-widest text-primary-400 uppercase mb-4">
-            Hi-Tech Interiors
-          </h2>
-          <h1 data-aos="fade-up" className="text-5xl md:text-7xl font-black font-serif mb-6 leading-tight">
-            Crafting Spaces That <br />Inspire
-          </h1>
-          <p data-aos="fade-up" className="text-lg text-gray-300 max-w-2xl mx-auto mb-10">
-            Elevate your living and working environments with our bespoke, turnkey interior design solutions tailored to your unique lifestyle.
-          </p>
         </div>
       </section>
 

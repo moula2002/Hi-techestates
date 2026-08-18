@@ -7,17 +7,45 @@ import aboutImage from '../assets/image.png';
 
 const About = () => {
   return (
-    <div className="w-full font-sans pt-24 bg-white">
+    <div className="w-full font-sans bg-white pb-24">
       <Helmet>
         <title>About Us | Hi-Tech Estates & Interiors</title>
         <meta name="description" content="Learn more about Hi-Tech Estates & Interiors, our 10+ years of experience, mission, and the expert team helping you find the best properties." />
       </Helmet>
-      {/* 1. Intro Section */}
-      <section className="py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-sm text-gray-500 mb-8 font-medium">
-            <Link to="/">Home</Link> / About Us
+
+      {/* Premium Hero Section */}
+      <div className="relative w-full h-[40vh] min-h-[350px] flex items-center justify-center overflow-hidden">
+        {/* Background Image with Light Overlay */}
+        <div className="absolute inset-0 w-full h-full bg-gray-200">
+          <img 
+            src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" 
+            alt="About Hi-Tech Estates" 
+            className="w-full h-full object-cover object-center scale-105 animate-[slow-zoom_20s_linear_infinite_alternate]"
+          />
+          {/* Very Light Overlay */}
+          <div className="absolute inset-0 bg-white/20"></div>
+          {/* Top white gradient specifically for Navbar visibility */}
+          <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-white/90 to-transparent z-10 pointer-events-none"></div>
+        </div>
+
+        {/* Hero Content */}
+        <div className="relative z-10 text-center px-4 pt-8" data-aos="fade-up">
+          <div className="inline-block bg-white/30 backdrop-blur-md px-6 md:px-10 py-6 rounded-2xl shadow-lg border border-white/50">
+            <h1 className="text-3xl md:text-4xl font-serif font-bold text-charcoal-900 mb-4 tracking-tight">
+              About Us
+            </h1>
+            <div className="flex items-center justify-center gap-3 text-charcoal-800 text-xs md:text-sm font-bold tracking-wide uppercase">
+              <span className="hover:text-primary-600 transition-colors cursor-pointer" onClick={() => window.location.href = '/'}>Home</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-primary-500 shadow-sm"></span>
+              <span className="text-primary-900 font-black">About Us</span>
+            </div>
           </div>
+        </div>
+      </div>
+
+      {/* 1. Intro Section */}
+      <section className="py-16 -mt-8 relative z-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row gap-12 items-center">
             <div className="flex-1" data-aos="fade-right">
               <h1 className="text-xl font-bold tracking-widest text-primary-600 uppercase mb-2">Who We Are</h1>

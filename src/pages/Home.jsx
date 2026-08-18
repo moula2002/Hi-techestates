@@ -72,16 +72,16 @@ const Home = () => {
   const handleContactSubmit = async (e) => {
     e.preventDefault();
     setContactStatus('loading');
-    
+
     try {
       const response = await fetch('/api/send-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...contactData, formSource: 'Home Page' })
       });
-      
+
       const result = await response.json();
-      
+
       if (response.ok) {
         setContactStatus('success');
         setContactMessage('Your message has been sent successfully!');
@@ -93,7 +93,7 @@ const Home = () => {
       setContactStatus('error');
       setContactMessage(error.message || 'Failed to send message. Please try again.');
     }
-    
+
     setTimeout(() => {
       setContactStatus('idle');
       setContactMessage('');
@@ -504,22 +504,22 @@ const Home = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-bold text-charcoal-700 mb-2">Full Name *</label>
-                    <input type="text" value={contactData.name} onChange={e => setContactData({...contactData, name: e.target.value})} required className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition-colors" placeholder="John Doe" />
+                    <input type="text" value={contactData.name} onChange={e => setContactData({ ...contactData, name: e.target.value })} required className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition-colors" placeholder="John Doe" />
                   </div>
                   <div>
                     <label className="block text-sm font-bold text-charcoal-700 mb-2">Phone Number *</label>
-                    <input type="tel" value={contactData.phone} onChange={e => setContactData({...contactData, phone: e.target.value})} required className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition-colors" placeholder="080-4132 3523" />
+                    <input type="tel" value={contactData.phone} onChange={e => setContactData({ ...contactData, phone: e.target.value })} required className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition-colors" placeholder="+91 99000 00494" />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-bold text-charcoal-700 mb-2">Email Address</label>
-                    <input type="email" value={contactData.email} onChange={e => setContactData({...contactData, email: e.target.value})} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition-colors" placeholder="john@example.com" />
+                    <input type="email" value={contactData.email} onChange={e => setContactData({ ...contactData, email: e.target.value })} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition-colors" placeholder="john@example.com" />
                   </div>
                   <div>
                     <label className="block text-sm font-bold text-charcoal-700 mb-2">Interested In</label>
-                    <select value={contactData.interestedIn} onChange={e => setContactData({...contactData, interestedIn: e.target.value})} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition-colors text-charcoal-700">
+                    <select value={contactData.interestedIn} onChange={e => setContactData({ ...contactData, interestedIn: e.target.value })} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition-colors text-charcoal-700">
                       <option>Buying a Property</option>
                       <option>Selling a Property</option>
                       <option>Renting/Leasing</option>
@@ -531,7 +531,7 @@ const Home = () => {
 
                 <div>
                   <label className="block text-sm font-bold text-charcoal-700 mb-2">Your Message</label>
-                  <textarea rows="4" value={contactData.message} onChange={e => setContactData({...contactData, message: e.target.value})} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition-colors resize-none" placeholder="How can we help you?"></textarea>
+                  <textarea rows="4" value={contactData.message} onChange={e => setContactData({ ...contactData, message: e.target.value })} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition-colors resize-none" placeholder="How can we help you?"></textarea>
                 </div>
 
                 {contactMessage && (

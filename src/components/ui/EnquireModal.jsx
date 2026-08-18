@@ -43,20 +43,20 @@ const EnquireModal = ({ isOpen, onClose }) => {
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
       {/* Backdrop */}
-      <div 
+      <div
         className="absolute inset-0 bg-charcoal-900/60 backdrop-blur-sm animate-fade-in-up"
         style={{ animationDuration: '0.3s' }}
         onClick={onClose}
       ></div>
 
       {/* Modal Content */}
-      <div 
+      <div
         className="relative bg-white w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden animate-fade-in-up"
         style={{ animationDuration: '0.4s' }}
       >
         <div className="bg-charcoal-900 px-6 py-4 flex justify-between items-center">
           <h3 className="text-xl font-serif text-white">Enquire Now</h3>
-          <button 
+          <button
             onClick={onClose}
             className="text-white/80 hover:text-white transition-colors"
           >
@@ -72,44 +72,44 @@ const EnquireModal = ({ isOpen, onClose }) => {
           <form className="space-y-4" onSubmit={handleSubmit}>
             <div>
               <label className="block text-xs font-bold text-charcoal-900 uppercase tracking-widest mb-1">Full Name</label>
-              <input 
-                type="text" 
+              <input
+                type="text"
                 value={formData.name}
-                onChange={e => setFormData({...formData, name: e.target.value})}
-                className="w-full px-4 py-3 rounded-lg border border-charcoal-200 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-all bg-charcoal-50 font-medium text-charcoal-900" 
-                placeholder="John Doe" 
-                required 
+                onChange={e => setFormData({ ...formData, name: e.target.value })}
+                className="w-full px-4 py-3 rounded-lg border border-charcoal-200 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-all bg-charcoal-50 font-medium text-charcoal-900"
+                placeholder="John Doe"
+                required
               />
             </div>
-            
+
             <div>
               <label className="block text-xs font-bold text-charcoal-900 uppercase tracking-widest mb-1">Phone Number</label>
-              <input 
-                type="tel" 
+              <input
+                type="tel"
                 value={formData.phone}
-                onChange={e => setFormData({...formData, phone: e.target.value})}
-                className="w-full px-4 py-3 rounded-lg border border-charcoal-200 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-all bg-charcoal-50 font-medium text-charcoal-900" 
-                placeholder="+91 98765 43210" 
-                required 
+                onChange={e => setFormData({ ...formData, phone: e.target.value })}
+                className="w-full px-4 py-3 rounded-lg border border-charcoal-200 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-all bg-charcoal-50 font-medium text-charcoal-900"
+                placeholder="+91 98765 43210"
+                required
               />
             </div>
 
             <div>
               <label className="block text-xs font-bold text-charcoal-900 uppercase tracking-widest mb-1">Email Address (Optional)</label>
-              <input 
-                type="email" 
+              <input
+                type="email"
                 value={formData.email}
-                onChange={e => setFormData({...formData, email: e.target.value})}
-                className="w-full px-4 py-3 rounded-lg border border-charcoal-200 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-all bg-charcoal-50 font-medium text-charcoal-900" 
-                placeholder="john@example.com" 
+                onChange={e => setFormData({ ...formData, email: e.target.value })}
+                className="w-full px-4 py-3 rounded-lg border border-charcoal-200 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-all bg-charcoal-50 font-medium text-charcoal-900"
+                placeholder="john@example.com"
               />
             </div>
 
             <div>
               <label className="block text-xs font-bold text-charcoal-900 uppercase tracking-widest mb-1">Requirement</label>
-              <select 
+              <select
                 value={formData.requirement}
-                onChange={e => setFormData({...formData, requirement: e.target.value})}
+                onChange={e => setFormData({ ...formData, requirement: e.target.value })}
                 className="w-full px-4 py-3 rounded-lg border border-charcoal-200 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-all bg-charcoal-50 font-medium text-charcoal-900"
               >
                 <option>Buying a Property</option>
@@ -118,12 +118,12 @@ const EnquireModal = ({ isOpen, onClose }) => {
                 <option>Interior Design Services</option>
               </select>
             </div>
-            
+
             {status === 'success' && <p className="text-green-600 text-sm font-bold text-center">Enquiry sent successfully!</p>}
             {status === 'error' && <p className="text-red-600 text-sm font-bold text-center">Failed to send. Please try again.</p>}
-            
-            <button 
-              type="submit" 
+
+            <button
+              type="submit"
               disabled={status === 'loading' || status === 'success'}
               className="w-full mt-4 py-4 bg-primary-500 text-white rounded-lg font-bold hover:bg-primary-600 transition-colors flex justify-center items-center gap-2 shadow-lg shadow-primary-500/30 uppercase tracking-widest text-sm disabled:opacity-70 disabled:cursor-not-allowed"
             >

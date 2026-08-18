@@ -69,42 +69,31 @@ const PropertyServices = () => {
         <meta name="description" content="Expert property buying, selling, and rental services in Bangalore." />
       </Helmet>
       
-      {/* Cinematic Hero Section */}
-      <section className="relative h-[60vh] min-h-[500px] flex items-center justify-center pt-20">
-        <div className="absolute inset-0 z-0">
+      {/* Hero Banner */}
+      <section className="relative w-full h-[40vh] min-h-[350px] flex flex-col justify-center items-center overflow-hidden mb-12">
+        <div className="absolute inset-0 w-full h-full bg-gray-200">
           <img
-            src="/assets/images/img-5.jpg"
+            src="https://images.unsplash.com/photo-1560520653-9e0e4c89eb11?ixlib=rb-4.0.3&auto=format&fit=crop&w=2073&q=80"
             alt="Real Estate Services"
-            className="w-full h-full object-cover"
-            onError={(e) => { e.target.src = "https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80" }}
+            className="w-full h-full object-cover object-center scale-105 animate-[slow-zoom_20s_linear_infinite_alternate]"
           />
-          <div className="absolute inset-0 bg-charcoal-900/70"></div>
-          {/* White gradient at top so the dark transparent navbar is legible */}
-          <div className="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-white/90 via-white/50 to-transparent"></div>
+          {/* Very Light Overlay */}
+          <div className="absolute inset-0 bg-white/20"></div>
+          {/* Top white gradient specifically for Navbar visibility */}
+          <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-white/90 to-transparent z-10 pointer-events-none"></div>
         </div>
 
-        <div data-aos="fade-up" 
-          className="relative z-10 text-center text-white px-4 max-w-4xl"
-        >
-          <h2 data-aos="fade-up" className="text-xl font-bold tracking-widest text-primary-400 uppercase mb-4">
-            Real Estate Solutions
-          </h2>
-          <h1 data-aos="fade-up" className="text-5xl md:text-7xl font-black font-serif mb-6 leading-tight">
-            Seamless Property <br />Transactions
-          </h1>
-          <p data-aos="fade-up" className="text-lg text-gray-300 max-w-2xl mx-auto mb-8">
-            From buying your first home to leasing commercial spaces, experience white-glove service at every step of your real estate journey.
-          </p>
-          <div data-aos="fade-up">
-            <Link to="/contact" className="inline-flex items-center gap-2 px-8 py-4 bg-primary-600 hover:bg-primary-500 text-white font-bold rounded-xl transition-all duration-300 shadow-lg hover:shadow-primary-600/30 hover:-translate-y-1">
-              Consult an Expert <ArrowRight size={20} />
-            </Link>
+        <div className="relative z-20 text-center px-4 max-w-4xl mx-auto pt-16" data-aos="zoom-in">
+          <div className="inline-block bg-white/30 backdrop-blur-md px-6 md:px-10 py-6 rounded-2xl shadow-lg border border-white/50">
+            <p className="text-primary-700 font-bold tracking-widest uppercase mb-2 text-xs">Real Estate Solutions</p>
+            <h1 className="text-3xl md:text-4xl font-black text-charcoal-900 mb-4 font-serif">Seamless Property Transactions</h1>
+            <div className="w-16 h-1 bg-primary-600 mx-auto rounded-full shadow-sm"></div>
           </div>
         </div>
       </section>
 
       {/* Core Services Grid */}
-      <section className="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 -mt-20">
+      <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {services.map((service, idx) => (
             <div data-aos="fade-up" 
@@ -135,46 +124,21 @@ const PropertyServices = () => {
         </div>
       </section>
 
-      {/* Featured Sales */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-end mb-12">
-            <div>
-              <h2 className="text-xl font-bold tracking-widest text-primary-600 uppercase mb-2">Prime Listings</h2>
-              <h3 className="text-3xl md:text-4xl font-black text-charcoal-900 font-serif">Properties For Sale</h3>
-            </div>
-            <Link to="/properties?type=Buy" className="hidden md:flex items-center gap-2 text-primary-600 font-bold hover:text-primary-800 transition-colors">
-              View All <ArrowRight size={20} />
-            </Link>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {salesProperties.map((property, idx) => (
-              <div data-aos="fade-up" 
-                key={property.id}
-              >
-                <PropertyCard property={property} />
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Featured Rentals */}
+      {/* Featured Properties */}
       <section className="py-20 bg-gray-50 border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-end mb-12">
             <div>
               <h2 className="text-xl font-bold tracking-widest text-primary-600 uppercase mb-2">Move In Today</h2>
-              <h3 className="text-3xl md:text-4xl font-black text-charcoal-900 font-serif">Properties For Rent</h3>
+              <h3 className="text-3xl md:text-4xl font-black text-charcoal-900 font-serif">Properties For Sale & Rent</h3>
             </div>
-            <Link to="/properties?type=Rent" className="hidden md:flex items-center gap-2 text-primary-600 font-bold hover:text-primary-800 transition-colors">
+            <Link to="/properties" className="hidden md:flex items-center gap-2 text-primary-600 font-bold hover:text-primary-800 transition-colors">
               View All <ArrowRight size={20} />
             </Link>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {rentalProperties.map((property, idx) => (
+            {apiProperties.slice(0, 3).map((property, idx) => (
               <div data-aos="fade-up" 
                 key={property.id}
               >

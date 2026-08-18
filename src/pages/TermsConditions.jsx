@@ -68,7 +68,7 @@ const TermsConditions = () => {
                 # 1&2, 1st Floor, 4th Main<br />
                 4th Cross, Arekere, B.G Road,<br />
                 Bangalore - 560076<br />
-                Phone: 080-4132 3523
+                Phone: +91 99000 00494
               </p>
             </section>
           </div>

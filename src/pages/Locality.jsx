@@ -27,27 +27,33 @@ const Locality = () => {
       </Helmet>
 
       {/* Hero Banner */}
-      <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 flex flex-col justify-center items-center overflow-hidden mb-12">
-        <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-white/80 z-10"></div>
+      <section className="relative w-full h-[40vh] min-h-[350px] flex flex-col justify-center items-center overflow-hidden mb-12">
+        <div className="absolute inset-0 w-full h-full bg-gray-200">
           <img
             src="/assets/images/img-17.jpg"
             alt={`Properties in ${formattedAreaName}`}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover object-center scale-105 animate-[slow-zoom_20s_linear_infinite_alternate]"
             onError={(e) => { e.target.src = "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2075&q=80" }}
           />
+          {/* Very Light Overlay */}
+          <div className="absolute inset-0 bg-white/20"></div>
+          {/* Top white gradient specifically for Navbar visibility */}
+          <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-white/90 to-transparent z-10 pointer-events-none"></div>
         </div>
-        <div className="relative z-20 text-center px-4 max-w-4xl mx-auto" data-aos="zoom-in">
-          <div className="mb-4 text-charcoal-600 font-medium text-sm flex items-center justify-center gap-2">
-            <Link to="/" className="hover:text-primary-700 transition-colors">Home</Link> / 
-            <span>{formattedAreaName}</span>
+        
+        <div className="relative z-20 text-center px-4 max-w-4xl mx-auto pt-16" data-aos="zoom-in">
+          <div className="inline-block bg-white/30 backdrop-blur-md px-6 md:px-10 py-6 rounded-2xl shadow-lg border border-white/50">
+            <div className="mb-2 text-charcoal-700 font-bold uppercase tracking-wider text-[10px] flex items-center justify-center gap-2">
+              <Link to="/" className="hover:text-primary-700 transition-colors">Home</Link> / 
+              <span>{formattedAreaName}</span>
+            </div>
+            <p className="text-primary-700 font-bold tracking-widest uppercase mb-2 text-xs">Location Focus</p>
+            <h1 className="text-3xl md:text-4xl font-black text-charcoal-900 mb-4 font-serif">Properties in {formattedAreaName}</h1>
+            <div className="w-16 h-1 bg-primary-600 mx-auto rounded-full mb-4 shadow-sm"></div>
+            <p className="text-sm md:text-base text-charcoal-900 leading-relaxed font-bold max-w-xl mx-auto">
+              Explore the best flats, apartments, plots, and commercial spaces available for sale and rent in {formattedAreaName}.
+            </p>
           </div>
-          <p className="text-primary-700 font-bold tracking-widest uppercase mb-4 text-sm">Location Focus</p>
-          <h1 className="text-4xl md:text-6xl font-black text-charcoal-900 mb-6 font-serif">Properties in {formattedAreaName}</h1>
-          <div className="w-24 h-1.5 bg-primary-600 mx-auto rounded-full mb-8"></div>
-          <p className="text-lg md:text-xl text-charcoal-700 leading-relaxed font-medium">
-            Explore the best flats, apartments, plots, and commercial spaces available for sale and rent in {formattedAreaName}, Bangalore.
-          </p>
         </div>
       </section>
 

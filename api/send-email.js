@@ -40,8 +40,9 @@ export default async function handler(req, res) {
       <!DOCTYPE html>
       <html>
       <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
-          body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f8fafc; margin: 0; padding: 0; }
+          body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f8fafc; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
           .container { max-width: 600px; margin: 40px auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
           .header { background-color: #0f172a; padding: 35px 30px; text-align: center; border-bottom: 4px solid #3b82f6; }
           .header h1 { color: #ffffff; margin: 0; font-size: 28px; font-weight: 800; letter-spacing: 1px; }
@@ -50,12 +51,24 @@ export default async function handler(req, res) {
           .field { margin-bottom: 25px; border-bottom: 1px solid #f1f5f9; padding-bottom: 16px; }
           .field:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
           .label { font-size: 12px; color: #64748b; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; margin-bottom: 8px; display: block; }
-          .value { font-size: 16px; color: #0f172a; font-weight: 600; margin: 0; }
+          .value { font-size: 16px; color: #0f172a; font-weight: 600; margin: 0; word-break: break-word; }
           .message-box { background-color: #f8fafc; border: 1px solid #e2e8f0; padding: 20px; border-radius: 8px; margin-top: 12px; }
-          .message-text { color: #334155; font-size: 15px; line-height: 1.6; margin: 0; white-space: pre-wrap; font-weight: 500; }
+          .message-text { color: #334155; font-size: 15px; line-height: 1.6; margin: 0; white-space: pre-wrap; font-weight: 500; word-break: break-word; }
           .footer { background-color: #f1f5f9; padding: 25px; text-align: center; border-top: 1px solid #e2e8f0; }
           .footer p { margin: 0; color: #64748b; font-size: 13px; font-weight: 500; }
           .accent { color: #3b82f6; }
+          
+          /* Mobile Responsiveness */
+          @media screen and (max-width: 600px) {
+            .container { margin: 15px auto !important; width: 95% !important; border-radius: 8px !important; }
+            .header { padding: 25px 20px !important; }
+            .header h1 { font-size: 24px !important; }
+            .content { padding: 25px 20px !important; }
+            .field { margin-bottom: 20px; }
+            .value { font-size: 15px !important; }
+            .message-box { padding: 15px !important; }
+            .message-text { font-size: 14px !important; }
+          }
         </style>
       </head>
       <body>
