@@ -25,12 +25,10 @@ export default async function handler(req, res) {
       });
     }
 
-    // Configure the Nodemailer transporter
-    // It relies on Environment Variables set in Vercel (or .env.local for development)
+    // Configure the Nodemailer transporter for Gmail
+    // Using the 'gmail' service shortcut is the most reliable way to connect on Vercel
     const transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST || 'smtp.gmail.com',
-      port: process.env.SMTP_PORT || 587,
-      secure: process.env.SMTP_PORT === '465', // true for 465, false for other ports
+      service: 'gmail',
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
