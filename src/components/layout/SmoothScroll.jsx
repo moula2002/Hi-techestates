@@ -14,14 +14,19 @@ const SmoothScroll = ({ children }) => {
       direction: 'vertical',
       gestureDirection: 'vertical',
       smooth: true,
-      wheelMultiplier: 1.2, // Balanced wheel speed
       smoothTouch: false,
       touchMultiplier: 2,
       infinite: false,
-      autoRaf: true, // Let Lenis manage its own performant RAF loop natively
     });
 
     lenisRef.current = lenis;
+
+    let rafId;
+    function raf(time) {
+      lenis.raf(time);
+      rafId = requestAnimationFrame(raf);
+    }
+    rafId = requestAnimationFrame(raf);
 
     // Expose a global scrollToTop function for the floating button
     window.scrollToTop = () => {
@@ -34,6 +39,7 @@ const SmoothScroll = ({ children }) => {
 
     return () => {
       delete window.scrollToTop;
+      cancelAnimationFrame(rafId);
       lenis.destroy();
       lenisRef.current = null;
     };
