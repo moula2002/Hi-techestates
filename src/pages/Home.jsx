@@ -133,25 +133,8 @@ const Home = () => {
   const [isFeaturedHovered, setIsFeaturedHovered] = useState(false);
 
   useEffect(() => {
-    let animationId;
-    const carousel = featuredCarouselRef.current;
-    
-    if (!carousel || featuredProperties.length <= 1) return;
-
-    const scroll = () => {
-      if (!isFeaturedHovered) {
-        carousel.scrollLeft += 1;
-        // Reset when reaching halfway point (since array is doubled)
-        if (carousel.scrollLeft >= carousel.scrollWidth / 2) {
-          carousel.scrollLeft = 0;
-        }
-      }
-      animationId = requestAnimationFrame(scroll);
-    };
-
-    animationId = requestAnimationFrame(scroll);
-    return () => cancelAnimationFrame(animationId);
-  }, [isFeaturedHovered, featuredProperties.length]);
+    // Removed continuous scroll loop to prevent repeating elements and provide standard professional carousel
+  }, []);
 
   const scrollFeatured = (direction) => {
     if (featuredCarouselRef.current) {
@@ -159,14 +142,6 @@ const Home = () => {
       const scrollAmount = 400; // rough width of a card + gap
       
       let newScrollLeft = direction === 'left' ? carousel.scrollLeft - scrollAmount : carousel.scrollLeft + scrollAmount;
-      
-      // Keep it within bounds for seamless loop
-      if (newScrollLeft < 0) {
-        newScrollLeft += carousel.scrollWidth / 2;
-      } else if (newScrollLeft >= carousel.scrollWidth / 2) {
-        newScrollLeft -= carousel.scrollWidth / 2;
-      }
-      
       carousel.scrollTo({ left: newScrollLeft, behavior: 'smooth' });
     }
   };
@@ -349,13 +324,14 @@ const Home = () => {
               </>
             )}
 
-            {/* Continuous JS Scroll Container */}
+            {/* Standard Snap Carousel Container */}
             <div 
               ref={featuredCarouselRef}
-              className="flex overflow-x-hidden gap-8 pb-4 pt-2 text-left"
+              className="flex overflow-x-auto snap-x snap-mandatory gap-8 pb-8 pt-2 text-left hide-scrollbar"
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
             >
-              {[...featuredProperties, ...featuredProperties].map((property, idx) => (
-                <div key={`${property.id}-${idx}`} className="w-[85vw] sm:w-[350px] md:w-[400px] shrink-0" data-aos="fade-up" data-aos-delay={idx < 5 ? idx * 100 : 0}>
+              {featuredProperties.map((property, idx) => (
+                <div key={`${property.id}-${idx}`} className="w-[85vw] sm:w-[350px] md:w-[400px] shrink-0 snap-start" data-aos="fade-up" data-aos-delay={idx < 5 ? idx * 100 : 0}>
                   <PropertyCard property={property} />
                 </div>
               ))}
