@@ -19,6 +19,8 @@ const PropertyDetail = () => {
   // Form States
   const [scheduleForm, setScheduleForm] = useState({ time: 'Time', name: '', phone: '', email: '', message: '' });
   const [enquireForm, setEnquireForm] = useState({ name: '', phone: '', email: '', type: 'Select', message: '' });
+  const [scheduleStatus, setScheduleStatus] = useState('idle');
+  const [enquireStatus, setEnquireStatus] = useState('idle');
   const [selectedDateIndex, setSelectedDateIndex] = useState(0);
   const [dateOffset, setDateOffset] = useState(0);
 
@@ -64,25 +66,85 @@ const PropertyDetail = () => {
     }
   };
 
-  const handleScheduleSubmit = (e) => {
+  const handleScheduleSubmit = async (e) => {
     e.preventDefault();
     if (!scheduleForm.name || !scheduleForm.phone) {
       alert("Please fill in your Name and Phone Number to schedule a tour.");
       return;
     }
     const chosenDate = nextDates[selectedDateIndex];
-    alert(`Thank you ${scheduleForm.name}! Your ${tourType === 'in_person' ? 'In Person' : 'Video'} tour request for ${chosenDate.dayName}, ${chosenDate.monthName} ${chosenDate.dayNum} has been submitted.`);
-    setScheduleForm({ time: 'Time', name: '', phone: '', email: '', message: '' });
+    setScheduleStatus('loading');
+    
+    try {
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: scheduleForm.name,
+          email: scheduleForm.email,
+          phone: scheduleForm.phone,
+          interestedIn: sidebarTab === 'schedule' 
+            ? `Schedule a ${tourType === 'in_person' ? 'In Person' : 'Video'} tour on ${chosenDate.dayName}, ${chosenDate.monthName} ${chosenDate.dayNum} at ${scheduleForm.time}`
+            : 'Request Info',
+          message: scheduleForm.message || `I would like to ${sidebarTab === 'schedule' ? 'schedule a tour for' : 'request info about'} ${property?.title}`,
+          formSource: `Property Sidebar Form - ${property?.title}`
+        })
+      });
+
+      if (response.ok) {
+        setScheduleStatus('success');
+        if (sidebarTab === 'schedule') {
+          alert(`Thank you ${scheduleForm.name}! Your ${tourType === 'in_person' ? 'In Person' : 'Video'} tour request for ${chosenDate.dayName}, ${chosenDate.monthName} ${chosenDate.dayNum} has been submitted.`);
+        } else {
+          alert(`Thank you ${scheduleForm.name}! Your request has been sent.`);
+        }
+        setScheduleForm({ time: 'Time', name: '', phone: '', email: '', message: '' });
+      } else {
+        throw new Error('Something went wrong');
+      }
+    } catch (error) {
+      setScheduleStatus('error');
+      alert('Failed to send request. Please try again.');
+    }
+    
+    setTimeout(() => setScheduleStatus('idle'), 5000);
   };
 
-  const handleEnquireSubmit = (e) => {
+  const handleEnquireSubmit = async (e) => {
     e.preventDefault();
     if (!enquireForm.name || !enquireForm.phone) {
       alert("Please fill in your Name and Phone Number to enquire.");
       return;
     }
-    alert(`Thank you ${enquireForm.name}! Your enquiry has been sent to the agent.`);
-    setEnquireForm({ name: '', phone: '', email: '', type: 'Select', message: `Hello, I am interested in [${property?.title}]` });
+    setEnquireStatus('loading');
+    
+    try {
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: enquireForm.name,
+          email: enquireForm.email,
+          phone: enquireForm.phone,
+          interestedIn: enquireForm.type,
+          message: enquireForm.message,
+          formSource: `Property Enquiry Section - ${property?.title}`
+        })
+      });
+
+      if (response.ok) {
+        setEnquireStatus('success');
+        alert(`Thank you ${enquireForm.name}! Your enquiry has been sent to the agent.`);
+        setEnquireForm({ name: '', phone: '', email: '', type: 'Select', message: `Hello, I am interested in [${property?.title}]` });
+      } else {
+        throw new Error('Something went wrong');
+      }
+    } catch (error) {
+      setEnquireStatus('error');
+      alert('Failed to send enquiry. Please try again.');
+    }
+    
+    setTimeout(() => setEnquireStatus('idle'), 5000);
   };
 
   if (loading) {
@@ -397,8 +459,8 @@ const PropertyDetail = () => {
                   ></textarea>
                 </div>
 
-                <button type="submit" className="bg-gradient-to-r from-[#00a8ff] to-[#0097e6] text-white py-3.5 px-8 rounded-xl font-bold hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2 w-full sm:w-auto">
-                  Send Enquiry Request
+                <button type="submit" disabled={enquireStatus === 'loading'} className="bg-gradient-to-r from-[#00a8ff] to-[#0097e6] text-white py-3.5 px-8 rounded-xl font-bold hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2 w-full sm:w-auto disabled:opacity-70 disabled:cursor-not-allowed">
+                  {enquireStatus === 'loading' ? 'Sending...' : 'Send Enquiry Request'}
                 </button>
               </form>
 
@@ -516,8 +578,11 @@ const PropertyDetail = () => {
                   </div>
 
                   {/* Submit Button */}
-                  <button type="submit" className="w-full bg-gradient-to-r from-[#2ecc71] to-[#27ae60] text-white py-4 rounded-xl text-[15px] font-bold hover:shadow-[0_8px_20px_rgba(46,204,113,0.3)] hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2">
-                    {sidebarTab === 'schedule' ? 'Confirm Tour Request' : 'Send Information Request'}
+                  <button type="submit" disabled={scheduleStatus === 'loading'} className="w-full bg-gradient-to-r from-[#2ecc71] to-[#27ae60] text-white py-4 rounded-xl text-[15px] font-bold hover:shadow-[0_8px_20px_rgba(46,204,113,0.3)] hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed">
+                    {scheduleStatus === 'loading' 
+                      ? 'Processing...' 
+                      : (sidebarTab === 'schedule' ? 'Confirm Tour Request' : 'Send Information Request')
+                    }
                   </button>
 
                 </form>
