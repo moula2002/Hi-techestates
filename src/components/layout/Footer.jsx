@@ -39,7 +39,7 @@ const Footer = () => {
   };
 
   return (
-    <footer className="bg-primary-900 text-white pt-16 pb-8 relative mt-16">
+    <footer className="bg-primary-900 text-white pt-16 pb-8 relative">
       {/* Unique Floating Scroll to Top Button */}
       <div className="absolute top-8 right-8 md:right-16 z-20">
         <button 

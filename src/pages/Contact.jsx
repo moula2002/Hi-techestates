@@ -233,8 +233,7 @@ const Contact = () => {
                   <div>
                     <h4 className="font-bold text-white mb-2 text-lg tracking-wide">Office Hours</h4>
                     <p className="text-gray-400 text-[15px] leading-relaxed font-medium">
-                      Mon - Sat: 9:00 AM - 7:00 PM<br />
-                      Sunday: <span className="text-red-400/80 font-semibold">Closed</span>
+                      Mon - Sun: 9:00 AM - 10:00 PM
                     </p>
                   </div>
                 </div>
@@ -249,25 +248,37 @@ const Contact = () => {
             </div>
           </div>
         </div>
-
-        {/* Premium Map Section */}
-        <div className="mt-20 w-full h-[500px] rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.1)] border border-gray-200/60 bg-white relative group" data-aos="fade-up" data-aos-delay="200">
-          {/* Stylish overlay that disappears on map hover */}
-          <div className="absolute inset-0 bg-charcoal-950/5 group-hover:opacity-0 transition-opacity duration-700 pointer-events-none z-10"></div>
-
-          <iframe
-            src="https://maps.google.com/maps?q=Arekere,%20B.G%20Road,%20Bangalore&t=&z=15&ie=UTF8&iwloc=&output=embed"
-            width="100%"
-            height="100%"
-            style={{ border: 0 }}
-            allowFullScreen=""
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-            title="Google Map"
-            className="w-full h-full grayscale-[25%] contrast-[1.05] group-hover:grayscale-0 transition-all duration-1000 ease-in-out"
-          ></iframe>
-        </div>
       </div>
+
+      {/* Premium Map Section with Parallax Background */}
+      <section 
+        className="mt-24 py-24 relative overflow-hidden bg-cover bg-center md:bg-fixed"
+        style={{ backgroundImage: "url('/assets/images/exterior/WhatsApp%20Image%202026-09-01%20at%2012.01.17%20PM%20(1).jpeg')" }}
+      >
+        <div className="absolute inset-0 bg-black/60 z-0"></div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10" data-aos="fade-up" data-aos-delay="200">
+          <div className="mb-10 text-center">
+            <h2 className="text-xl font-bold tracking-widest text-primary-400 uppercase mb-2 drop-shadow-md">Find Us</h2>
+            <h3 className="text-3xl md:text-4xl font-black text-white font-serif drop-shadow-md">Visit Our Office</h3>
+          </div>
+          <div className="w-full h-[500px] rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] border-4 border-white/20 bg-white relative group">
+            {/* Stylish overlay that disappears on map hover */}
+            <div className="absolute inset-0 bg-charcoal-950/10 group-hover:opacity-0 transition-opacity duration-700 pointer-events-none z-10"></div>
+
+            <iframe
+              src="https://maps.google.com/maps?q=Arekere,%20B.G%20Road,%20Bangalore&t=&z=15&ie=UTF8&iwloc=&output=embed"
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              allowFullScreen=""
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Google Map"
+              className="w-full h-full grayscale-[25%] contrast-[1.05] group-hover:grayscale-0 transition-all duration-1000 ease-in-out"
+            ></iframe>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };

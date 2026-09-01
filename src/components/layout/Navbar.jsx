@@ -12,6 +12,8 @@ const Navbar = () => {
   const [isListPropertyModalOpen, setIsListPropertyModalOpen] = useState(false);
   const [openMobileDropdown, setOpenMobileDropdown] = useState(null);
   const location = useLocation();
+  const isServicesPage = location.pathname === '/services';
+  const showSolidNavbar = isScrolled || isServicesPage;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -44,7 +46,8 @@ const Navbar = () => {
       name: 'Services',
       path: '/services',
       dropdown: [
-        { name: 'Property Rent/ Sell', path: '/property-services' },
+        { name: 'Property Rent', path: '/property-services' },
+        { name: 'Property Sell', path: '/property-services' },
         { name: 'Interiors Designs', path: '/interior-designs' }
       ]
     },
@@ -55,7 +58,7 @@ const Navbar = () => {
   return (
     <>
       <header
-        className={`fixed left-1/2 -translate-x-1/2 w-[95%] max-w-[1400px] z-40 transition-all duration-500 rounded-full ${isScrolled
+        className={`fixed left-1/2 -translate-x-1/2 w-[95%] max-w-[1400px] z-40 transition-all duration-500 rounded-full ${showSolidNavbar
           ? 'top-4 bg-white/95 backdrop-blur-2xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-gray-200/60 py-2.5'
           : 'top-2 bg-transparent shadow-none border border-transparent py-4'
           }`}

@@ -17,19 +17,21 @@ const Projects = () => {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-24 font-sans pb-20">
+    <div className="min-h-screen bg-gray-50 font-sans pb-20">
+      
+      {/* Header / Breadcrumbs */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12 text-center md:text-left flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold text-charcoal-900 mb-2">Our Projects</h1>
+          <div className="text-sm text-gray-500 font-medium">
+            Home / Projects
+          </div>
+        </div>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Header / Breadcrumbs */}
-        <div className="mb-12 text-center md:text-left flex flex-col md:flex-row md:items-end justify-between gap-4">
-          <div>
-            <h1 className="text-3xl font-bold text-charcoal-900 mb-2">Our Projects</h1>
-            <div className="text-sm text-gray-500 font-medium">
-              Home / Projects
-            </div>
-          </div>
-
-          {/* Tabs */}
+        {/* Tabs */}
+        <div className="mb-12 flex justify-center md:justify-start">
           <div className="flex gap-2">
             {['All', 'Ongoing', 'Completed'].map(tab => (
               <button

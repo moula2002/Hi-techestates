@@ -73,12 +73,9 @@ const InteriorDesigns = () => {
             <h2 data-aos="fade-up" className="text-xs md:text-sm font-bold tracking-widest text-primary-700 uppercase mb-2">
               Hi-Tech Interiors
             </h2>
-            <h1 data-aos="fade-up" className="text-3xl md:text-4xl font-black font-serif text-charcoal-900 mb-4 leading-tight">
-              Crafting Spaces That <br />Inspire
+            <h1 data-aos="fade-up" className="text-4xl md:text-5xl font-black text-charcoal-900 mb-6 leading-tight font-serif">
+              Transforming Spaces <br className="hidden md:block" /> Into Masterpieces
             </h1>
-            <p data-aos="fade-up" className="text-sm md:text-base text-charcoal-900 font-bold max-w-xl mx-auto">
-              Elevate your living and working environments with our bespoke, turnkey interior design solutions tailored to your unique lifestyle.
-            </p>
           </div>
         </div>
       </section>

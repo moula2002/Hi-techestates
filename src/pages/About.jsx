@@ -81,28 +81,32 @@ const About = () => {
         </div>
       </section>
 
-      {/* 2. Stats Section (Experience) */}
-      <section className="py-12 border-y border-gray-100 bg-gray-50" data-aos="fade-up">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* 2. Stats Section (Experience) - Parallax */}
+      <section 
+        className="py-24 relative overflow-hidden bg-cover bg-center md:bg-fixed" 
+        style={{ backgroundImage: "url('/assets/images/exterior/WhatsApp%20Image%202026-09-01%20at%2012.01.24%20PM%20(1).jpeg')" }}
+      >
+        <div className="absolute inset-0 bg-black/50"></div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="flex flex-wrap justify-between items-center text-center gap-6">
             <div className="flex-1 min-w-[150px]">
-              <h3 className="text-4xl font-black text-primary-900 mb-2">10+</h3>
-              <p className="text-sm font-bold text-charcoal-700 uppercase tracking-wider">Years Experience</p>
+              <h3 className="text-5xl font-black text-white mb-2 drop-shadow-md">10+</h3>
+              <p className="text-sm font-bold text-gray-300 uppercase tracking-wider">Years Experience</p>
             </div>
             <div className="flex-1 min-w-[150px]">
-              <h3 className="text-4xl font-black text-primary-900 mb-2">250+</h3>
-              <p className="text-sm font-bold text-charcoal-700 uppercase tracking-wider">Successful Transactions</p>
+              <h3 className="text-5xl font-black text-white mb-2 drop-shadow-md">250+</h3>
+              <p className="text-sm font-bold text-gray-300 uppercase tracking-wider">Successful Transactions</p>
             </div>
             <div className="flex-1 min-w-[150px]">
-              <h3 className="text-4xl font-black text-primary-900 mb-2">500+</h3>
-              <p className="text-sm font-bold text-charcoal-700 uppercase tracking-wider">Happy Customers</p>
+              <h3 className="text-5xl font-black text-white mb-2 drop-shadow-md">500+</h3>
+              <p className="text-sm font-bold text-gray-300 uppercase tracking-wider">Happy Customers</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* 3. Areas We Specialise In */}
-      <section className="py-20 bg-white" data-aos="fade-up">
+      <section className="py-24 bg-white border-y border-gray-100" data-aos="fade-up">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-xl font-bold tracking-widest text-primary-600 uppercase mb-2">Our Territory</h2>
           <h3 className="text-3xl font-black text-charcoal-900 mb-12">Areas We Specialise In</h3>
@@ -112,7 +116,7 @@ const About = () => {
           <div className="flex flex-wrap justify-center gap-4">
             {locations.map((loc) => (
               <div key={loc} className="px-6 py-3 bg-gray-50 border border-gray-200 rounded-lg font-bold text-charcoal-900 flex items-center gap-2">
-                <MapPin size={18} className="text-primary-500" />
+                <MapPin size={18} className="text-primary-600" />
                 {loc}
               </div>
             ))}
@@ -120,27 +124,28 @@ const About = () => {
         </div>
       </section>
 
-      {/* 4. Why Choose Us */}
-      <section className="py-20 bg-gray-50" data-aos="fade-up">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* 4. Why Choose Us - Parallax */}
+      <section 
+        className="py-24 relative overflow-hidden bg-cover bg-center md:bg-fixed"
+        style={{ backgroundImage: "url('/assets/images/exterior/WhatsApp%20Image%202026-09-01%20at%2012.01.21%20PM.jpeg')" }}
+      >
+        <div className="absolute inset-0 bg-black/60"></div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-16">
-            <h2 className="text-xl font-bold tracking-widest text-primary-600 uppercase mb-2">Our Advantage</h2>
-            <h3 className="text-3xl font-black text-charcoal-900">Why Clients Choose Us</h3>
+            <h2 className="text-xl font-bold tracking-widest text-primary-400 uppercase mb-2 drop-shadow-md">Our Advantage</h2>
+            <h3 className="text-3xl font-black text-white drop-shadow-md">Why Clients Choose Us</h3>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
-              { title: 'Local Expertise', desc: 'Unmatched knowledge of the local real estate market trends and property values.' },
-              { title: 'Verified Properties', desc: 'Every property goes through a rigorous legal and quality check before listing.' },
-              { title: 'End-to-End Service', desc: 'From property search to registration and interior design, we handle everything.' },
-              { title: 'Transparent Dealings', desc: '100% transparency in pricing and legal processes. No hidden charges.' },
-              { title: 'Dedicated Support', desc: 'A dedicated relationship manager for personalized assistance throughout.' },
-              { title: 'Vast Network', desc: 'Access to off-market properties and exclusive pre-launch offers.' }
+              { title: 'Local Expertise', desc: 'Deep understanding of property values, trends, and future developments in our target areas.' },
+              { title: 'Personalized Service', desc: 'We take the time to understand your exact requirements before recommending any property.' },
+              { title: 'Transparency', desc: 'No hidden costs, clear communication, and ethical practices throughout the transaction.' }
             ].map((feature, idx) => (
-              <div key={idx} className="bg-white p-8 rounded-xl shadow-sm border border-gray-100 flex gap-4 items-start">
-                <CheckCircle className="text-primary-600 shrink-0 mt-1" size={24} />
+              <div key={idx} className="bg-white/10 backdrop-blur-md p-8 rounded-xl border border-white/20 shadow-lg flex gap-4 text-left hover:bg-white/20 transition-colors" data-aos="fade-up" data-aos-delay={idx * 100}>
+                <CheckCircle className="text-primary-400 shrink-0 mt-1" size={24} />
                 <div>
-                  <h4 className="text-xl font-bold text-charcoal-900 mb-2">{feature.title}</h4>
-                  <p className="text-gray-600">{feature.desc}</p>
+                  <h4 className="text-xl font-bold text-white mb-2">{feature.title}</h4>
+                  <p className="text-gray-200">{feature.desc}</p>
                 </div>
               </div>
             ))}
@@ -149,8 +154,8 @@ const About = () => {
       </section>
 
       {/* 5. Client Testimonials */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <section className="py-24 bg-gray-50 text-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-xl font-bold tracking-widest text-primary-600 uppercase mb-2">Reviews</h2>
           <h3 className="text-3xl font-black text-charcoal-900 mb-12">What Our Clients Say</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -159,15 +164,13 @@ const About = () => {
               { name: "Priya Desai", text: "Sold my plot in Begur within a month at a great price. Excellent marketing and fast process.", area: "Begur" },
               { name: "Anil Kumar", text: "Their interior design service completely transformed my new villa. Highly recommended.", area: "Koramangala" }
             ].map((review, idx) => (
-              <div key={idx} className="bg-gray-50 p-8 rounded-xl border border-gray-100 relative text-left">
+              <div key={idx} className="bg-white p-8 rounded-xl border border-gray-100 relative text-left shadow-md" data-aos="fade-up" data-aos-delay={idx * 100}>
                 <div className="flex mb-4 text-yellow-400">
                   <Star fill="currentColor" size={20} /><Star fill="currentColor" size={20} /><Star fill="currentColor" size={20} /><Star fill="currentColor" size={20} /><Star fill="currentColor" size={20} />
                 </div>
                 <p className="text-charcoal-700 italic mb-6">"{review.text}"</p>
-                <div className="mt-auto">
-                  <h4 className="font-bold text-charcoal-900">{review.name}</h4>
-                  <p className="text-sm text-gray-500">Property in {review.area}</p>
-                </div>
+                <h4 className="font-bold text-charcoal-900">{review.name}</h4>
+                <p className="text-sm text-gray-500">Property in {review.area}</p>
               </div>
             ))}
           </div>

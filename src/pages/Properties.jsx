@@ -163,7 +163,7 @@ const Properties = () => {
                         className={`flex-1 py-2.5 text-xs font-bold rounded-lg transition-all duration-300 ${filter.status === status ? 'bg-primary-600 text-white shadow-md transform scale-[1.02]' : 'text-charcoal-600 hover:text-charcoal-900 hover:bg-gray-200'}`}
                         onClick={() => setFilter({...filter, status})}
                       >
-                        {status}
+                        {status.replace('For ', '')}
                       </button>
                     ))}
                   </div>
@@ -213,7 +213,7 @@ const Properties = () => {
                     value={filter.bhk}
                     onChange={(e) => setFilter({...filter, bhk: e.target.value})}
                   >
-                    <option value="" className="bg-white text-charcoal-700">Any BHK</option>
+                    <option value="" className="bg-white text-charcoal-700">BHK</option>
                     {bhkOptions.map(bhk => <option key={bhk} value={bhk} className="bg-white text-charcoal-700">{bhk}</option>)}
                   </select>
                 </div>
@@ -226,7 +226,7 @@ const Properties = () => {
                     value={filter.budget}
                     onChange={(e) => setFilter({...filter, budget: e.target.value})}
                   >
-                    <option value="" className="bg-white text-charcoal-700">Any Budget</option>
+                    <option value="" className="bg-white text-charcoal-700">Budget</option>
                     {(filter.status === 'For Rent' || filter.status === 'For Lease' ? rentalBudgetRanges : budgetRanges).map(budget => (
                       <option key={budget} value={budget} className="bg-white text-charcoal-700">{budget}</option>
                     ))}
@@ -241,7 +241,7 @@ const Properties = () => {
                     value={filter.furnishing}
                     onChange={(e) => setFilter({...filter, furnishing: e.target.value})}
                   >
-                    <option value="" className="bg-white text-charcoal-700">Any Furnishing</option>
+                    <option value="" className="bg-white text-charcoal-700">Furnishing</option>
                     {furnishOptions.map(f => <option key={f} value={f} className="bg-white text-charcoal-700">{f}</option>)}
                   </select>
                 </div>

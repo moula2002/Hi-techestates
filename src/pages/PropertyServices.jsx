@@ -93,8 +93,9 @@ const PropertyServices = () => {
       </section>
 
       {/* Core Services Grid */}
-      <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <section className="py-24 bg-gray-50 border-b border-gray-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {services.map((service, idx) => (
             <div data-aos="fade-up" 
               key={service.id}
@@ -121,18 +122,23 @@ const PropertyServices = () => {
               </div>
             </div>
           ))}
+          </div>
         </div>
       </section>
 
-      {/* Featured Properties */}
-      <section className="py-20 bg-gray-50 border-t border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Featured Properties - Parallax */}
+      <section 
+        className="py-24 relative overflow-hidden bg-cover bg-center md:bg-fixed"
+        style={{ backgroundImage: "url('/assets/images/exterior/WhatsApp%20Image%202026-09-01%20at%2012.01.24%20PM%20(2).jpeg')" }}
+      >
+        <div className="absolute inset-0 bg-black/60"></div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="flex justify-between items-end mb-12">
             <div>
-              <h2 className="text-xl font-bold tracking-widest text-primary-600 uppercase mb-2">Move In Today</h2>
-              <h3 className="text-3xl md:text-4xl font-black text-charcoal-900 font-serif">Properties For Sale & Rent</h3>
+              <h2 className="text-xl font-bold tracking-widest text-primary-400 uppercase mb-2 drop-shadow-md">Move In Today</h2>
+              <h3 className="text-3xl md:text-4xl font-black text-white font-serif drop-shadow-md">Properties For Sale & Rent</h3>
             </div>
-            <Link to="/properties" className="hidden md:flex items-center gap-2 text-primary-600 font-bold hover:text-primary-800 transition-colors">
+            <Link to="/properties" className="hidden md:flex items-center gap-2 text-white font-bold hover:text-gray-200 transition-colors drop-shadow-md">
               View All <ArrowRight size={20} />
             </Link>
           </div>

@@ -163,7 +163,7 @@ const Home = () => {
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
           <div className="max-w-xl" data-aos="fade-up">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-primary-900 uppercase mb-4 drop-shadow-sm">Hi-Tech Estates</h2>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-widest text-[#0A2540] uppercase mb-4 drop-shadow-md">Hi-Tech Estates</h2>
             <h1 className="text-3xl md:text-4xl font-black text-charcoal-900 leading-tight mb-6">
               Design Your <br />Dreams
             </h1>
@@ -261,19 +261,21 @@ const Home = () => {
       </section>
 
       {/* 6.5 Property Categories UI Redesign */}
-      <section className="py-24 bg-white overflow-hidden relative">
-        {/* Subtle background circular glow */}
-        <div className="absolute left-[-10%] top-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#f0f7fb] rounded-full mix-blend-multiply filter blur-3xl opacity-70 z-0 pointer-events-none"></div>
+      <section 
+        className="py-24 overflow-hidden relative bg-cover bg-center md:bg-fixed"
+        style={{ backgroundImage: "url('/assets/images/exterior/WhatsApp%20Image%202026-09-01%20at%2012.01.24%20PM%20(1).jpeg')" }}
+      >
+        <div className="absolute inset-0 bg-black/50 z-0"></div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="flex flex-col lg:flex-row gap-16 items-start">
 
             {/* Left Side: Typography */}
             <div className="lg:w-[30%] pt-12" data-aos="fade-right">
-              <h2 className="text-4xl md:text-5xl font-sans text-charcoal-900 mb-3 leading-tight tracking-tight">
+              <h2 className="text-4xl md:text-5xl font-sans text-white mb-3 leading-tight tracking-tight drop-shadow-md">
                 Residential<br />Properties
               </h2>
-              <h3 className="text-3xl md:text-4xl text-gray-400 font-sans font-normal leading-tight">
+              <h3 className="text-3xl md:text-4xl text-gray-300 font-sans font-normal leading-tight drop-shadow-md">
                 In a good<br />locations
               </h3>
             </div>
@@ -339,10 +341,10 @@ const Home = () => {
       </section>
 
       {/* 5. Our Services */}
-      <section className="py-20 bg-primary-900 text-white text-center">
+      <section className="py-20 bg-white text-center">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" data-aos="fade-up">
-          <h2 className="text-xl font-bold tracking-widest text-primary-400 uppercase mb-2">What We Do</h2>
-          <h3 className="text-3xl font-black mb-12">Our Services</h3>
+          <h2 className="text-xl font-bold tracking-widest text-primary-600 uppercase mb-2">What We Do</h2>
+          <h3 className="text-3xl font-black text-charcoal-900 mb-12">Our Services</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
               { title: 'Property Sales', desc: 'Expert guidance on buying & selling.', img: '/assets/images/img-1.jpg', icon: <Building2 className="w-6 h-6 text-primary-900" /> },
@@ -350,7 +352,7 @@ const Home = () => {
               { title: 'Investment Consult', desc: 'Secure high-ROI investments.', img: '/assets/images/img-5.jpg', icon: <Building2 className="w-6 h-6 text-primary-900" /> },
               { title: 'Interiors', desc: 'Turnkey interior design solutions.', img: '/assets/images/img-7.jpg', icon: <Building2 className="w-6 h-6 text-primary-900" /> },
             ].map((srv, idx) => (
-              <div key={idx} className="bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-colors overflow-hidden flex flex-col group" data-aos="fade-up" data-aos-delay={idx * 100}>
+              <div key={idx} className="bg-gray-50 border border-gray-100 rounded-xl hover:shadow-md transition-shadow overflow-hidden flex flex-col group" data-aos="fade-up" data-aos-delay={idx * 100}>
                 <div className="h-40 overflow-hidden relative">
                   <img
                     src={srv.img}
@@ -363,25 +365,29 @@ const Home = () => {
                   </div>
                 </div>
                 <div className="p-6 text-left flex flex-col flex-grow">
-                  <h4 className="text-lg font-bold mb-2">{srv.title}</h4>
-                  <p className="text-sm text-gray-300">{srv.desc}</p>
+                  <h4 className="text-lg font-bold text-charcoal-900 mb-2">{srv.title}</h4>
+                  <p className="text-sm text-gray-600">{srv.desc}</p>
                 </div>
               </div>
             ))}
           </div>
           <div className="mt-12">
-            <Link to="/services" className="inline-block px-8 py-3 bg-white text-primary-900 font-bold rounded hover:bg-gray-100 transition-colors">
+            <Link to="/services" className="inline-block px-8 py-3 bg-primary-900 text-white font-bold rounded hover:bg-primary-800 transition-colors">
               View All Services
             </Link>
           </div>
         </div>
       </section>
 
-      {/* 4. Latest Listings */}
-      <section className="py-20 bg-white border-t border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center" data-aos="fade-up">
-          <h2 className="text-xl font-bold tracking-widest text-primary-600 uppercase mb-2">New On Market</h2>
-          <h3 className="text-3xl font-black text-charcoal-900 mb-12">Latest Listings</h3>
+      {/* 4. Latest Listings - Parallax */}
+      <section 
+        className="py-20 bg-cover bg-center md:bg-fixed relative border-t border-gray-800"
+        style={{ backgroundImage: "url('/assets/images/exterior/WhatsApp%20Image%202026-09-01%20at%2012.01.24%20PM%20(1).jpeg')" }}
+      >
+        <div className="absolute inset-0 bg-black/50 z-0"></div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10" data-aos="fade-up">
+          <h2 className="text-xl font-bold tracking-widest text-primary-400 uppercase mb-2 drop-shadow-md">New On Market</h2>
+          <h3 className="text-3xl font-black text-white mb-12 drop-shadow-md">Latest Listings</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-10 text-left">
             {latestProperties.map((property, idx) => (
               <div key={property.id} data-aos="fade-up" data-aos-delay={idx * 100}>
@@ -428,24 +434,28 @@ const Home = () => {
         </div>
       </section>
 
-      {/* 7. Client Testimonials */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center" data-aos="fade-up">
-          <h2 className="text-xl font-bold tracking-widest text-primary-600 uppercase mb-2">Reviews</h2>
-          <h3 className="text-3xl font-black text-charcoal-900 mb-12">Client Testimonials</h3>
+      {/* 7. Client Testimonials - Parallax */}
+      <section 
+        className="py-20 bg-cover bg-center md:bg-fixed relative"
+        style={{ backgroundImage: "url('/assets/images/exterior/WhatsApp%20Image%202026-09-01%20at%2012.01.25%20PM.jpeg')" }}
+      >
+        <div className="absolute inset-0 bg-black/50 z-0"></div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10" data-aos="fade-up">
+          <h2 className="text-xl font-bold tracking-widest text-primary-400 uppercase mb-2 drop-shadow-md">Reviews</h2>
+          <h3 className="text-3xl font-black text-white mb-12 drop-shadow-md">Client Testimonials</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               { name: "Rahul Sharma", text: "Hi-Tech Estates helped me find the perfect apartment in JP Nagar. Very professional team!", area: "JP Nagar" },
               { name: "Priya Desai", text: "Sold my plot in Begur within a month at a great price. Excellent marketing and fast process.", area: "Begur" },
               { name: "Anil Kumar", text: "Their interior design service completely transformed my new villa. Highly recommended.", area: "Koramangala" }
             ].map((review, idx) => (
-              <div key={idx} className="bg-gray-50 p-8 rounded-xl border border-gray-100 relative" data-aos="fade-up" data-aos-delay={idx * 100}>
+              <div key={idx} className="bg-white/10 backdrop-blur-md p-8 rounded-xl border border-white/20 relative shadow-lg" data-aos="fade-up" data-aos-delay={idx * 100}>
                 <div className="flex justify-center mb-4 text-yellow-400">
                   <Star fill="currentColor" size={20} /><Star fill="currentColor" size={20} /><Star fill="currentColor" size={20} /><Star fill="currentColor" size={20} /><Star fill="currentColor" size={20} />
                 </div>
-                <p className="text-charcoal-700 italic mb-6">"{review.text}"</p>
-                <h4 className="font-bold text-charcoal-900">{review.name}</h4>
-                <p className="text-sm text-gray-500">Property in {review.area}</p>
+                <p className="text-gray-200 italic mb-6">"{review.text}"</p>
+                <h4 className="font-bold text-white">{review.name}</h4>
+                <p className="text-sm text-gray-400">Property in {review.area}</p>
               </div>
             ))}
           </div>

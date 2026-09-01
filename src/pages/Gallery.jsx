@@ -6,15 +6,34 @@ const Gallery = () => {
   const categories = ['All', 'Exteriors', 'Interiors', 'Commercial', 'Ongoing Projects'];
 
   const galleryImages = [
-    { id: 1, category: 'Exteriors', url: '/assets/gallery/gallery-1.jpg', alt: 'Modern Villa Exterior' },
     { id: 2, category: 'Interiors', url: '/assets/gallery/gallery-2.jpg', alt: 'Luxury Living Room' },
     { id: 3, category: 'Commercial', url: '/assets/gallery/gallery-3.jpg', alt: 'Premium Office Space' },
-    { id: 4, category: 'Exteriors', url: '/assets/gallery/gallery-4.jpg', alt: 'Contemporary Home' },
     { id: 5, category: 'Interiors', url: '/assets/gallery/kitchen.jpg', alt: 'Modern Kitchen' },
     { id: 6, category: 'Ongoing Projects', url: '/assets/gallery/gallery-6.jpg', alt: 'Construction Site' },
     { id: 7, category: 'Interiors', url: '/assets/gallery/gallery-7.jpg', alt: 'Elegant Bathroom' },
     { id: 8, category: 'Commercial', url: '/assets/gallery/gallery-8.jpg', alt: 'Co-working Space' },
     { id: 9, category: 'Ongoing Projects', url: '/assets/gallery/gallery-9.jpg', alt: 'Architecture Planning' },
+    { id: 101, category: 'Exteriors', url: '/assets/images/exterior/WhatsApp Image 2026-09-01 at 12.00.56 PM.jpeg', alt: 'Exterior Image 1' },
+    { id: 102, category: 'Exteriors', url: '/assets/images/exterior/WhatsApp Image 2026-09-01 at 12.00.57 PM (1).jpeg', alt: 'Exterior Image 2' },
+    { id: 103, category: 'Exteriors', url: '/assets/images/exterior/WhatsApp Image 2026-09-01 at 12.00.57 PM (2).jpeg', alt: 'Exterior Image 3' },
+    { id: 104, category: 'Exteriors', url: '/assets/images/exterior/WhatsApp Image 2026-09-01 at 12.00.57 PM.jpeg', alt: 'Exterior Image 4' },
+    { id: 105, category: 'Exteriors', url: '/assets/images/exterior/WhatsApp Image 2026-09-01 at 12.00.58 PM.jpeg', alt: 'Exterior Image 5' },
+    { id: 106, category: 'Exteriors', url: '/assets/images/exterior/WhatsApp Image 2026-09-01 at 12.01.00 PM.jpeg', alt: 'Exterior Image 6' },
+    { id: 107, category: 'Exteriors', url: '/assets/images/exterior/WhatsApp Image 2026-09-01 at 12.01.03 PM (1).jpeg', alt: 'Exterior Image 7' },
+    { id: 108, category: 'Exteriors', url: '/assets/images/exterior/WhatsApp Image 2026-09-01 at 12.01.03 PM.jpeg', alt: 'Exterior Image 8' },
+    { id: 109, category: 'Exteriors', url: '/assets/images/exterior/WhatsApp Image 2026-09-01 at 12.01.16 PM (1).jpeg', alt: 'Exterior Image 9' },
+    { id: 110, category: 'Exteriors', url: '/assets/images/exterior/WhatsApp Image 2026-09-01 at 12.01.16 PM.jpeg', alt: 'Exterior Image 10' },
+    { id: 111, category: 'Exteriors', url: '/assets/images/exterior/WhatsApp Image 2026-09-01 at 12.01.17 PM (1).jpeg', alt: 'Exterior Image 11' },
+    { id: 112, category: 'Exteriors', url: '/assets/images/exterior/WhatsApp Image 2026-09-01 at 12.01.17 PM.jpeg', alt: 'Exterior Image 12' },
+    { id: 113, category: 'Exteriors', url: '/assets/images/exterior/WhatsApp Image 2026-09-01 at 12.01.18 PM.jpeg', alt: 'Exterior Image 13' },
+    { id: 114, category: 'Exteriors', url: '/assets/images/exterior/WhatsApp Image 2026-09-01 at 12.01.20 PM.jpeg', alt: 'Exterior Image 14' },
+    { id: 115, category: 'Exteriors', url: '/assets/images/exterior/WhatsApp Image 2026-09-01 at 12.01.21 PM.jpeg', alt: 'Exterior Image 15' },
+    { id: 116, category: 'Exteriors', url: '/assets/images/exterior/WhatsApp Image 2026-09-01 at 12.01.22 PM (1).jpeg', alt: 'Exterior Image 16' },
+    { id: 117, category: 'Exteriors', url: '/assets/images/exterior/WhatsApp Image 2026-09-01 at 12.01.22 PM.jpeg', alt: 'Exterior Image 17' },
+    { id: 118, category: 'Exteriors', url: '/assets/images/exterior/WhatsApp Image 2026-09-01 at 12.01.24 PM (1).jpeg', alt: 'Exterior Image 18' },
+    { id: 119, category: 'Exteriors', url: '/assets/images/exterior/WhatsApp Image 2026-09-01 at 12.01.24 PM (2).jpeg', alt: 'Exterior Image 19' },
+    { id: 120, category: 'Exteriors', url: '/assets/images/exterior/WhatsApp Image 2026-09-01 at 12.01.24 PM.jpeg', alt: 'Exterior Image 20' },
+    { id: 121, category: 'Exteriors', url: '/assets/images/exterior/WhatsApp Image 2026-09-01 at 12.01.25 PM.jpeg', alt: 'Exterior Image 21' },
   ];
 
   const filteredImages = activeCategory === 'All'

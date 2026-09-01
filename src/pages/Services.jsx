@@ -16,20 +16,24 @@ const Services = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-24 font-sans pb-20">
+    <div 
+      className="min-h-screen font-sans pb-20 pt-40 relative bg-cover bg-center md:bg-fixed"
+      style={{ backgroundImage: "url('/assets/images/exterior/WhatsApp%20Image%202026-09-01%20at%2012.01.17%20PM%20(1).jpeg')" }}
+    >
+      <div className="fixed inset-0 bg-black/50 z-0 pointer-events-none"></div>
       <Helmet>
         <title>Our Services | Hi-Tech Estates & Interiors</title>
         <meta name="description" content="From property sales and rentals to documentation and interior design, Hi-Tech Estates offers comprehensive real estate services in Bangalore." />
       </Helmet>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
         
         {/* Header / Breadcrumbs */}
         <div className="mb-12 text-center" data-aos="fade-up">
-          <h1 className="text-xl font-bold tracking-widest text-primary-600 uppercase mb-2">What We Do</h1>
-          <h2 className="text-4xl font-black text-charcoal-900 mb-4">Our Premium Services</h2>
-          <div className="text-sm text-gray-500 font-medium flex justify-center gap-2">
-            <Link to="/" className="hover:text-primary-900 transition-colors">Home</Link> / 
-            <span className="text-charcoal-900">Services</span>
+          <h1 className="text-xl font-bold tracking-widest text-primary-400 uppercase mb-2 drop-shadow-md">What We Do</h1>
+          <h2 className="text-4xl font-black text-white mb-4 drop-shadow-md">Our Premium Services</h2>
+          <div className="text-sm text-gray-300 font-medium flex justify-center gap-2 drop-shadow-md">
+            <Link to="/" className="text-gray-300 hover:text-white transition-colors">Home</Link> / 
+            <span className="text-white">Services</span>
           </div>
         </div>
 
