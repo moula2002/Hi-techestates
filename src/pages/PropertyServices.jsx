@@ -93,8 +93,12 @@ const PropertyServices = () => {
       </section>
 
       {/* Core Services Grid */}
-      <section className="py-24 bg-gray-50 border-b border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-24 bg-gray-50 bg-premium-texture border-b border-gray-100 relative overflow-hidden">
+        {/* Background Accents */}
+        <div className="absolute inset-y-0 right-0 w-1/2 bg-building-outline opacity-60 pointer-events-none z-0"></div>
+        <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-white rounded-full -translate-y-1/2 translate-x-1/3 pointer-events-none z-0 shadow-[0_0_100px_rgba(0,0,0,0.05)]"></div>
+        <div className="absolute bottom-20 left-10 w-[400px] h-[400px] bg-primary-100/40 rounded-full filter blur-[100px] animate-float pointer-events-none z-0"></div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {services.map((service, idx) => (
             <div data-aos="fade-up" 

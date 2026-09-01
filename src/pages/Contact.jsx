@@ -55,7 +55,11 @@ const Contact = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 font-sans pb-24">
+    <div className="min-h-screen bg-gray-50 bg-premium-texture font-sans pb-24 relative overflow-hidden">
+      {/* Decorative Background Elements */}
+      <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-primary-200/30 rounded-full filter blur-[100px] pointer-events-none z-0"></div>
+      <div className="absolute top-1/3 left-0 w-1/2 h-[800px] bg-building-outline opacity-40 pointer-events-none z-0"></div>
+
 
       {/* Premium Hero Section */}
       <div className="relative w-full h-[40vh] min-h-[350px] flex flex-col justify-center items-center overflow-hidden mb-12">
@@ -250,20 +254,21 @@ const Contact = () => {
         </div>
       </div>
 
-      {/* Premium Map Section with Parallax Background */}
-      <section 
-        className="mt-24 py-24 relative overflow-hidden bg-cover bg-center md:bg-fixed"
-        style={{ backgroundImage: "url('/assets/images/exterior/WhatsApp%20Image%202026-09-01%20at%2012.01.17%20PM%20(1).jpeg')" }}
-      >
-        <div className="absolute inset-0 bg-black/60 z-0"></div>
+      {/* Premium Map Section */}
+      <section className="py-24 bg-white bg-premium-texture relative overflow-hidden border-t border-gray-100">
+        {/* Decorative Background Elements */}
+        <div className="absolute inset-y-0 right-0 w-1/2 bg-building-outline opacity-60 pointer-events-none z-0"></div>
+        <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-white rounded-full -translate-y-1/2 translate-x-1/3 pointer-events-none z-0 shadow-[0_0_100px_rgba(0,0,0,0.05)]"></div>
+        <div className="absolute bottom-20 left-10 w-[400px] h-[400px] bg-primary-100/40 rounded-full filter blur-[100px] animate-float pointer-events-none z-0"></div>
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10" data-aos="fade-up" data-aos-delay="200">
           <div className="mb-10 text-center">
-            <h2 className="text-xl font-bold tracking-widest text-primary-400 uppercase mb-2 drop-shadow-md">Find Us</h2>
-            <h3 className="text-3xl md:text-4xl font-black text-white font-serif drop-shadow-md">Visit Our Office</h3>
+            <h2 className="text-xl font-bold tracking-widest text-primary-600 uppercase mb-2">Find Us</h2>
+            <h3 className="text-3xl md:text-4xl font-black text-charcoal-900 font-serif">Visit Our Office</h3>
           </div>
-          <div className="w-full h-[500px] rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] border-4 border-white/20 bg-white relative group">
+          <div className="w-full h-[500px] rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.15)] border border-gray-100 bg-white relative group">
             {/* Stylish overlay that disappears on map hover */}
-            <div className="absolute inset-0 bg-charcoal-950/10 group-hover:opacity-0 transition-opacity duration-700 pointer-events-none z-10"></div>
+            <div className="absolute inset-0 bg-charcoal-900/5 group-hover:opacity-0 transition-opacity duration-700 pointer-events-none z-10"></div>
 
             <iframe
               src="https://maps.google.com/maps?q=Arekere,%20B.G%20Road,%20Bangalore&t=&z=15&ie=UTF8&iwloc=&output=embed"

@@ -110,8 +110,12 @@ const InteriorDesigns = () => {
       </section>
 
       {/* Design Portfolio */}
-      <section className="py-24 bg-white text-charcoal-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-24 bg-white bg-premium-texture text-charcoal-900 relative overflow-hidden">
+        {/* Dynamic Blobs */}
+        <div className="absolute inset-y-0 right-0 w-1/2 bg-building-outline opacity-60 pointer-events-none z-0"></div>
+        <div className="absolute top-20 left-10 w-[400px] h-[400px] bg-primary-200/40 rounded-full filter blur-[80px] animate-float pointer-events-none z-0"></div>
+        <div className="absolute bottom-10 right-20 w-[500px] h-[500px] bg-slate-200/60 rounded-full filter blur-[100px] animate-float pointer-events-none z-0" style={{animationDelay: '4s'}}></div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
             <div>
               <h2 className="text-xl font-bold tracking-widest text-primary-600 uppercase mb-2">Our Portfolio</h2>

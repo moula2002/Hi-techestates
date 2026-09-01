@@ -106,8 +106,10 @@ const About = () => {
       </section>
 
       {/* 3. Areas We Specialise In */}
-      <section className="py-24 bg-white border-y border-gray-100" data-aos="fade-up">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <section className="py-24 bg-white bg-premium-texture border-y border-gray-100 relative overflow-hidden" data-aos="fade-up">
+        <div className="absolute inset-y-0 right-0 w-1/2 bg-building-outline opacity-60 pointer-events-none z-0"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary-100/40 rounded-full filter blur-[80px] pointer-events-none z-0"></div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <h2 className="text-xl font-bold tracking-widest text-primary-600 uppercase mb-2">Our Territory</h2>
           <h3 className="text-3xl font-black text-charcoal-900 mb-12">Areas We Specialise In</h3>
           <p className="max-w-3xl mx-auto text-charcoal-700 mb-10 text-lg">
@@ -154,8 +156,10 @@ const About = () => {
       </section>
 
       {/* 5. Client Testimonials */}
-      <section className="py-24 bg-gray-50 text-center">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-24 bg-gray-50 bg-premium-texture text-center relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-white rounded-full -translate-y-1/2 translate-x-1/3 pointer-events-none z-0 shadow-[0_0_100px_rgba(0,0,0,0.05)]"></div>
+        <div className="absolute bottom-10 left-10 w-[400px] h-[400px] bg-slate-200/50 rounded-full filter blur-[100px] animate-float pointer-events-none z-0"></div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <h2 className="text-xl font-bold tracking-widest text-primary-600 uppercase mb-2">Reviews</h2>
           <h3 className="text-3xl font-black text-charcoal-900 mb-12">What Our Clients Say</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

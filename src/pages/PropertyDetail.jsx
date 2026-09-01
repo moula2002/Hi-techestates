@@ -117,7 +117,7 @@ const PropertyDetail = () => {
   const nextImage = () => setCurrentImgIndex((prev) => (prev + 1) % allImages.length);
   const prevImage = () => setCurrentImgIndex((prev) => (prev === 0 ? allImages.length - 1 : prev - 1));
 
-  const agentName = property.agent?.name || "Madhu Kumar G";
+  const agentName = property.agent?.name || "Joseph";
   const agentPhone = property.agent?.mobile || "+91 63632 72452";
 
   return (

@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowRight, CheckCircle, Search, Building2, Users, Trophy, MapPin, Star, ChevronRight, Play } from 'lucide-react';
+import { ArrowRight, CheckCircle, Search, Building2, Users, Trophy, MapPin, Star, ChevronRight, ChevronLeft, Play } from 'lucide-react';
 import PropertyCard from '../components/property/PropertyCard';
 import { mapApiPropertyToClient } from '../utils/propertyMapper';
 import { useApiCache } from '../hooks/useApiCache';
@@ -52,6 +52,16 @@ const Home = () => {
       return () => clearInterval(interval);
     }
   }, [banners]);
+
+  const handlePrevBanner = () => {
+    if (banners.length <= 1) return;
+    setCurrentBannerIdx(prev => (prev === 0 ? banners.length - 1 : prev - 1));
+  };
+
+  const handleNextBanner = () => {
+    if (banners.length <= 1) return;
+    setCurrentBannerIdx(prev => (prev + 1) % banners.length);
+  };
 
   // Search State
   const [searchParams, setSearchParams] = useState({
@@ -115,9 +125,51 @@ const Home = () => {
   };
 
   const sourceProperties = apiProperties;
-  const featuredProperties = sourceProperties.filter(p => p.featured).slice(0, 3);
+  const featuredOnly = sourceProperties.filter(p => p.featured);
+  const additionalProps = sourceProperties.filter(p => !p.featured);
+  const featuredProperties = [...featuredOnly, ...additionalProps].slice(0, 5);
   const latestProperties = [...sourceProperties].slice(0, 3);
+  const featuredCarouselRef = useRef(null);
+  const [isFeaturedHovered, setIsFeaturedHovered] = useState(false);
 
+  useEffect(() => {
+    let animationId;
+    const carousel = featuredCarouselRef.current;
+    
+    if (!carousel || featuredProperties.length <= 1) return;
+
+    const scroll = () => {
+      if (!isFeaturedHovered) {
+        carousel.scrollLeft += 1;
+        // Reset when reaching halfway point (since array is doubled)
+        if (carousel.scrollLeft >= carousel.scrollWidth / 2) {
+          carousel.scrollLeft = 0;
+        }
+      }
+      animationId = requestAnimationFrame(scroll);
+    };
+
+    animationId = requestAnimationFrame(scroll);
+    return () => cancelAnimationFrame(animationId);
+  }, [isFeaturedHovered, featuredProperties.length]);
+
+  const scrollFeatured = (direction) => {
+    if (featuredCarouselRef.current) {
+      const carousel = featuredCarouselRef.current;
+      const scrollAmount = 400; // rough width of a card + gap
+      
+      let newScrollLeft = direction === 'left' ? carousel.scrollLeft - scrollAmount : carousel.scrollLeft + scrollAmount;
+      
+      // Keep it within bounds for seamless loop
+      if (newScrollLeft < 0) {
+        newScrollLeft += carousel.scrollWidth / 2;
+      } else if (newScrollLeft >= carousel.scrollWidth / 2) {
+        newScrollLeft -= carousel.scrollWidth / 2;
+      }
+      
+      carousel.scrollTo({ left: newScrollLeft, behavior: 'smooth' });
+    }
+  };
   // Dynamically extract options from fetched properties
   const dynamicLocations = [...new Set(apiProperties.map(p => p.location).filter(Boolean))].sort();
   const dynamicPropertyTypes = [...new Set(apiProperties.map(p => p.type).filter(Boolean))].sort();
@@ -129,7 +181,7 @@ const Home = () => {
         <meta name="description" content="Hi-Tech Estates & Interiors helps you find the best residential and commercial properties in Bangalore. Explore top listings and interior design services." />
       </Helmet>
       {/* 1. Hero Section */}
-      <section className="relative h-[650px] flex items-center pt-20">
+      <section className="relative h-[650px] flex items-center pt-20 group">
         <div className="absolute inset-0 z-0">
           {banners.length > 0 && (
             banners.map((banner, idx) => (
@@ -161,7 +213,27 @@ const Home = () => {
           <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-white/80 via-white/40 to-transparent"></div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
+        {/* Navigation Arrows */}
+        {banners.length > 1 && (
+          <>
+            <button
+              onClick={handlePrevBanner}
+              className="absolute left-4 md:left-8 z-20 p-2 md:p-3 rounded-full bg-white/30 hover:bg-white/60 text-charcoal-900 transition-all opacity-0 group-hover:opacity-100 backdrop-blur-sm shadow-md"
+              aria-label="Previous Image"
+            >
+              <ChevronLeft size={32} />
+            </button>
+            <button
+              onClick={handleNextBanner}
+              className="absolute right-4 md:right-8 z-20 p-2 md:p-3 rounded-full bg-white/30 hover:bg-white/60 text-charcoal-900 transition-all opacity-0 group-hover:opacity-100 backdrop-blur-sm shadow-md"
+              aria-label="Next Image"
+            >
+              <ChevronRight size={32} />
+            </button>
+          </>
+        )}
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full pl-12 md:pl-8">
           <div className="max-w-xl" data-aos="fade-up">
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-widest text-[#0A2540] uppercase mb-4 drop-shadow-md">Hi-Tech Estates</h2>
             <h1 className="text-3xl md:text-4xl font-black text-charcoal-900 leading-tight mb-6">
@@ -193,7 +265,7 @@ const Home = () => {
               value={searchParams.location}
               onChange={(e) => setSearchParams({ ...searchParams, location: e.target.value })}
             >
-              <option value="">Any Location</option>
+              <option value="">Location</option>
               {dynamicLocations.map(loc => <option key={loc} value={loc}>{loc}</option>)}
             </select>
           </div>
@@ -204,7 +276,7 @@ const Home = () => {
               value={searchParams.type}
               onChange={(e) => setSearchParams({ ...searchParams, type: e.target.value })}
             >
-              <option value="">Any Type</option>
+              <option value="">Type</option>
               {dynamicPropertyTypes.map(type => <option key={type} value={type}>{type}</option>)}
             </select>
           </div>
@@ -215,7 +287,7 @@ const Home = () => {
               value={searchParams.bhk}
               onChange={(e) => setSearchParams({ ...searchParams, bhk: e.target.value })}
             >
-              <option value="">Any BHK</option>
+              <option value="">BHK</option>
               {bhkOptions.map(bhk => <option key={bhk} value={bhk}>{bhk}</option>)}
             </select>
           </div>
@@ -226,7 +298,7 @@ const Home = () => {
               value={searchParams.budget}
               onChange={(e) => setSearchParams({ ...searchParams, budget: e.target.value })}
             >
-              <option value="">Any Budget</option>
+              <option value="">Budget</option>
               {budgetRanges.map(budget => <option key={budget} value={budget}>{budget}</option>)}
             </select>
           </div>
@@ -243,16 +315,51 @@ const Home = () => {
       </section>
 
       {/* 3. Featured Properties */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center" data-aos="fade-up">
+      <section className="py-20 bg-gray-50 bg-premium-texture relative overflow-hidden">
+        {/* Soft Background Blobs & Elements */}
+        <div className="absolute -top-40 -right-40 w-[600px] h-[600px] bg-primary-200/50 rounded-full filter blur-[80px] opacity-80 animate-float pointer-events-none z-0"></div>
+        <div className="absolute -bottom-20 -left-20 w-[500px] h-[500px] bg-blue-200/40 rounded-full filter blur-[60px] opacity-80 pointer-events-none z-0" style={{animationDelay: '2s'}}></div>
+        <div className="absolute bottom-10 right-10 w-64 h-64 border-2 border-primary-900/10 rounded-full pointer-events-none z-0"></div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10" data-aos="fade-up">
           <h2 className="text-xl font-bold tracking-widest text-primary-600 uppercase mb-2">Curated Selection</h2>
           <h3 className="text-3xl font-black text-charcoal-900 mb-12">Featured Properties</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-10 text-left">
-            {featuredProperties.map((property, idx) => (
-              <div key={property.id} data-aos="fade-up" data-aos-delay={idx * 100}>
-                <PropertyCard property={property} />
-              </div>
-            ))}
+          <div 
+            className="relative group mb-10 overflow-hidden"
+            onMouseEnter={() => setIsFeaturedHovered(true)}
+            onMouseLeave={() => setIsFeaturedHovered(false)}
+          >
+            {/* Carousel Navigation Arrows */}
+            {featuredProperties.length > 1 && (
+              <>
+                <button 
+                  onClick={() => scrollFeatured('left')}
+                  className="absolute left-0 md:left-2 lg:left-6 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-white shadow-[0_5px_15px_rgba(0,0,0,0.25)] text-primary-900 hover:bg-primary-900 hover:text-white transition-all md:flex items-center justify-center opacity-80 hover:opacity-100"
+                  aria-label="Scroll Left"
+                >
+                  <ChevronLeft size={24} />
+                </button>
+                <button 
+                  onClick={() => scrollFeatured('right')}
+                  className="absolute right-0 md:right-2 lg:right-6 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-white shadow-[0_5px_15px_rgba(0,0,0,0.25)] text-primary-900 hover:bg-primary-900 hover:text-white transition-all md:flex items-center justify-center opacity-80 hover:opacity-100"
+                  aria-label="Scroll Right"
+                >
+                  <ChevronRight size={24} />
+                </button>
+              </>
+            )}
+
+            {/* Continuous JS Scroll Container */}
+            <div 
+              ref={featuredCarouselRef}
+              className="flex overflow-x-hidden gap-8 pb-4 pt-2 text-left"
+            >
+              {[...featuredProperties, ...featuredProperties].map((property, idx) => (
+                <div key={`${property.id}-${idx}`} className="w-[85vw] sm:w-[350px] md:w-[400px] shrink-0" data-aos="fade-up" data-aos-delay={idx < 5 ? idx * 100 : 0}>
+                  <PropertyCard property={property} />
+                </div>
+              ))}
+            </div>
           </div>
           <Link to="/properties" className="inline-block px-8 py-3 bg-primary-900 text-white font-bold rounded hover:bg-primary-800 transition-colors">
             View All Properties
@@ -341,8 +448,13 @@ const Home = () => {
       </section>
 
       {/* 5. Our Services */}
-      <section className="py-20 bg-white text-center">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" data-aos="fade-up">
+      <section className="py-20 bg-white bg-premium-texture text-center relative overflow-hidden">
+        {/* Architectural Background */}
+        <div className="absolute inset-y-0 right-0 w-1/2 bg-building-outline opacity-60 pointer-events-none z-0"></div>
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-lg h-1 bg-gradient-to-r from-transparent via-primary-900/20 to-transparent"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary-100/60 rounded-full filter blur-[100px] pointer-events-none z-0"></div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10" data-aos="fade-up">
           <h2 className="text-xl font-bold tracking-widest text-primary-600 uppercase mb-2">What We Do</h2>
           <h3 className="text-3xl font-black text-charcoal-900 mb-12">Our Services</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -399,8 +511,12 @@ const Home = () => {
       </section>
 
       {/* 6. Why Choose Us */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-20 bg-gray-50 bg-premium-texture relative overflow-hidden">
+        {/* Background Accents */}
+        <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-white rounded-full -translate-y-1/2 translate-x-1/3 pointer-events-none z-0 shadow-[0_0_100px_rgba(0,0,0,0.05)]"></div>
+        <div className="absolute bottom-20 left-10 w-[200px] h-[200px] bg-[radial-gradient(#1e3a8a_2px,transparent_2px)] [background-size:16px_16px] opacity-10 pointer-events-none z-0"></div>
+        
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="flex flex-col md:flex-row gap-12 items-center">
             <div className="flex-1" data-aos="fade-right">
               <h2 className="text-xl font-bold tracking-widest text-primary-600 uppercase mb-2">Our Advantage</h2>
@@ -463,7 +579,13 @@ const Home = () => {
       </section>
 
       {/* 8. Areas We Serve (Redesigned from image) */}
-      <section className="py-24 bg-white overflow-hidden relative">
+      <section className="py-24 bg-white bg-premium-texture overflow-hidden relative">
+        {/* Dynamic Blobs */}
+        <div className="absolute top-20 left-10 w-[400px] h-[400px] bg-primary-200/40 rounded-full filter blur-[80px] animate-float pointer-events-none z-0"></div>
+        <div className="absolute bottom-10 right-20 w-[500px] h-[500px] bg-slate-200/60 rounded-full filter blur-[100px] animate-float pointer-events-none z-0" style={{animationDelay: '4s'}}></div>
+        {/* Elegant curved separator */}
+        <div className="absolute top-1/4 right-0 w-[50vw] h-[2px] bg-gradient-to-l from-primary-900/20 to-transparent pointer-events-none z-0"></div>
+
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="flex flex-col lg:flex-row gap-8 items-start">
 
@@ -533,8 +655,12 @@ const Home = () => {
       </section>
 
       {/* 9. Contact Us Form */}
-      <section className="py-20 bg-white border-t border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-20 bg-white bg-premium-texture relative border-t border-gray-100 overflow-hidden">
+        {/* Subtle Accents */}
+        <div className="absolute top-0 left-0 w-1/3 h-full bg-[radial-gradient(#94a3b8_2px,transparent_2px)] [background-size:20px_20px] opacity-10 pointer-events-none z-0"></div>
+        <div className="absolute bottom-0 right-1/4 w-[300px] h-[300px] bg-primary-200/30 rounded-full filter blur-[60px] pointer-events-none z-0"></div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden flex flex-col lg:flex-row">
 
             {/* Left Side: Image */}

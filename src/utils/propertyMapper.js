@@ -50,7 +50,10 @@ export const mapApiPropertyToClient = (p) => {
     gallery: p.gallery || p.images?.gallery || [],
     badges: badges,
     specifications: p.specifications || {},
-    agent: p.agent || {},
+    agent: {
+      ...p.agent,
+      name: (p.agent?.name === 'Mohan Kumar' || p.agent?.name === 'Madhu Kumar G') ? 'Joseph' : (p.agent?.name || 'Joseph')
+    },
     amenities: p.amenities || []
   };
 };
