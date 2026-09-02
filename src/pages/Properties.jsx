@@ -156,7 +156,7 @@ const Properties = () => {
                   Filters
                 </h3>
                 <button 
-                  onClick={() => setFilter({location: '', type: 'All Type', category: '', bhk: '', budget: '', status: 'All', furnishing: ''})}
+                  onClick={() => setFilter({location: '', type: 'All Type', category: '', bhk: '', budget: '', status: 'All', furnishing: '', newLaunch: false})}
                   className="text-xs text-primary-700 font-bold hover:text-primary-900 transition-colors uppercase tracking-widest bg-primary-50 px-3 py-1.5 rounded-lg border border-primary-100"
                 >
                   Clear All
@@ -310,7 +310,7 @@ const Properties = () => {
                   We couldn't find any luxury properties matching these specific filters in our exclusive portfolio.
                 </p>
                 <button 
-                  onClick={() => setFilter({location: '', type: 'All Type', category: '', bhk: '', budget: '', status: 'All', furnishing: ''})}
+                  onClick={() => setFilter({location: '', type: 'All Type', category: '', bhk: '', budget: '', status: 'All', furnishing: '', newLaunch: false})}
                   className="px-8 py-4 bg-primary-900 text-white font-bold rounded-xl hover:bg-primary-800 hover:shadow-[0_10px_30px_rgba(8,42,92,0.25)] transition-all duration-300 transform hover:-translate-y-1"
                 >
                   Explore All Properties
