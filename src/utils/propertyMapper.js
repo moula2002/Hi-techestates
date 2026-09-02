@@ -1,4 +1,6 @@
 export const mapApiPropertyToClient = (p) => {
+  const fixUrl = (url) => url && typeof url === 'string' ? url.replace('http://localhost:5000', 'https://hi-techserver-zd1d.onrender.com') : url;
+
   // Format price helper
   const formatPrice = (priceStr) => {
     if (!priceStr) return '';
@@ -40,14 +42,14 @@ export const mapApiPropertyToClient = (p) => {
     area: p.specifications?.totalArea || p.specifications?.builtUpArea || '',
     facing: p.specifications?.facing || '',
     parking: p.specifications?.parkingSpaces || '',
-    image: p.images?.featured || "",
-    video: p.images?.videoUrl || null,
+    image: fixUrl(p.images?.featured) || "",
+    video: fixUrl(p.images?.videoUrl) || null,
     features: p.amenities || [],
     featured: p.highlights?.featuredProperty || p.highlights?.premiumProperty || p.highlights?.hotProperty || p.featured || false,
     furnishing: p.specifications?.furnishing || "",
     description: p.description?.short || p.description?.full || "",
     mapUrl: p.location?.googleMapLink || "",
-    gallery: p.gallery || p.images?.gallery || [],
+    gallery: (p.gallery || p.images?.gallery || []).map(img => typeof img === 'string' ? fixUrl(img) : img),
     badges: badges,
     specifications: p.specifications || {},
     agent: {

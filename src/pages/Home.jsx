@@ -33,7 +33,12 @@ const Home = () => {
 
   useEffect(() => {
     if (bannersData) {
-      setBanners(Array.isArray(bannersData) ? bannersData : []);
+      const fixedBanners = (Array.isArray(bannersData) ? bannersData : []).map(b => ({
+        ...b,
+        image: b.image ? b.image.replace('http://localhost:5000', 'https://hi-techserver-zd1d.onrender.com') : b.image,
+        video: b.video ? b.video.replace('http://localhost:5000', 'https://hi-techserver-zd1d.onrender.com') : b.video
+      }));
+      setBanners(fixedBanners);
     }
   }, [bannersData]);
 
