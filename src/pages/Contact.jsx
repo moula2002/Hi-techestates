@@ -57,7 +57,7 @@ const Contact = () => {
   return (
     <div className="min-h-screen bg-gray-50 bg-premium-texture font-sans pb-24 relative overflow-hidden">
       {/* Decorative Background Elements */}
-      <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-primary-200/30 rounded-full filter blur-[100px] pointer-events-none z-0"></div>
+      <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-primary-200/30 rounded-full filter blur-[100px] pointer-events-none z-0 will-change-transform"></div>
       <div className="absolute top-1/3 left-0 w-1/2 h-[800px] bg-building-outline opacity-40 pointer-events-none z-0"></div>
 
 
@@ -182,8 +182,8 @@ const Contact = () => {
           {/* Right Column: Contact Info (Dark Premium Background) */}
           <div className="w-full lg:w-2/5 bg-charcoal-950 p-8 md:p-12 lg:p-16 text-white flex flex-col justify-between relative overflow-hidden">
             {/* Decorative background gradients for luxury feel */}
-            <div className="absolute top-0 right-0 -mr-20 -mt-20 w-80 h-80 rounded-full bg-primary-900/30 blur-[80px] pointer-events-none"></div>
-            <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 rounded-full bg-primary-500/20 blur-[80px] pointer-events-none"></div>
+            <div className="absolute top-0 right-0 -mr-20 -mt-20 w-80 h-80 rounded-full bg-primary-900/30 blur-[80px] pointer-events-none will-change-transform"></div>
+            <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 rounded-full bg-primary-500/20 blur-[80px] pointer-events-none will-change-transform"></div>
 
             <div className="relative z-10">
               <h3 className="text-2xl md:text-3xl font-serif font-bold mb-10 flex items-center gap-3 tracking-wide">
@@ -260,7 +260,7 @@ const Contact = () => {
         {/* Decorative Background Elements */}
         <div className="absolute inset-y-0 right-0 w-1/2 bg-building-outline opacity-60 pointer-events-none z-0"></div>
         <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-white rounded-full -translate-y-1/2 translate-x-1/3 pointer-events-none z-0 shadow-[0_0_100px_rgba(0,0,0,0.05)]"></div>
-        <div className="absolute bottom-20 left-10 w-[400px] h-[400px] bg-primary-100/40 rounded-full filter blur-[100px] animate-float pointer-events-none z-0"></div>
+        <div className="absolute bottom-20 left-10 w-[400px] h-[400px] bg-primary-100/40 rounded-full filter blur-[100px] animate-float pointer-events-none z-0 will-change-transform"></div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10" data-aos="fade-up" data-aos-delay="200">
           <div className="mb-10 text-center">

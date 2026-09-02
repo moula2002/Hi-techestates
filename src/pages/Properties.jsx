@@ -92,7 +92,7 @@ const Properties = () => {
   return (
     <div className="min-h-screen bg-gray-50 bg-premium-texture font-sans pb-24 relative overflow-hidden">
       {/* Decorative Background Elements */}
-      <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-primary-200/30 rounded-full filter blur-[100px] pointer-events-none z-0"></div>
+      <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-primary-200/30 rounded-full filter blur-[100px] pointer-events-none z-0 will-change-transform"></div>
       <div className="absolute top-1/3 left-0 w-1/2 h-[800px] bg-building-outline opacity-40 pointer-events-none z-0"></div>
 
       <Helmet>
@@ -148,7 +148,7 @@ const Properties = () => {
           <div className={`w-full lg:w-1/4 ${showFilters ? 'block' : 'hidden lg:block'}`} data-aos="fade-right">
             <div className="bg-white p-6 md:p-8 rounded-3xl shadow-[0_10px_40px_-15px_rgba(0,0,0,0.1)] border border-gray-100 text-charcoal-900 relative overflow-hidden">
               {/* Decorative backgrounds */}
-              <div className="absolute top-0 right-0 w-64 h-64 bg-primary-50 blur-[60px] rounded-full pointer-events-none -mr-20 -mt-20"></div>
+              <div className="absolute top-0 right-0 w-64 h-64 bg-primary-50 blur-[60px] rounded-full pointer-events-none -mr-20 -mt-20 will-change-transform"></div>
               
               <div className="flex justify-between items-center mb-8 relative z-10">
                 <h3 className="font-bold text-charcoal-900 text-2xl font-serif tracking-wide flex items-center gap-2">
