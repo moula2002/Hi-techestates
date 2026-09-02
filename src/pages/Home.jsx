@@ -202,7 +202,7 @@ const Home = () => {
 
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full pl-12 md:pl-8">
-          <div className="max-w-3xl lg:max-w-4xl p-6 md:p-8 rounded-2xl bg-white/20 backdrop-blur-md border border-white/30 shadow-xl" data-aos="fade-up">
+          <div className="max-w-3xl lg:max-w-4xl p-6 rounded-2xl bg-white/5 backdrop-blur-[2px] border border-white/20 shadow-sm" data-aos="fade-up">
             <h2 className="text-4xl md:text-5xl lg:text-7xl md:whitespace-nowrap font-['Cinzel'] font-black tracking-widest text-[#17427a] mb-4 drop-shadow-lg animate-premium-reveal">
               Hi-Tech Estates
             </h2>

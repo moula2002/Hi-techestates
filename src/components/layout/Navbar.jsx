@@ -88,7 +88,7 @@ const Navbar = () => {
                   <div key={link.name} className="relative group py-2">
                     <Link
                       to={link.path}
-                      className={`relative px-2 py-1 text-[15px] font-bold tracking-wide transition-all duration-300 flex items-center gap-1.5 ${isActive
+                      className={`relative px-2 py-1 text-[16px] font-black tracking-wide transition-all duration-300 flex items-center gap-1.5 ${isActive
                         ? 'text-primary-900'
                         : 'text-charcoal-700 hover:text-primary-900'
                         }`}
