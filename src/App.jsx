@@ -12,6 +12,7 @@ const About = lazy(() => import('./pages/About'));
 const Services = lazy(() => import('./pages/Services'));
 const PropertyServices = lazy(() => import('./pages/PropertyServices'));
 const InteriorDesigns = lazy(() => import('./pages/InteriorDesigns'));
+const HomeLoanServices = lazy(() => import('./pages/HomeLoanServices'));
 const Properties = lazy(() => import('./pages/Properties'));
 const Career = lazy(() => import('./pages/Career'));
 const Gallery = lazy(() => import('./pages/Gallery'));
@@ -51,6 +52,7 @@ function App() {
               <Route path="/services" element={<Services />} />
               <Route path="/property-services" element={<PropertyServices />} />
               <Route path="/interior-designs" element={<InteriorDesigns />} />
+              <Route path="/home-loan" element={<HomeLoanServices />} />
               <Route path="/properties" element={<Properties />} />
               <Route path="/property/:id" element={<PropertyDetail />} />
               <Route path="/career" element={<Career />} />

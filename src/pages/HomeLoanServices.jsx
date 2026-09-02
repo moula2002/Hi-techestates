@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
-import { Home, Key, Handshake, TrendingUp, FileText, ArrowRight, CheckCircle } from 'lucide-react';
+import { Landmark, CheckCircle, Repeat, FileText, ArrowRight } from 'lucide-react';
 import PropertyCard from '../components/property/PropertyCard';
 import { mapApiPropertyToClient } from '../utils/propertyMapper';
 
-const PropertyServices = () => {
+const HomeLoanServices = () => {
   const [apiProperties, setApiProperties] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -28,45 +28,42 @@ const PropertyServices = () => {
     fetchProperties();
   }, []);
 
-  const salesProperties = apiProperties.filter(p => p.status === 'For Sale').slice(0, 3);
-  const rentalProperties = apiProperties.filter(p => p.status === 'For Rent').slice(0, 3);
-
   const services = [
     { 
-      id: 'buying', 
-      icon: <Home size={32} />, 
-      title: 'Property Buying', 
-      desc: 'Expert guidance to help you find and acquire your dream residential or commercial property at the best value.',
-      points: ['Extensive market research', 'Negotiation assistance', 'Property valuation', 'Legal verification']
+      id: 'advisory', 
+      icon: <Landmark size={32} />, 
+      title: 'Home Loan Advisory', 
+      desc: 'Expert consultation to help you choose the best loan products with minimal interest rates.',
+      points: ['Eligibility check', 'Bank comparison', 'Interest rate negotiation', 'Tenure optimization']
     },
     { 
-      id: 'selling', 
-      icon: <TrendingUp size={32} />, 
-      title: 'Property Selling', 
-      desc: 'Strategic marketing and positioning to ensure your property sells quickly and at a premium price.',
-      points: ['Professional photography', 'Targeted marketing', 'Buyer qualification', 'Closing assistance']
+      id: 'preapproved', 
+      icon: <CheckCircle size={32} />, 
+      title: 'Pre-Approved Loans', 
+      desc: 'Get pre-approved quickly to strengthen your buying position before property hunting.',
+      points: ['Quick processing', 'Credit analysis', 'Financial planning', 'Budget estimation']
     },
     { 
-      id: 'rentals', 
-      icon: <Key size={32} />, 
-      title: 'Rentals & Leasing', 
-      desc: 'Comprehensive rental management services connecting landlords with reliable tenants.',
-      points: ['Tenant screening', 'Lease agreement drafting', 'Rent collection setup', 'Property maintenance coordination']
+      id: 'refinancing', 
+      icon: <Repeat size={32} />, 
+      title: 'Loan Transfer', 
+      desc: 'Transfer your existing high-interest loans to better banks for lower EMIs and benefits.',
+      points: ['Balance transfer', 'Top-up loans', 'EMI reduction', 'Restructuring']
     },
     { 
       id: 'documentation', 
       icon: <FileText size={32} />, 
-      title: 'Legal Property Assessment', 
-      desc: 'Hassle-free handling of all legal paperwork, registrations, and title transfers by our expert legal team.',
-      points: ['Title search & verification', 'Sale deed drafting', 'Registration assistance', 'Tax consultation']
+      title: 'Documentation Assist', 
+      desc: 'End-to-end support with all bank paperwork, legal checks, and loan disbursements.',
+      points: ['Income document prep', 'Legal clearances', 'Bank coordination', 'Disbursement support']
     }
   ];
 
   return (
     <div className="min-h-screen bg-gray-50 font-sans pb-20 overflow-hidden">
       <Helmet>
-        <title>Property Sales & Rentals | Hi-Tech Estates</title>
-        <meta name="description" content="Expert property buying, selling, and rental services in Bangalore." />
+        <title>Home Loan Services | Hi-Tech Estates</title>
+        <meta name="description" content="Fast, flexible, and hassle-free home loan financing for your dream property." />
       </Helmet>
       
       {/* Hero Banner */}
@@ -74,7 +71,7 @@ const PropertyServices = () => {
         <div className="absolute inset-0 w-full h-full bg-gray-200">
           <img
             src="https://images.unsplash.com/photo-1560520653-9e0e4c89eb11?ixlib=rb-4.0.3&auto=format&fit=crop&w=2073&q=80"
-            alt="Real Estate Services"
+            alt="Home Loan Services"
             className="w-full h-full object-cover object-center scale-105 animate-[slow-zoom_20s_linear_infinite_alternate]"
           />
           {/* Very Light Overlay */}
@@ -85,8 +82,8 @@ const PropertyServices = () => {
 
         <div className="relative z-20 text-center px-4 max-w-4xl mx-auto pt-16" data-aos="zoom-in">
           <div className="inline-block bg-white/30 backdrop-blur-md px-6 md:px-10 py-6 rounded-2xl shadow-lg border border-white/50">
-            <p className="text-primary-700 font-bold tracking-widest uppercase mb-2 text-xs">Real Estate Solutions</p>
-            <h1 className="text-3xl md:text-4xl font-black text-charcoal-900 mb-4 font-serif">Seamless Property Transactions</h1>
+            <p className="text-primary-700 font-bold tracking-widest uppercase mb-2 text-xs">Financial Solutions</p>
+            <h1 className="text-3xl md:text-4xl font-black text-charcoal-900 mb-4 font-serif">Seamless Home Loans</h1>
             <div className="w-16 h-1 bg-primary-600 mx-auto rounded-full shadow-sm"></div>
           </div>
         </div>
@@ -139,7 +136,7 @@ const PropertyServices = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="flex justify-between items-end mb-12">
             <div>
-              <h2 className="text-xl font-bold tracking-widest text-primary-400 uppercase mb-2 drop-shadow-md">Move In Today</h2>
+              <h2 className="text-xl font-bold tracking-widest text-primary-400 uppercase mb-2 drop-shadow-md">Ready to Buy?</h2>
               <h3 className="text-3xl md:text-4xl font-black text-white font-serif drop-shadow-md">Properties For Sale & Rent</h3>
             </div>
             <Link to="/properties" className="hidden md:flex items-center gap-2 text-white font-bold hover:text-gray-200 transition-colors drop-shadow-md">
@@ -163,4 +160,4 @@ const PropertyServices = () => {
   );
 };
 
-export default PropertyServices;
+export default HomeLoanServices;

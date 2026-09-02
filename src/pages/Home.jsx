@@ -158,7 +158,7 @@ const Home = () => {
       {/* 1. Hero Section */}
       <section className="relative h-[650px] flex items-center pt-20 group">
         <div className="absolute inset-0 z-0">
-          {banners.length > 0 && (
+          {banners.length > 0 ? (
             banners.map((banner, idx) => (
               banner.video ? (
                 <video
@@ -181,11 +181,14 @@ const Home = () => {
                 />
               )
             ))
+          ) : (
+            <img
+              src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2075&q=80"
+              alt="Default Banner"
+              className="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 origin-center opacity-100 animate-slow-zoom"
+            />
           )}
-          {/* Subtle gradient overlays to make text readable */}
-          <div className="absolute inset-0 bg-gradient-to-r from-white/70 via-white/30 to-transparent"></div>
-          {/* Top gradient specifically for Navbar and Logo visibility */}
-          <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-white/80 via-white/40 to-transparent"></div>
+
         </div>
 
         {/* Navigation Arrows */}
@@ -209,19 +212,21 @@ const Home = () => {
         )}
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full pl-12 md:pl-8">
-          <div className="max-w-xl" data-aos="fade-up">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-widest text-[#0A2540] uppercase mb-4 drop-shadow-md">Hi-Tech Estates</h2>
-            <h1 className="text-3xl md:text-4xl font-black text-charcoal-900 leading-tight mb-6">
-              Design Your <br />Dreams
+          <div className="max-w-3xl lg:max-w-4xl" data-aos="fade-up">
+            <h2 className="text-4xl md:text-5xl lg:text-7xl md:whitespace-nowrap font-['Cinzel'] font-black tracking-widest text-[#17427a] mb-4 drop-shadow-lg animate-premium-reveal">
+              Hi-Tech Estates
+            </h2>
+            <h1 className="text-2xl md:text-3xl font-black text-black leading-tight mb-6 drop-shadow-sm">
+              Design Your Dreams
             </h1>
             <p className="text-lg text-charcoal-700 mb-8 font-medium">
               Find a Property That Feels Like Home.
             </p>
-
+            
             {/* Quick Action Buttons */}
-            <div className="flex flex-wrap gap-4 mb-8">
+            <div className="flex flex-wrap gap-4 mb-2 transition-transform duration-500 group-hover/glass:translate-x-2 delay-150">
               {['Buy', 'Sell', 'Rent', 'Lease'].map((action) => (
-                <button key={action} className="px-8 py-3 bg-primary-900 text-white font-bold rounded hover:bg-primary-800 transition-colors shadow-lg hover:shadow-xl hover:-translate-y-1 transform duration-200">
+                <button key={action} className="px-8 py-3 bg-primary-900/90 backdrop-blur-sm border border-primary-800/50 text-white font-bold rounded-xl hover:bg-primary-800 transition-all shadow-lg hover:shadow-xl hover:-translate-y-1 transform duration-300">
                   {action}
                 </button>
               ))}

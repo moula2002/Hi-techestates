@@ -42,12 +42,13 @@ const FloatingContact = () => {
       
       {/* Call Floating Button */}
       <div className="relative group">
-        <button
+        <a
+          href="tel:+919900000494"
           className="w-14 h-14 md:w-16 md:h-16 bg-charcoal-900 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-primary-500 transition-all hover:scale-110 relative z-10"
           aria-label="Call Us"
         >
           <Phone className="w-6 h-6 md:w-8 md:h-8 group-hover:animate-pulse" />
-        </button>
+        </a>
         
         {/* Call Numbers Popup */}
         <div className="absolute top-1/2 -translate-y-1/2 right-full mr-4 bg-white rounded-xl shadow-[0_10px_25px_rgba(0,0,0,0.15)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-x-4 group-hover:translate-x-0 z-50 overflow-hidden border border-gray-100 flex flex-col min-w-[210px] pointer-events-none group-hover:pointer-events-auto">
@@ -56,16 +57,16 @@ const FloatingContact = () => {
           </div>
           <div className="flex flex-col">
             <a 
-              href="tel:+918550000494" 
+              href="tel:+919900000494" 
               className="px-5 py-3.5 text-charcoal-900 font-bold text-[15px] hover:bg-gray-50 hover:text-primary-600 transition-colors flex items-center gap-3 border-b border-gray-100"
             >
-              <Phone size={18} className="text-gray-400" /> +91 85500 00494
+              <Phone size={18} className="text-gray-400" /> +91 99000 00494
             </a>
             <a 
-              href="tel:+919900000494" 
+              href="tel:+918550000494" 
               className="px-5 py-3.5 text-charcoal-900 font-bold text-[15px] hover:bg-gray-50 hover:text-primary-600 transition-colors flex items-center gap-3"
             >
-              <Phone size={18} className="text-gray-400" /> +91 99000 00494
+              <Phone size={18} className="text-gray-400" /> +91 85500 00494
             </a>
           </div>
         </div>

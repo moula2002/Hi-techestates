@@ -196,10 +196,10 @@ const Contact = () => {
                     <MapPin size={24} />
                   </div>
                   <div>
-                    <h4 className="font-bold text-white mb-2 text-lg tracking-wide">Head Office</h4>
+                    <h4 className="font-bold text-white mb-2 text-lg tracking-wide">Corporate Office</h4>
                     <p className="text-gray-400 text-[15px] leading-relaxed font-medium">
-                      # 1&2, 1st Floor, 4th Main<br />
-                      4th Cross, Arekere, B.G Road,<br />
+                      # 1, 1st Floor, 4th Main & Cross,<br />
+                      Arekere, B.G Road,<br />
                       Bangalore - 560076
                     </p>
                   </div>
@@ -212,7 +212,8 @@ const Contact = () => {
                   <div>
                     <h4 className="font-bold text-white mb-2 text-lg tracking-wide">Direct Line</h4>
                     <p className="text-gray-400 text-[15px] leading-relaxed font-medium">
-                      +91 99000 00494
+                      +91 99000 00494 <br />
+                      +91 8550000494
                     </p>
                   </div>
                 </div>

@@ -48,7 +48,8 @@ const Navbar = () => {
       dropdown: [
         { name: 'Property Rent', path: '/property-services' },
         { name: 'Property Sell', path: '/property-services' },
-        { name: 'Interiors Designs', path: '/interior-designs' }
+        { name: 'Interiors Designs', path: '/interior-designs' },
+        { name: 'Home Loan', path: '/home-loan' }
       ]
     },
     { name: 'Gallery', path: '/gallery' },
@@ -74,7 +75,7 @@ const Navbar = () => {
               <img
                 src={logoImg}
                 alt="Hi-Tech Estates Logo"
-                className={`object-contain transition-all duration-500 drop-shadow-sm group-hover:scale-105 ${isScrolled ? 'h-10 md:h-12' : 'h-16 md:h-20'
+                className={`object-contain transition-all duration-500 drop-shadow-sm group-hover:scale-105 ${isScrolled ? 'h-16 md:h-20' : 'h-20 md:h-28'
                   }`}
               />
             </Link>
