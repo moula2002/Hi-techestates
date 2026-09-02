@@ -192,6 +192,29 @@ const Properties = () => {
                   </select>
                 </div>
 
+                {/* Category */}
+                <div className="pt-2">
+                  <label className="block text-[11px] font-bold text-charcoal-500 uppercase tracking-widest mb-2 ml-1">Category</label>
+                  <select 
+                    className="w-full p-4 bg-white border border-gray-200 rounded-xl text-sm text-charcoal-700 focus:outline-none focus:border-primary-400 focus:ring-1 focus:ring-primary-400 transition-all appearance-none cursor-pointer shadow-sm"
+                    value={filter.category}
+                    onChange={(e) => setFilter({...filter, category: e.target.value})}
+                  >
+                    <option value="" className="bg-white text-charcoal-700">Any Category</option>
+                    <option value="Residential" className="bg-white text-charcoal-700">Residential</option>
+                    <option value="Commercial" className="bg-white text-charcoal-700">Commercial</option>
+                    <option value="Plots/Land" className="bg-white text-charcoal-700">Plots/Land</option>
+                  </select>
+                </div>
+                
+                {/* New Launch Toggle */}
+                <div className="pt-2">
+                  <label className="flex items-center gap-3 p-4 bg-white border border-gray-200 rounded-xl cursor-pointer group hover:border-primary-400 transition-all shadow-sm">
+                    <input type="checkbox" checked={filter.newLaunch} onChange={(e) => setFilter({...filter, newLaunch: e.target.checked})} className="w-5 h-5 rounded text-primary-600 focus:ring-primary-500 cursor-pointer" />
+                    <span className="text-sm font-bold text-charcoal-700 uppercase">New Launch Only</span>
+                  </label>
+                </div>
+
                 {/* Property Type */}
                 <div className="pt-2">
                   <label className="block text-[11px] font-bold text-charcoal-500 uppercase tracking-widest mb-4 ml-1">Property Type</label>
