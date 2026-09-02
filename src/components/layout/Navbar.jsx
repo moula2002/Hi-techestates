@@ -90,7 +90,7 @@ const Navbar = () => {
                       to={link.path}
                       className={`relative px-2 py-1 text-[16px] font-black tracking-wide transition-all duration-300 flex items-center gap-1.5 ${isActive
                         ? 'text-primary-900'
-                        : 'text-charcoal-700 hover:text-primary-900'
+                        : 'text-black hover:text-primary-900'
                         }`}
                     >
                       {link.name}

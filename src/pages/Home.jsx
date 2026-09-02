@@ -202,16 +202,18 @@ const Home = () => {
 
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full pl-12 md:pl-8">
-          <div className="max-w-3xl lg:max-w-4xl p-6 rounded-2xl bg-white/5 backdrop-blur-[2px] border border-white/20 shadow-sm" data-aos="fade-up">
-            <h2 className="text-4xl md:text-5xl lg:text-7xl md:whitespace-nowrap font-['Cinzel'] font-black tracking-widest text-[#17427a] mb-4 drop-shadow-lg animate-premium-reveal">
-              Hi-Tech Estates
-            </h2>
-            <h1 className="text-2xl md:text-3xl font-black text-black leading-tight mb-6 drop-shadow-sm">
-              Design Your Dreams
-            </h1>
-            <p className="text-lg text-charcoal-700 mb-8 font-medium">
-              Find a Property That Feels Like Home.
-            </p>
+          <div className="max-w-3xl lg:max-w-4xl" data-aos="fade-up">
+            <div className="inline-block p-4 md:p-6 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 shadow-sm mb-6">
+              <h2 className="text-4xl md:text-5xl lg:text-7xl md:whitespace-nowrap font-['Cinzel'] font-black tracking-widest text-[#17427a] mb-2 drop-shadow-lg animate-premium-reveal">
+                Hi-Tech Estates
+              </h2>
+              <h1 className="text-2xl md:text-3xl font-black text-black leading-tight mb-2 drop-shadow-sm">
+                Design Your Dreams
+              </h1>
+              <p className="text-lg text-charcoal-900 font-bold drop-shadow-sm">
+                Find a Property That Feels Like Home.
+              </p>
+            </div>
             
             {/* Quick Action Buttons */}
             <div className="flex flex-wrap gap-4 mb-2 transition-transform duration-500 group-hover/glass:translate-x-2 delay-150">
