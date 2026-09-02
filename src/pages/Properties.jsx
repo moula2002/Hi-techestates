@@ -45,7 +45,13 @@ const Properties = () => {
   // Client-side filtering logic
   const filteredProperties = apiProperties.filter(p => {
     if (filter.location && p.location !== filter.location) return false;
-    if (filter.type !== 'All Type' && filter.type !== '' && p.type !== filter.type) return false;
+    if (filter.type !== 'All Type' && filter.type !== '') {
+        if (filter.type === 'New Launch') {
+          if (!p.highlights?.newLaunch && p.type !== 'New Launch') return false;
+        } else {
+          if (p.type !== filter.type) return false;
+        }
+      }
     
     if (filter.category) {
       const pType = (p.type || '').toLowerCase();

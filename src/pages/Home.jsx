@@ -147,7 +147,7 @@ const Home = () => {
   };
   // Dynamically extract options from fetched properties
   const dynamicLocations = [...new Set(apiProperties.map(p => p.location).filter(Boolean))].sort();
-  const dynamicPropertyTypes = [...new Set(apiProperties.map(p => p.type).filter(Boolean))].sort();
+  const dynamicPropertyTypes = [...new Set([...apiProperties.map(p => p.type).filter(Boolean), 'Commercial', 'Plots/Land', 'New Launch'])].sort();
 
   return (
     <div className="w-full font-sans">
