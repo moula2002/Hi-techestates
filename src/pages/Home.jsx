@@ -71,9 +71,11 @@ const Home = () => {
   // Search State
   const [searchParams, setSearchParams] = useState({
     location: '',
+    category: '',
     type: '',
     bhk: '',
-    budget: ''
+    budget: '',
+    newLaunch: false
   });
 
   // Contact Form State
@@ -122,9 +124,11 @@ const Home = () => {
     // Navigate to properties page with search params as query string
     const query = new URLSearchParams();
     if (searchParams.location) query.set('location', searchParams.location);
+    if (searchParams.category) query.set('category', searchParams.category);
     if (searchParams.type) query.set('type', searchParams.type);
     if (searchParams.bhk) query.set('bhk', searchParams.bhk);
     if (searchParams.budget) query.set('budget', searchParams.budget);
+    if (searchParams.newLaunch) query.set('newLaunch', 'true');
 
     navigate(`/properties?${query.toString()}`);
   };
@@ -241,9 +245,9 @@ const Home = () => {
       </section>
 
       {/* 2. Floating Search Bar */}
-      <section className="relative z-20 max-w-6xl mx-auto px-4 -mt-12 mb-16" data-aos="fade-up" data-aos-delay="200">
-        <div className="bg-white rounded-lg shadow-xl p-6 flex flex-col md:flex-row gap-4 items-end border border-gray-100">
-          <div className="flex-1 w-full">
+      <section className="relative z-20 max-w-7xl mx-auto px-4 -mt-12 mb-16" data-aos="fade-up" data-aos-delay="200">
+        <div className="bg-white rounded-lg shadow-xl p-6 flex flex-wrap lg:flex-nowrap gap-4 items-end border border-gray-100">
+          <div className="flex-1 w-full min-w-[140px]">
             <label className="block text-xs font-bold text-charcoal-600 uppercase mb-2">Location</label>
             <select
               className="w-full p-3 border border-gray-200 rounded text-charcoal-700 focus:outline-none focus:border-primary-500 font-medium"
@@ -254,7 +258,20 @@ const Home = () => {
               {dynamicLocations.map(loc => <option key={loc} value={loc}>{loc}</option>)}
             </select>
           </div>
-          <div className="flex-1 w-full">
+          <div className="flex-1 w-full min-w-[140px]">
+            <label className="block text-xs font-bold text-charcoal-600 uppercase mb-2">Category</label>
+            <select
+              className="w-full p-3 border border-gray-200 rounded text-charcoal-700 focus:outline-none focus:border-primary-500 font-medium"
+              value={searchParams.category}
+              onChange={(e) => setSearchParams({ ...searchParams, category: e.target.value })}
+            >
+              <option value="">Any</option>
+              <option value="Residential">Residential</option>
+              <option value="Commercial">Commercial</option>
+              <option value="Plots/Land">Plots/Land</option>
+            </select>
+          </div>
+          <div className="flex-1 w-full min-w-[140px]">
             <label className="block text-xs font-bold text-charcoal-600 uppercase mb-2">Property Type</label>
             <select
               className="w-full p-3 border border-gray-200 rounded text-charcoal-700 focus:outline-none focus:border-primary-500 font-medium"
@@ -265,7 +282,7 @@ const Home = () => {
               {dynamicPropertyTypes.map(type => <option key={type} value={type}>{type}</option>)}
             </select>
           </div>
-          <div className="flex-1 w-full">
+          <div className="flex-1 w-full min-w-[120px]">
             <label className="block text-xs font-bold text-charcoal-600 uppercase mb-2">BHK</label>
             <select
               className="w-full p-3 border border-gray-200 rounded text-charcoal-700 focus:outline-none focus:border-primary-500 font-medium"
@@ -276,7 +293,7 @@ const Home = () => {
               {bhkOptions.map(bhk => <option key={bhk} value={bhk}>{bhk}</option>)}
             </select>
           </div>
-          <div className="flex-1 w-full">
+          <div className="flex-1 w-full min-w-[140px]">
             <label className="block text-xs font-bold text-charcoal-600 uppercase mb-2">Budget</label>
             <select
               className="w-full p-3 border border-gray-200 rounded text-charcoal-700 focus:outline-none focus:border-primary-500 font-medium"
@@ -287,13 +304,19 @@ const Home = () => {
               {budgetRanges.map(budget => <option key={budget} value={budget}>{budget}</option>)}
             </select>
           </div>
-          <div className="w-full md:w-auto">
+          <div className="flex items-center h-[50px] min-w-[120px] mb-1">
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" checked={searchParams.newLaunch} onChange={(e) => setSearchParams({ ...searchParams, newLaunch: e.target.checked })} className="w-5 h-5 rounded text-primary-600 focus:ring-primary-500 cursor-pointer" />
+              <span className="text-sm font-bold text-charcoal-700 uppercase">New Launch</span>
+            </label>
+          </div>
+          <div className="w-full lg:w-auto">
             <button
               onClick={handleSearch}
-              className="w-full md:w-48 p-3 bg-primary-900 text-white font-bold rounded hover:bg-primary-800 transition-colors flex items-center justify-center gap-2 shadow-lg"
+              className="w-full lg:w-48 p-3 bg-primary-900 text-white font-bold rounded hover:bg-primary-800 transition-colors flex items-center justify-center gap-2 shadow-lg"
             >
               <Search size={18} />
-              Search Property
+              Search
             </button>
           </div>
         </div>
