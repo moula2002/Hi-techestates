@@ -204,8 +204,8 @@ const Home = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full pl-12 md:pl-8">
           <div className="max-w-3xl lg:max-w-4xl" data-aos="fade-up">
             <div className="relative inline-block mb-8">
-              {/* Soft, edgeless blurred glass cloud */}
-              <div className="absolute inset-0 bg-white/10 backdrop-blur-lg blur-2xl rounded-[100px] scale-110 pointer-events-none"></div>
+              {/* Soft, edgeless blurred glass cloud - heavily optimized for scroll performance */}
+              <div className="absolute inset-0 bg-white/30 blur-3xl rounded-[100px] scale-125 pointer-events-none will-change-transform"></div>
               
               <div className="relative z-10">
                 <h2 className="text-4xl md:text-5xl lg:text-7xl md:whitespace-nowrap font-['Cinzel'] font-black tracking-widest text-[#17427a] mb-2 drop-shadow-xl animate-premium-reveal">

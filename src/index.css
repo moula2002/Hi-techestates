@@ -167,6 +167,7 @@
 
   .animate-float {
     animation: float 15s ease-in-out infinite;
+    will-change: transform;
   }
 }
 
