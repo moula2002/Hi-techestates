@@ -200,28 +200,9 @@ const Home = () => {
 
         </div>
 
-        {/* Navigation Arrows */}
-        {banners.length > 1 && (
-          <>
-            <button
-              onClick={handlePrevBanner}
-              className="absolute left-4 md:left-8 z-20 p-2 md:p-3 rounded-full bg-white/30 hover:bg-white/60 text-charcoal-900 transition-all opacity-0 group-hover:opacity-100 backdrop-blur-sm shadow-md"
-              aria-label="Previous Image"
-            >
-              <ChevronLeft size={32} />
-            </button>
-            <button
-              onClick={handleNextBanner}
-              className="absolute right-4 md:right-8 z-20 p-2 md:p-3 rounded-full bg-white/30 hover:bg-white/60 text-charcoal-900 transition-all opacity-0 group-hover:opacity-100 backdrop-blur-sm shadow-md"
-              aria-label="Next Image"
-            >
-              <ChevronRight size={32} />
-            </button>
-          </>
-        )}
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full pl-12 md:pl-8">
-          <div className="max-w-3xl lg:max-w-4xl" data-aos="fade-up">
+          <div className="max-w-3xl lg:max-w-4xl p-6 md:p-8 rounded-2xl bg-white/20 backdrop-blur-md border border-white/30 shadow-xl" data-aos="fade-up">
             <h2 className="text-4xl md:text-5xl lg:text-7xl md:whitespace-nowrap font-['Cinzel'] font-black tracking-widest text-[#17427a] mb-4 drop-shadow-lg animate-premium-reveal">
               Hi-Tech Estates
             </h2>
