@@ -204,17 +204,16 @@ const Home = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full pl-12 md:pl-8">
           <div className="max-w-3xl lg:max-w-4xl" data-aos="fade-up">
             <div className="relative inline-block mb-8">
-              {/* Soft, edgeless blurred glass cloud - heavily optimized for scroll performance */}
-              <div className="absolute inset-0 bg-white/50 blur-2xl rounded-[100px] scale-110 pointer-events-none will-change-transform"></div>
+              {/* Removed blurred glass cloud entirely as requested to prevent washed out patch */}
               
-              <div className="relative z-10">
-                <h2 className="text-4xl md:text-5xl lg:text-7xl md:whitespace-nowrap font-['Cinzel'] font-black tracking-widest text-[#17427a] mb-2 drop-shadow-xl animate-premium-reveal">
+              <div className="relative z-10 flex flex-col items-start">
+                <h2 className="inline-block text-4xl md:text-5xl lg:text-7xl md:whitespace-nowrap font-['Cinzel'] font-black tracking-widest text-[#17427a] mb-2 drop-shadow-xl animate-premium-reveal bg-white/0 backdrop-blur-[1px] px-4 py-2 rounded-2xl">
                   Hi-Tech Estates
                 </h2>
-                <h1 className="text-2xl md:text-3xl font-black text-black leading-tight mb-2 drop-shadow-xl">
+                <h1 className="inline-block text-2xl md:text-3xl font-black text-black leading-tight mb-3 drop-shadow-xl bg-white/0 backdrop-blur-[1px] px-4 py-1.5 rounded-xl">
                   Design Your Dreams
                 </h1>
-                <p className="text-lg text-black font-extrabold drop-shadow-lg">
+                <p className="inline-block text-lg text-black font-extrabold drop-shadow-lg bg-white/0 backdrop-blur-[1px] px-4 py-1.5 rounded-xl mb-6">
                   Find a Property That Feels Like Home.
                 </p>
               </div>

@@ -112,12 +112,13 @@ const Footer = () => {
             <ul className="space-y-4">
               <li className="flex items-start gap-3">
                 <MapPin className="text-gray-300 shrink-0 mt-1" size={18} />
-                <span className="text-sm text-gray-300"># 1&2, 1st Floor, 4th Main<br />4th Cross, Arekere, B.G Road,<br />Bangalore - 560076</span>
+                <span className="text-sm text-gray-300"># 1, 1st Floor, 4th Main & Cross<br />Arekere, B.G Road,<br />Bangalore - 560076</span>
               </li>
               <li className="flex items-start gap-3">
                 <Phone className="text-gray-300 shrink-0 mt-1" size={18} />
                 <div className="flex flex-col">
                   <a href="tel:+919900000494" className="text-sm text-gray-300 hover:text-white">+91 99000 00494</a>
+                  <a href="tel:+918550000494" className="text-sm text-gray-300 hover:text-white mt-1">+91 85500 00494</a>
                 </div>
               </li>
               <li className="flex items-start gap-3">

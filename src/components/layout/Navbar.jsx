@@ -132,7 +132,7 @@ const Navbar = () => {
             <div className="hidden lg:flex items-center gap-2 shrink-0">
               <button
                 onClick={() => setIsListPropertyModalOpen(true)}
-                className={`px-5 py-2.5 rounded-full text-[14px] font-bold transition-colors duration-300 ${isScrolled ? 'text-primary-900 hover:bg-primary-50' : 'text-charcoal-800 hover:bg-black/5'
+                className={`px-3 py-1 relative text-[16px] font-black tracking-wide transition-all duration-300 flex items-center gap-1.5 ${isScrolled ? 'text-primary-900' : 'text-black hover:text-primary-900'
                   }`}
               >
                 List Property
