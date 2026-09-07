@@ -183,6 +183,16 @@ const PropertyDetail = () => {
   const agentPhone = "+91 99000 00494";
   const agentLocation = property.agent?.city || property.agent?.location || "Bengaluru";
 
+  const generateWhatsAppText = () => {
+    let text = ``;
+    if (enquireForm.name) text += `Name: ${enquireForm.name}\n`;
+    if (enquireForm.phone) text += `Phone: ${enquireForm.phone}\n`;
+    if (enquireForm.email) text += `Email: ${enquireForm.email}\n`;
+    if (enquireForm.type && enquireForm.type !== 'Select Option' && enquireForm.type !== 'Select') text += `I am a: ${enquireForm.type}\n`;
+    if (enquireForm.message) text += `Message: ${enquireForm.message}`;
+    return encodeURIComponent(text.trim());
+  };
+
   return (
     <div className="min-h-screen bg-[#F8F9FA] pt-36 md:pt-40 lg:pt-48 font-sans pb-20 relative overflow-hidden">
 
@@ -407,7 +417,7 @@ const PropertyDetail = () => {
                       <div className="flex flex-wrap justify-center sm:justify-start gap-4 text-sm font-medium">
                         <span className="flex items-center gap-1.5 bg-white/10 px-3 py-1.5 rounded-lg backdrop-blur-sm"><Phone size={16} /> {agentPhone}</span>
                         <a
-                          href={`https://wa.me/${agentPhone.replace(/[^0-9]/g, '')}?text=Hi! I am interested in ${property.title}`}
+                          href={`https://wa.me/${agentPhone.replace(/[^0-9]/g, '')}?text=${generateWhatsAppText()}`}
                           target="_blank"
                           rel="noreferrer"
                           className="flex items-center gap-1.5 bg-[#25D366]/20 text-[#25D366] px-3 py-1.5 rounded-lg backdrop-blur-sm hover:bg-[#25D366]/30 transition-colors"
