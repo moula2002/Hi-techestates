@@ -181,6 +181,7 @@ const PropertyDetail = () => {
 
   const agentName = property.agent?.name || "Joseph";
   const agentPhone = property.agent?.mobile || "+91 63632 72452";
+  const agentLocation = property.agent?.city || property.agent?.location || "Bengaluru";
 
   return (
     <div className="min-h-screen bg-[#F8F9FA] pt-36 md:pt-40 lg:pt-48 font-sans pb-20 relative overflow-hidden">
@@ -402,7 +403,7 @@ const PropertyDetail = () => {
                         <span className="text-[#6cc133]"><CheckCircle size={18} fill="currentColor" className="text-white" /></span>
                         <span className="text-2xl font-bold">{agentName}</span>
                       </div>
-                      <div className="text-gray-300 text-sm mb-4">Professional Real Estate Consultant | {property.city}</div>
+                      <div className="text-gray-300 text-sm mb-4">Professional Real Estate Consultant | {agentLocation}</div>
                       <div className="flex flex-wrap justify-center sm:justify-start gap-4 text-sm font-medium">
                         <span className="flex items-center gap-1.5 bg-white/10 px-3 py-1.5 rounded-lg backdrop-blur-sm"><Phone size={16} /> {agentPhone}</span>
                         <a
