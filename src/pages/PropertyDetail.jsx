@@ -180,7 +180,7 @@ const PropertyDetail = () => {
   const prevImage = () => setCurrentImgIndex((prev) => (prev === 0 ? allImages.length - 1 : prev - 1));
 
   const agentName = property.agent?.name || "Joseph";
-  const agentPhone = property.agent?.mobile || "+91 63632 72452";
+  const agentPhone = "+91 99000 00494";
   const agentLocation = property.agent?.city || property.agent?.location || "Bengaluru";
 
   return (
