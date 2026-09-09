@@ -16,12 +16,23 @@ const EnquireModal = ({ isOpen, onClose }) => {
     e.preventDefault();
     setStatus('loading');
     try {
-      const response = await fetch('/api/send-email', {
+      const dbEndpoint = import.meta.env.DEV 
+        ? 'http://localhost:5000/api/enquiries' 
+        : 'https://hi-techserver-zd1d.onrender.com/api/enquiries';
+
+      const endpoint = import.meta.env.DEV 
+        ? dbEndpoint 
+        : '/api/send-email';
+        
+      const response = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          ...formData,
-          interestedIn: formData.requirement,
+          name: formData.name || 'Not Provided',
+          email: formData.email || 'Not Provided',
+          phone: formData.phone || 'Not Provided',
+          message: 'No message provided', // Enquire modal doesn't have a message field
+          interestedIn: formData.requirement || 'Not Provided',
           formSource: 'Enquire Modal'
         })
       });

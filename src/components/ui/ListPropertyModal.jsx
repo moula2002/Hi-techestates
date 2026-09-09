@@ -11,6 +11,13 @@ const ListPropertyModal = ({ isOpen, onClose }) => {
     price: ''
   });
   const [status, setStatus] = useState('idle');
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  const handleFileChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      setSelectedFile(e.target.files[0]);
+    }
+  };
 
   if (!isOpen) return null;
 
@@ -18,22 +25,47 @@ const ListPropertyModal = ({ isOpen, onClose }) => {
     e.preventDefault();
     setStatus('loading');
     try {
-      const response = await fetch('/api/send-email', {
+      const dbEndpoint = import.meta.env.DEV 
+        ? 'http://localhost:5000/api/enquiries' 
+        : 'https://hi-techserver-zd1d.onrender.com/api/enquiries';
+        
+      const endpoint = (import.meta.env.DEV || selectedFile)
+        ? dbEndpoint 
+        : '/api/send-email';
+        
+      const requestOptions = {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: formData.name,
-          phone: formData.phone,
+      };
+
+      if (selectedFile || import.meta.env.DEV) {
+        const formDataToSend = new FormData();
+        formDataToSend.append('name', formData.name || 'Not Provided');
+        formDataToSend.append('email', 'Not Provided');
+        formDataToSend.append('phone', formData.phone || 'Not Provided');
+        formDataToSend.append('interestedIn', `List Property - ${formData.intent} ${formData.type}`);
+        formDataToSend.append('message', `Location: ${formData.location}\nPrice/Rent: ${formData.price}`);
+        formDataToSend.append('formSource', 'List Property Modal');
+        if (selectedFile) formDataToSend.append('image', selectedFile);
+        requestOptions.body = formDataToSend;
+      } else {
+        requestOptions.headers = { 'Content-Type': 'application/json' };
+        requestOptions.body = JSON.stringify({
+          name: formData.name || 'Not Provided',
+          email: 'Not Provided',
+          phone: formData.phone || 'Not Provided',
           interestedIn: `List Property - ${formData.intent} ${formData.type}`,
           message: `Location: ${formData.location}\nPrice/Rent: ${formData.price}`,
           formSource: 'List Property Modal'
-        })
-      });
+        });
+      }
+
+      const response = await fetch(endpoint, requestOptions);
       if (response.ok) {
         setStatus('success');
         setTimeout(() => {
           setStatus('idle');
           setFormData({ name: '', phone: '', intent: 'Sell', type: 'Apartment', location: '', price: '' });
+          setSelectedFile(null);
           onClose();
         }, 2000);
       } else {
@@ -133,14 +165,22 @@ const ListPropertyModal = ({ isOpen, onClose }) => {
               </div>
             </div>
 
-            {/* Photos (Mock) */}
+            {/* Photos */}
             <div>
               <h4 className="text-sm font-black text-charcoal-900 uppercase tracking-widest mb-3 border-b pb-2">3. Photos (Optional)</h4>
-              <div className="border-2 border-dashed border-charcoal-200 rounded-xl p-6 flex flex-col items-center justify-center text-center bg-charcoal-50 hover:bg-primary-50/50 transition-colors cursor-pointer">
+              <label className="border-2 border-dashed border-charcoal-200 rounded-xl p-6 flex flex-col items-center justify-center text-center bg-charcoal-50 hover:bg-primary-50/50 transition-colors cursor-pointer relative overflow-hidden">
+                <input 
+                  type="file" 
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" 
+                  accept="image/jpeg, image/png"
+                  onChange={handleFileChange}
+                />
                 <UploadCloud className="text-primary-500 mb-2" size={32} />
-                <p className="text-sm font-bold text-charcoal-800">Click to upload property images</p>
+                <p className="text-sm font-bold text-charcoal-800">
+                  {selectedFile ? selectedFile.name : 'Click to upload property images'}
+                </p>
                 <p className="text-xs text-charcoal-500 mt-1">JPEG, PNG up to 5MB</p>
-              </div>
+              </label>
             </div>
 
             {status === 'success' && <p className="text-green-600 text-sm font-bold text-center">Property details sent successfully!</p>}

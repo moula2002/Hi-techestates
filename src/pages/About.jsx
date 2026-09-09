@@ -9,8 +9,15 @@ const About = () => {
   const { data: propertiesData } = useApiCache('https://hi-techserver-zd1d.onrender.com/api/properties', 'hi-tech-properties');
   
   const locations = React.useMemo(() => {
-    if (!propertiesData || !Array.isArray(propertiesData)) return [];
-    return [...new Set(propertiesData.map(p => p.location?.area || p.location?.city).filter(Boolean))].sort();
+    if (!propertiesData || !Array.isArray(propertiesData)) return ['Bengaluru'];
+    const rawLocations = [...new Set(propertiesData.map(p => p.location?.area || p.location?.city).filter(Boolean))];
+    const filteredLocations = rawLocations.filter(
+      loc => !['saravanampatti', 'thindal'].includes(loc.toLowerCase())
+    );
+    if (!filteredLocations.some(loc => loc.toLowerCase() === 'bengaluru')) {
+      filteredLocations.push('Bengaluru');
+    }
+    return filteredLocations.sort();
   }, [propertiesData]);
 
   return (
