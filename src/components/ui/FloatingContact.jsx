@@ -3,6 +3,23 @@ import { Phone, ArrowUp, X } from 'lucide-react';
 
 const FloatingContact = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const [isPhoneMenuOpen, setIsPhoneMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.target.closest('.phone-menu-container')) {
+        setIsPhoneMenuOpen(false);
+      }
+    };
+    if (isPhoneMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('touchstart', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
+  }, [isPhoneMenuOpen]);
 
   useEffect(() => {
     const toggleVisibility = () => {
@@ -41,33 +58,35 @@ const FloatingContact = () => {
       </button>
       
       {/* Call Floating Button */}
-      <div className="relative group">
-        <a
-          href="tel:+919900000494"
-          className="w-14 h-14 md:w-16 md:h-16 bg-charcoal-900 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-primary-500 transition-all hover:scale-110 relative z-10"
+      <div className="relative group phone-menu-container">
+        <button
+          onClick={() => setIsPhoneMenuOpen(!isPhoneMenuOpen)}
+          className="w-14 h-14 md:w-16 md:h-16 bg-charcoal-900 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-primary-500 transition-all hover:scale-110 relative z-10 focus:outline-none"
           aria-label="Call Us"
         >
           <Phone className="w-6 h-6 md:w-8 md:h-8 group-hover:animate-pulse" />
-        </a>
+        </button>
         
         {/* Call Numbers Popup */}
-        <div className="absolute top-1/2 -translate-y-1/2 right-full mr-4 bg-white rounded-xl shadow-[0_10px_25px_rgba(0,0,0,0.15)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-x-4 group-hover:translate-x-0 z-50 overflow-hidden border border-gray-100 flex flex-col min-w-[210px] pointer-events-none group-hover:pointer-events-auto">
-          <div className="bg-primary-600 px-4 py-2.5 text-white text-[13px] font-bold text-center tracking-wider uppercase">
-            Select Number to Call
-          </div>
-          <div className="flex flex-col">
-            <a 
-              href="tel:+919900000494" 
-              className="px-5 py-3.5 text-charcoal-900 font-bold text-[15px] hover:bg-gray-50 hover:text-primary-600 transition-colors flex items-center gap-3 border-b border-gray-100"
-            >
-              <Phone size={18} className="text-gray-400" /> +91 99000 00494
-            </a>
-            <a 
-              href="tel:+918550000494" 
-              className="px-5 py-3.5 text-charcoal-900 font-bold text-[15px] hover:bg-gray-50 hover:text-primary-600 transition-colors flex items-center gap-3"
-            >
-              <Phone size={18} className="text-gray-400" /> +91 85500 00494
-            </a>
+        <div className={`absolute top-1/2 -translate-y-1/2 right-full pr-4 transition-all duration-300 transform z-50 min-w-[210px] ${isPhoneMenuOpen ? 'opacity-100 visible translate-x-0 pointer-events-auto' : 'opacity-0 invisible translate-x-4 pointer-events-none group-hover:opacity-100 group-hover:visible group-hover:translate-x-0 group-hover:pointer-events-auto'}`}>
+          <div className="bg-white rounded-xl shadow-[0_10px_25px_rgba(0,0,0,0.15)] overflow-hidden border border-gray-100 flex flex-col">
+            <div className="bg-primary-600 px-4 py-2.5 text-white text-[13px] font-bold text-center tracking-wider uppercase">
+              Select Number to Call
+            </div>
+            <div className="flex flex-col">
+              <a 
+                href="tel:+919900000494" 
+                className="px-5 py-3.5 text-charcoal-900 font-bold text-[15px] hover:bg-gray-50 hover:text-primary-600 transition-colors flex items-center gap-3 border-b border-gray-100 whitespace-nowrap"
+              >
+                <Phone size={18} className="text-gray-400" /> +91 99000 00494
+              </a>
+              <a 
+                href="tel:+918550000494" 
+                className="px-5 py-3.5 text-charcoal-900 font-bold text-[15px] hover:bg-gray-50 hover:text-primary-600 transition-colors flex items-center gap-3 whitespace-nowrap"
+              >
+                <Phone size={18} className="text-gray-400" /> +91 85500 00494
+              </a>
+            </div>
           </div>
         </div>
       </div>
