@@ -12,10 +12,13 @@ const ListPropertyModal = ({ isOpen, onClose }) => {
   });
   const [status, setStatus] = useState('idle');
   const [selectedFile, setSelectedFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
 
   const handleFileChange = (e) => {
     if (e.target.files && e.target.files[0]) {
-      setSelectedFile(e.target.files[0]);
+      const file = e.target.files[0];
+      setSelectedFile(file);
+      setImagePreview(URL.createObjectURL(file));
     }
   };
 
@@ -66,6 +69,7 @@ const ListPropertyModal = ({ isOpen, onClose }) => {
           setStatus('idle');
           setFormData({ name: '', phone: '', intent: 'Sell', type: 'Apartment', location: '', price: '' });
           setSelectedFile(null);
+          setImagePreview(null);
           onClose();
         }, 2000);
       } else {
@@ -77,7 +81,7 @@ const ListPropertyModal = ({ isOpen, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-charcoal-900/70 backdrop-blur-md animate-fade-in-up"
@@ -87,16 +91,17 @@ const ListPropertyModal = ({ isOpen, onClose }) => {
 
       {/* Modal Content */}
       <div
-        className="relative bg-white w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden animate-fade-in-up flex flex-col max-h-[90vh]"
+        className="relative bg-white w-full max-w-2xl rounded-2xl shadow-2xl flex flex-col overflow-hidden max-h-[100%] animate-fade-in-up"
         style={{ animationDuration: '0.4s' }}
       >
+        {/* Header - Fixed */}
         <div className="bg-primary-900 px-6 py-5 flex justify-between items-center shrink-0">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-white/10 rounded-lg">
               <Home className="text-white" size={24} />
             </div>
             <div>
-              <h3 className="text-xl font-serif text-white leading-tight">List Your Property</h3>
+              <h3 className="text-xl font-black text-white leading-tight">List Your Property</h3>
               <p className="text-primary-200 text-sm font-medium">Connect with thousands of verified buyers and tenants.</p>
             </div>
           </div>
@@ -108,42 +113,51 @@ const ListPropertyModal = ({ isOpen, onClose }) => {
           </button>
         </div>
 
-        <div className="p-6 overflow-y-auto custom-scrollbar">
-          <form className="space-y-5" onSubmit={handleSubmit}>
-
+        {/* Form Container - flex-1 min-h-0 allows it to shrink to fit available space */}
+        <form className="flex flex-col flex-1 min-h-0 overflow-hidden" onSubmit={handleSubmit}>
+          
+          {/* Scrollable Content */}
+          <div className="flex-1 overflow-y-auto p-6 space-y-8">
+            
             {/* Contact Details */}
             <div>
-              <h4 className="text-sm font-black text-charcoal-900 uppercase tracking-widest mb-3 border-b pb-2">1. Your Details</h4>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <h4 className="text-xs font-black text-primary-600 uppercase tracking-widest mb-4 flex items-center gap-2">
+                <span className="w-4 h-[2px] bg-primary-600"></span> Your Details
+              </h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div>
-                  <label className="block text-xs font-bold text-charcoal-600 uppercase mb-1">Full Name</label>
-                  <input type="text" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} className="w-full px-4 py-2.5 rounded-lg border border-charcoal-200 focus:ring-2 focus:ring-primary-500 outline-none bg-charcoal-50" placeholder="John Doe" required />
+                  <label className="block text-xs font-bold text-gray-500 uppercase mb-1.5">Full Name</label>
+                  <input type="text" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none bg-gray-50 focus:bg-white transition-all text-sm font-medium" placeholder="John Doe" required />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-charcoal-600 uppercase mb-1">Phone Number</label>
-                  <input type="tel" value={formData.phone} onChange={e => setFormData({ ...formData, phone: e.target.value })} className="w-full px-4 py-2.5 rounded-lg border border-charcoal-200 focus:ring-2 focus:ring-primary-500 outline-none bg-charcoal-50" placeholder="+91 98765 43210" required />
+                  <label className="block text-xs font-bold text-gray-500 uppercase mb-1.5">Phone Number</label>
+                  <input type="tel" value={formData.phone} onChange={e => setFormData({ ...formData, phone: e.target.value })} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none bg-gray-50 focus:bg-white transition-all text-sm font-medium" placeholder="+91 98765 43210" required />
                 </div>
               </div>
             </div>
 
             {/* Property Details */}
             <div>
-              <h4 className="text-sm font-black text-charcoal-900 uppercase tracking-widest mb-3 border-b pb-2">2. Property Details</h4>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <h4 className="text-xs font-black text-primary-600 uppercase tracking-widest mb-4 flex items-center gap-2">
+                <span className="w-4 h-[2px] bg-primary-600"></span> Property Details
+              </h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
                 <div>
-                  <label className="block text-xs font-bold text-charcoal-600 uppercase mb-1">I want to</label>
-                  <div className="flex gap-2">
-                    <label className="flex-1 flex items-center justify-center gap-2 p-2 border border-charcoal-200 rounded-lg cursor-pointer hover:bg-primary-50 transition-colors">
-                      <input type="radio" name="intent" value="Sell" checked={formData.intent === 'Sell'} onChange={e => setFormData({ ...formData, intent: e.target.value })} className="text-primary-500" /> <span className="text-sm font-bold">Sell</span>
+                  <label className="block text-xs font-bold text-gray-500 uppercase mb-1.5">I want to</label>
+                  <div className="flex gap-3">
+                    <label className={`flex-1 flex items-center justify-center p-3 rounded-xl cursor-pointer transition-all border ${formData.intent === 'Sell' ? 'border-primary-500 bg-primary-50 text-primary-700 shadow-sm' : 'border-gray-200 hover:border-primary-300 hover:bg-gray-50 text-gray-600'}`}>
+                      <input type="radio" name="intent" value="Sell" checked={formData.intent === 'Sell'} onChange={e => setFormData({ ...formData, intent: e.target.value })} className="hidden" />
+                      <span className="text-sm font-bold">Sell</span>
                     </label>
-                    <label className="flex-1 flex items-center justify-center gap-2 p-2 border border-charcoal-200 rounded-lg cursor-pointer hover:bg-primary-50 transition-colors">
-                      <input type="radio" name="intent" value="Rent Out" checked={formData.intent === 'Rent Out'} onChange={e => setFormData({ ...formData, intent: e.target.value })} className="text-primary-500" /> <span className="text-sm font-bold">Rent Out</span>
+                    <label className={`flex-1 flex items-center justify-center p-3 rounded-xl cursor-pointer transition-all border ${formData.intent === 'Rent Out' ? 'border-primary-500 bg-primary-50 text-primary-700 shadow-sm' : 'border-gray-200 hover:border-primary-300 hover:bg-gray-50 text-gray-600'}`}>
+                      <input type="radio" name="intent" value="Rent Out" checked={formData.intent === 'Rent Out'} onChange={e => setFormData({ ...formData, intent: e.target.value })} className="hidden" />
+                      <span className="text-sm font-bold">Rent Out</span>
                     </label>
                   </div>
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-charcoal-600 uppercase mb-1">Property Type</label>
-                  <select value={formData.type} onChange={e => setFormData({ ...formData, type: e.target.value })} className="w-full px-4 py-2.5 rounded-lg border border-charcoal-200 focus:ring-2 focus:ring-primary-500 outline-none bg-charcoal-50">
+                  <label className="block text-xs font-bold text-gray-500 uppercase mb-1.5">Property Type</label>
+                  <select value={formData.type} onChange={e => setFormData({ ...formData, type: e.target.value })} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none bg-gray-50 focus:bg-white transition-all text-sm font-medium cursor-pointer">
                     <option>Apartment</option>
                     <option>Villa</option>
                     <option>Independent House</option>
@@ -153,51 +167,88 @@ const ListPropertyModal = ({ isOpen, onClose }) => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div>
-                  <label className="block text-xs font-bold text-charcoal-600 uppercase mb-1">Location / Area</label>
-                  <input type="text" value={formData.location} onChange={e => setFormData({ ...formData, location: e.target.value })} className="w-full px-4 py-2.5 rounded-lg border border-charcoal-200 focus:ring-2 focus:ring-primary-500 outline-none bg-charcoal-50" placeholder="e.g. Indiranagar, Bangalore" required />
+                  <label className="block text-xs font-bold text-gray-500 uppercase mb-1.5">Location / Area</label>
+                  <input type="text" value={formData.location} onChange={e => setFormData({ ...formData, location: e.target.value })} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none bg-gray-50 focus:bg-white transition-all text-sm font-medium" placeholder="e.g. Indiranagar, Bangalore" required />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-charcoal-600 uppercase mb-1">Expected Price / Rent (₹)</label>
-                  <input type="text" value={formData.price} onChange={e => setFormData({ ...formData, price: e.target.value })} className="w-full px-4 py-2.5 rounded-lg border border-charcoal-200 focus:ring-2 focus:ring-primary-500 outline-none bg-charcoal-50" placeholder="e.g. 1.5 Cr or 45,000/mo" required />
+                  <label className="block text-xs font-bold text-gray-500 uppercase mb-1.5">Expected Price / Rent (₹)</label>
+                  <input type="text" value={formData.price} onChange={e => setFormData({ ...formData, price: e.target.value })} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none bg-gray-50 focus:bg-white transition-all text-sm font-medium" placeholder="e.g. 1.5 Cr or 45,000/mo" required />
                 </div>
               </div>
             </div>
 
             {/* Photos */}
             <div>
-              <h4 className="text-sm font-black text-charcoal-900 uppercase tracking-widest mb-3 border-b pb-2">3. Photos (Optional)</h4>
-              <label className="border-2 border-dashed border-charcoal-200 rounded-xl p-6 flex flex-col items-center justify-center text-center bg-charcoal-50 hover:bg-primary-50/50 transition-colors cursor-pointer relative overflow-hidden">
-                <input 
-                  type="file" 
-                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" 
-                  accept="image/jpeg, image/png"
-                  onChange={handleFileChange}
-                />
-                <UploadCloud className="text-primary-500 mb-2" size={32} />
-                <p className="text-sm font-bold text-charcoal-800">
-                  {selectedFile ? selectedFile.name : 'Click to upload property images'}
-                </p>
-                <p className="text-xs text-charcoal-500 mt-1">JPEG, PNG up to 5MB</p>
-              </label>
+              <h4 className="text-xs font-black text-primary-600 uppercase tracking-widest mb-4 flex items-center gap-2">
+                <span className="w-4 h-[2px] bg-primary-600"></span> Photos (Optional)
+              </h4>
+              <div className="flex flex-col sm:flex-row items-start gap-4">
+                <div className="flex-1 w-full min-w-0">
+                  <label className="block text-xs font-bold text-gray-500 uppercase mb-1.5">Upload Property Image</label>
+                  <div className="relative group">
+                    <input 
+                      type="file" 
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" 
+                      accept="image/jpeg, image/png"
+                      onChange={handleFileChange}
+                    />
+                    <div className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 flex items-center justify-between transition-colors group-hover:border-primary-300">
+                      <div className="flex items-center gap-3 overflow-hidden min-w-0 mr-3">
+                        <UploadCloud className="text-gray-400 shrink-0 group-hover:text-primary-500 transition-colors" size={20} />
+                        <span className="text-sm font-medium text-gray-500 truncate block">
+                          {selectedFile ? selectedFile.name : 'Choose an image file...'}
+                        </span>
+                      </div>
+                      <span className="shrink-0 bg-white border border-gray-200 px-3 py-1.5 rounded-lg text-[11px] font-bold text-gray-600 shadow-sm group-hover:text-primary-600 group-hover:border-primary-200 transition-colors">
+                        Browse
+                      </span>
+                    </div>
+                  </div>
+                  <p className="text-[11px] text-gray-400 font-medium mt-2">JPEG, PNG up to 5MB</p>
+                </div>
+                
+                {imagePreview && (
+                  <div className="shrink-0 relative w-20 h-20 rounded-xl border-2 border-gray-100 overflow-hidden shadow-sm sm:mt-6 group">
+                    <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
+                    <button 
+                      type="button" 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setSelectedFile(null);
+                        setImagePreview(null);
+                      }}
+                      className="absolute top-1 right-1 bg-white/90 text-red-500 rounded-full p-1 shadow-sm hover:bg-red-50 hover:text-red-600 transition-colors z-20 opacity-0 group-hover:opacity-100"
+                    >
+                      <X size={14} />
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
 
-            {status === 'success' && <p className="text-green-600 text-sm font-bold text-center">Property details sent successfully!</p>}
-            {status === 'error' && <p className="text-red-600 text-sm font-bold text-center">Failed to send. Please try again.</p>}
-
+            {status === 'success' && <div className="p-3 bg-green-50 rounded-xl text-green-700 text-sm font-bold text-center border border-green-100 mt-6">Property details sent successfully!</div>}
+            {status === 'error' && <div className="p-3 bg-red-50 rounded-xl text-red-700 text-sm font-bold text-center border border-red-100 mt-6">Failed to send. Please try again.</div>}
+            
+            {/* Safe bottom padding ensures final content clears the footer visually if needed */}
+            <div className="h-4 w-full"></div>
+          </div>
+          
+          {/* Footer - Fixed */}
+          <div className="shrink-0 p-6 border-t border-gray-100 bg-white">
             <button
               type="submit"
               disabled={status === 'loading' || status === 'success'}
-              className="w-full mt-2 py-4 bg-primary-600 text-white rounded-xl font-black hover:bg-primary-700 transition-colors flex justify-center items-center gap-2 shadow-lg shadow-primary-500/20 uppercase tracking-widest text-sm disabled:opacity-70 disabled:cursor-not-allowed"
+              className="w-full py-4 bg-primary-600 text-white rounded-xl font-black hover:bg-primary-700 transition-all flex justify-center items-center gap-2 shadow-lg shadow-primary-500/20 uppercase tracking-widest text-sm disabled:opacity-70 disabled:cursor-not-allowed hover:-translate-y-0.5"
             >
               {status === 'loading' ? 'Submitting...' : status === 'success' ? 'Submitted!' : 'Submit Property Details'}
             </button>
-            <p className="text-center text-xs text-charcoal-400 font-medium">
+            <p className="text-center text-[11px] text-gray-400 font-medium mt-3">
               By submitting, you agree to our Terms of Service & Privacy Policy.
             </p>
-          </form>
-        </div>
+          </div>
+        </form>
       </div>
     </div>
   );

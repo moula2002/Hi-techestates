@@ -339,7 +339,7 @@ const PropertyDetail = () => {
                 <h3 className="text-2xl font-bold text-gray-900">Property Overview</h3>
               </div>
 
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-6">
                 {[
                   { label: 'Total Area', val: property.specifications?.totalArea || property.area, suffix: 'sqft', icon: <Square size={16} /> },
                   { label: 'Built-up Area', val: property.specifications?.builtUpArea || property.area, suffix: 'sqft', icon: <Square size={16} /> },
@@ -349,11 +349,11 @@ const PropertyDetail = () => {
                   { label: 'Facing', val: property.facing, suffix: '', icon: <Compass size={16} /> },
                   { label: 'Floors', val: property.specifications?.floors, suffix: '', icon: <Car size={16} /> }
                 ].map((item, idx) => (
-                  <div key={idx} className="flex items-start gap-3 p-4 rounded-xl border border-gray-100 bg-gray-50 hover:bg-white hover:border-[#00a8ff]/30 hover:shadow-md transition-all duration-300 group">
-                    <div className="p-2 bg-white rounded-lg text-gray-400 group-hover:text-[#00a8ff] transition-colors shadow-sm">{item.icon}</div>
-                    <div>
-                      <div className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1">{item.label}</div>
-                      <div className="text-[15px] font-bold text-gray-900">{item.val || "-"} <span className="text-xs text-gray-500 font-normal">{item.val && item.suffix}</span></div>
+                  <div key={idx} className="flex items-start gap-2.5 sm:gap-3 p-3 sm:p-4 rounded-xl border border-gray-100 bg-gray-50 hover:bg-white hover:border-[#00a8ff]/30 hover:shadow-md transition-all duration-300 group overflow-hidden">
+                    <div className="p-2 bg-white rounded-lg text-gray-400 group-hover:text-[#00a8ff] transition-colors shadow-sm shrink-0">{item.icon}</div>
+                    <div className="min-w-0">
+                      <div className="text-[10px] sm:text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-0.5 sm:mb-1 truncate">{item.label}</div>
+                      <div className="text-[14px] sm:text-[15px] font-bold text-gray-900 truncate">{item.val || "-"} <span className="text-[10px] sm:text-xs text-gray-500 font-normal">{item.val && item.suffix}</span></div>
                     </div>
                   </div>
                 ))}

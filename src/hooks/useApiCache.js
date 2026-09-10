@@ -12,6 +12,21 @@ const fetchDedupe = new Map(); // For deduping concurrent requests
  * @param {string} url - The URL to fetch data from
  * @param {string} key - A unique string key for sessionStorage
  */
+const fetchWithRetry = async (url, options = {}, retries = 3, backoff = 1000) => {
+  for (let i = 0; i < retries; i++) {
+    try {
+      const response = await fetch(url, options);
+      if (!response.ok) throw new Error(`Failed to fetch from ${url}`);
+      return await response.json();
+    } catch (error) {
+      if (i === retries - 1) throw error;
+      console.warn(`Fetch attempt ${i + 1} failed for ${url} (Render instance might be waking up). Retrying in ${backoff}ms...`);
+      await new Promise(resolve => setTimeout(resolve, backoff));
+      backoff *= 2; // Exponential backoff
+    }
+  }
+};
+
 export const useApiCache = (url, key) => {
   const [data, setData] = useState(() => {
     // 1. Initialize state synchronously from memory cache if available
@@ -43,10 +58,7 @@ export const useApiCache = (url, key) => {
 
         // Deduplicate concurrent fetch requests for the same URL
         if (!fetchDedupe.has(url)) {
-          const fetchPromise = fetch(url, { cache: 'no-store' }).then(async (res) => {
-            if (!res.ok) throw new Error(`Failed to fetch from ${url}`);
-            return res.json();
-          });
+          const fetchPromise = fetchWithRetry(url, { cache: 'no-store' }, 4, 1500);
           fetchDedupe.set(url, fetchPromise);
         }
 
