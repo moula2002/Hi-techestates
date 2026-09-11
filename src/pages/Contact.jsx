@@ -119,19 +119,22 @@ const Contact = () => {
                     onChange={handleChange}
                     required
                     placeholder="John Doe"
-                    className="w-full px-5 py-4 rounded-xl border-2 border-gray-100 bg-gray-50/50 focus:bg-white focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all duration-300 outline-none text-charcoal-900 placeholder:text-gray-400 font-medium"
+                    className="peer w-full px-5 py-4 rounded-xl border-2 border-gray-100 bg-gray-50/50 focus:bg-white focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all duration-300 outline-none text-charcoal-900 placeholder:text-gray-400 font-medium invalid:[&:not(:placeholder-shown):not(:focus)]:border-red-500 invalid:[&:not(:placeholder-shown):not(:focus)]:text-red-600"
                   />
                 </div>
                 <div className="space-y-2 relative group">
                   <label className="text-[13px] font-bold text-charcoal-700 uppercase tracking-wide">Email Address</label>
                   <input
                     type="email"
+                    pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+                    title="Please provide a valid email address (e.g. @gmail.com, @yahoo.com)"
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    placeholder="john@example.com"
-                    className="w-full px-5 py-4 rounded-xl border-2 border-gray-100 bg-gray-50/50 focus:bg-white focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all duration-300 outline-none text-charcoal-900 placeholder:text-gray-400 font-medium"
+                    placeholder="john@gmail.com"
+                    className="peer w-full px-5 py-4 rounded-xl border-2 border-gray-100 bg-gray-50/50 focus:bg-white focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all duration-300 outline-none text-charcoal-900 placeholder:text-gray-400 font-medium invalid:[&:not(:placeholder-shown):not(:focus)]:border-red-500 invalid:[&:not(:placeholder-shown):not(:focus)]:text-red-600"
                   />
+                      <p className="hidden peer-invalid:[&:not(:placeholder-shown):not(:focus)]:block text-red-500 text-[11px] font-bold mt-1 absolute -bottom-5 left-0">Please enter a valid email address.</p>
                 </div>
               </div>
 
@@ -139,12 +142,16 @@ const Contact = () => {
                 <label className="text-[13px] font-bold text-charcoal-700 uppercase tracking-wide">Phone Number *</label>
                 <input
                   type="tel"
+                    pattern="[0-9]{10}"
+                    maxLength="10"
+                    title="Please enter exactly 10 digits"
+                    onInput={(e) => { e.target.value = e.target.value.replace(/[^0-9]/g, ''); }}
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
                   required
-                  placeholder="+91 00000 00000"
-                  className="w-full px-5 py-4 rounded-xl border-2 border-gray-100 bg-gray-50/50 focus:bg-white focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all duration-300 outline-none text-charcoal-900 placeholder:text-gray-400 font-medium"
+                  placeholder="9876543210"
+                  className="peer w-full px-5 py-4 rounded-xl border-2 border-gray-100 bg-gray-50/50 focus:bg-white focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all duration-300 outline-none text-charcoal-900 placeholder:text-gray-400 font-medium invalid:[&:not(:placeholder-shown):not(:focus)]:border-red-500 invalid:[&:not(:placeholder-shown):not(:focus)]:text-red-600"
                 />
               </div>
 

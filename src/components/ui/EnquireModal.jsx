@@ -87,7 +87,7 @@ const EnquireModal = ({ isOpen, onClose }) => {
                 type="text"
                 value={formData.name}
                 onChange={e => setFormData({ ...formData, name: e.target.value })}
-                className="w-full px-4 py-3 rounded-lg border border-charcoal-200 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-all bg-charcoal-50 font-medium text-charcoal-900"
+                className="peer w-full px-4 py-3 rounded-lg border border-charcoal-200 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-all bg-charcoal-50 font-medium text-charcoal-900 invalid:[&:not(:placeholder-shown):not(:focus)]:border-red-500 invalid:[&:not(:placeholder-shown):not(:focus)]:text-red-600"
                 placeholder="John Doe"
                 required
               />
@@ -97,10 +97,14 @@ const EnquireModal = ({ isOpen, onClose }) => {
               <label className="block text-xs font-bold text-charcoal-900 uppercase tracking-widest mb-1">Phone Number</label>
               <input
                 type="tel"
+                    pattern="[0-9]{10}"
+                    maxLength="10"
+                    title="Please enter exactly 10 digits"
+                    onInput={(e) => { e.target.value = e.target.value.replace(/[^0-9]/g, ''); }}
                 value={formData.phone}
                 onChange={e => setFormData({ ...formData, phone: e.target.value })}
-                className="w-full px-4 py-3 rounded-lg border border-charcoal-200 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-all bg-charcoal-50 font-medium text-charcoal-900"
-                placeholder="+91 98765 43210"
+                className="peer w-full px-4 py-3 rounded-lg border border-charcoal-200 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-all bg-charcoal-50 font-medium text-charcoal-900 invalid:[&:not(:placeholder-shown):not(:focus)]:border-red-500 invalid:[&:not(:placeholder-shown):not(:focus)]:text-red-600"
+                placeholder="9876543210"
                 required
               />
             </div>
@@ -109,11 +113,14 @@ const EnquireModal = ({ isOpen, onClose }) => {
               <label className="block text-xs font-bold text-charcoal-900 uppercase tracking-widest mb-1">Email Address (Optional)</label>
               <input
                 type="email"
+                    pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+                    title="Please provide a valid email address (e.g. @gmail.com, @yahoo.com)"
                 value={formData.email}
                 onChange={e => setFormData({ ...formData, email: e.target.value })}
-                className="w-full px-4 py-3 rounded-lg border border-charcoal-200 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-all bg-charcoal-50 font-medium text-charcoal-900"
-                placeholder="john@example.com"
+                className="peer w-full px-4 py-3 rounded-lg border border-charcoal-200 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-all bg-charcoal-50 font-medium text-charcoal-900 invalid:[&:not(:placeholder-shown):not(:focus)]:border-red-500 invalid:[&:not(:placeholder-shown):not(:focus)]:text-red-600"
+                placeholder="john@gmail.com"
               />
+              <p className="hidden peer-invalid:[&:not(:placeholder-shown):not(:focus)]:block text-red-500 text-[11px] font-bold mt-1">Please enter a valid email address.</p>
             </div>
 
             <div>
@@ -121,7 +128,7 @@ const EnquireModal = ({ isOpen, onClose }) => {
               <select
                 value={formData.requirement}
                 onChange={e => setFormData({ ...formData, requirement: e.target.value })}
-                className="w-full px-4 py-3 rounded-lg border border-charcoal-200 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-all bg-charcoal-50 font-medium text-charcoal-900"
+                className="peer w-full px-4 py-3 rounded-lg border border-charcoal-200 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-all bg-charcoal-50 font-medium text-charcoal-900 invalid:[&:not(:placeholder-shown):not(:focus)]:border-red-500 invalid:[&:not(:placeholder-shown):not(:focus)]:text-red-600"
               >
                 <option>Buying a Property</option>
                 <option>Renting a Property</option>

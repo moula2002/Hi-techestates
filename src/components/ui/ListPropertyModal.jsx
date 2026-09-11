@@ -131,7 +131,7 @@ const ListPropertyModal = ({ isOpen, onClose }) => {
                 </div>
                 <div>
                   <label className="block text-xs font-bold text-gray-500 uppercase mb-1.5">Phone Number</label>
-                  <input type="tel" value={formData.phone} onChange={e => setFormData({ ...formData, phone: e.target.value })} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none bg-gray-50 focus:bg-white transition-all text-sm font-medium" placeholder="+91 98765 43210" required />
+                  <input type="tel" pattern="[0-9]{10}" maxLength="10" title="Please enter exactly 10 digits" onInput={(e) => { e.target.value = e.target.value.replace(/[^0-9]/g, ''); }} value={formData.phone} onChange={e => setFormData({ ...formData, phone: e.target.value })} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none bg-gray-50 focus:bg-white transition-all text-sm font-medium" placeholder="9876543210" required />
                 </div>
               </div>
             </div>
