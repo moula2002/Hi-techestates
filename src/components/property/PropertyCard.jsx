@@ -26,7 +26,7 @@ const PropertyCard = ({ property }) => {
         <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/80 to-transparent"></div>
         
         {/* Top Badges */}
-        <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
+        <div className="absolute top-3 left-3 right-3 flex flex-wrap gap-1.5 items-start">
           {property.featured && (
             <span className="bg-[#68d320] text-white px-2 py-0.5 rounded-sm text-[10px] font-bold uppercase tracking-wide shadow-sm">
               Featured
@@ -42,9 +42,6 @@ const PropertyCard = ({ property }) => {
                {badge}
              </span>
           ))}
-        </div>
-        
-        <div className="absolute top-3 right-3 flex flex-wrap gap-1.5 justify-end">
           {property.status && !property.status.toLowerCase().includes('rent') && (
             <span className="bg-black/70 text-white px-2 py-0.5 rounded-sm text-[10px] font-bold uppercase tracking-wide backdrop-blur-sm">
               {property.status}

@@ -167,6 +167,7 @@ const PropertyDetail = () => {
   }
 
   const allImages = property.image ? [property.image] : [];
+    if (property.videoUrl) allImages.push(property.videoUrl);
   if (property.gallery && Array.isArray(property.gallery)) {
     property.gallery.forEach(img => {
       if (img !== property.image) allImages.push(img);
@@ -176,7 +177,16 @@ const PropertyDetail = () => {
     allImages.push("https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2075&q=80");
   }
 
-  const nextImage = () => setCurrentImgIndex((prev) => (prev + 1) % allImages.length);
+  const isVideo = (url) => url && typeof url === 'string' && (url.startsWith('data:video/') || url.match(/\.(mp4|webm|ogg)$/i));
+  const isEmbed = (url) => url && typeof url === 'string' && (url.includes('youtube.com') || url.includes('youtu.be') || url.includes('vimeo.com'));
+  
+  const getEmbedUrl = (url) => {
+    if (url.includes('youtube.com/watch?v=')) return url.replace('watch?v=', 'embed/');
+    if (url.includes('youtu.be/')) return url.replace('youtu.be/', 'youtube.com/embed/');
+    if (url.includes('vimeo.com/')) return url.replace('vimeo.com/', 'player.vimeo.com/video/');
+    return url;
+  };
+    const nextImage = () => setCurrentImgIndex((prev) => (prev + 1) % allImages.length);
   const prevImage = () => setCurrentImgIndex((prev) => (prev === 0 ? allImages.length - 1 : prev - 1));
 
   const agentName = property.agent?.name || "Joseph";
@@ -256,12 +266,31 @@ const PropertyDetail = () => {
             {/* Gallery Section */}
             <div data-aos="fade-up" className="bg-white p-4 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100">
               <div className="relative w-full h-[500px] bg-gray-900 rounded-xl overflow-hidden mb-4 group shadow-inner">
-                <img
-                  key={currentImgIndex}
-                  src={allImages[currentImgIndex]}
-                  alt={property.title}
-                  className="w-full h-full object-cover animate-slider"
-                />
+                {isEmbed(allImages[currentImgIndex]) ? (
+                    <iframe
+                      key={currentImgIndex}
+                      src={getEmbedUrl(allImages[currentImgIndex])}
+                      className="w-full h-full object-cover animate-slider bg-black"
+                      allowFullScreen
+                    ></iframe>
+                  ) : isVideo(allImages[currentImgIndex]) ? (
+                    <video
+                      key={currentImgIndex}
+                      src={allImages[currentImgIndex]}
+                      controls
+                      autoPlay
+                      muted
+                      loop
+                      className="w-full h-full object-cover animate-slider bg-black"
+                    />
+                  ) : (
+                    <img
+                      key={currentImgIndex}
+                      src={allImages[currentImgIndex]}
+                      alt={property.title}
+                      className="w-full h-full object-cover animate-slider"
+                    />
+                  )}
 
                 {/* On-image overlay icons (top right) */}
                 <div className="absolute top-4 right-4 flex gap-2">
@@ -300,7 +329,23 @@ const PropertyDetail = () => {
                       onClick={() => setCurrentImgIndex(idx)}
                       className={`h-24 min-w-[140px] rounded-lg overflow-hidden cursor-pointer transition-all duration-300 ${currentImgIndex === idx ? 'border-4 border-[#00a8ff] shadow-md scale-100 opacity-100' : 'border-2 border-transparent opacity-60 hover:opacity-100 hover:scale-[1.02]'}`}
                     >
-                      <img src={img} alt={`Thumb ${idx}`} className="w-full h-full object-cover" />
+                      {isEmbed(img) ? (
+                          <div className="relative w-full h-full">
+                            <iframe src={getEmbedUrl(img)} className="w-full h-full object-cover bg-black pointer-events-none" />
+                            <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/30">
+                              <div className="w-8 h-8 rounded-full bg-white/90 flex items-center justify-center shadow-lg">
+                                <div className="w-0 h-0 border-t-4 border-t-transparent border-l-6 border-l-red-600 border-b-4 border-b-transparent ml-1"></div>
+                              </div>
+                            </div>
+                          </div>
+                        ) : isVideo(img) ? (
+                          <div className="relative w-full h-full">
+                            <video src={img} className="w-full h-full object-cover bg-black" muted />
+                            <div className="absolute inset-0 flex items-center justify-center bg-black/30"><div className="w-8 h-8 rounded-full bg-white/80 flex items-center justify-center"><div className="w-0 h-0 border-t-4 border-t-transparent border-l-6 border-l-black border-b-4 border-b-transparent ml-1"></div></div></div>
+                          </div>
+                        ) : (
+                          <img src={img} alt={`Thumb ${idx}`} className="w-full h-full object-cover" />
+                        )}
                     </div>
                   ))}
                 </div>
