@@ -30,6 +30,7 @@ export const mapApiPropertyToClient = (p) => {
     id: p._id || p.id,
     title: p.title || '',
     slug: p.slug || '',
+    category: p.category || '',
     type: p.type || '',
     status: p.purpose === 'Sale' ? 'For Sale' : (p.purpose === 'Rent' ? 'For Rent' : p.purpose),
     price: displayPrice,

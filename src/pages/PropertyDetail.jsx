@@ -167,7 +167,7 @@ const PropertyDetail = () => {
   }
 
   const allImages = property.image ? [property.image] : [];
-    if (property.videoUrl) allImages.push(property.videoUrl);
+  if (property.video) allImages.push(property.video);
   if (property.gallery && Array.isArray(property.gallery)) {
     property.gallery.forEach(img => {
       if (img !== property.image) allImages.push(img);

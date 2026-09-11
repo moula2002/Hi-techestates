@@ -54,9 +54,9 @@ const Properties = () => {
       }
     
     if (filter.category) {
-      const pType = (p.type || '').toLowerCase();
+      const pCategory = (p.category || '').toLowerCase();
       const cName = filter.category.toLowerCase();
-      if (pType !== cName && !cName.includes(pType) && !pType.includes(cName.replace(/s$/, '')) && cName.replace(/st$/, 't') !== pType) return false;
+      if (pCategory !== cName && !cName.includes(pCategory) && !pCategory.includes(cName.replace(/s$/, '')) && cName.replace(/st$/, 't') !== pCategory) return false;
     }
     
     if (filter.bhk) {

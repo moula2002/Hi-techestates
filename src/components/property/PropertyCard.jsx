@@ -1,11 +1,56 @@
-import React, { useState } from 'react';
-import { MapPin, BedDouble, Bath, Square, Car, Maximize2 } from 'lucide-react';
+import React, { useState, useRef } from 'react';
+import { MapPin, BedDouble, Bath, Square, Car, Maximize2, ChevronLeft, ChevronRight, PlayCircle } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import QuickViewModal from './QuickViewModal';
 
 const PropertyCard = ({ property }) => {
   const [showQuickView, setShowQuickView] = useState(false);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const videoRef = useRef(null);
   const navigate = useNavigate();
+
+  // Combine images and video into a single array
+  const slides = [];
+  if (property.image) slides.push({ type: 'image', url: property.image });
+  if (property.video) slides.push({ type: 'video', url: property.video });
+  if (property.gallery && property.gallery.length > 0) {
+    property.gallery.forEach(img => {
+      if (img !== property.image) slides.push({ type: 'image', url: img });
+    });
+  }
+  // Fallback if empty
+  if (slides.length === 0) {
+    slides.push({ type: 'image', url: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2075&q=80" });
+  }
+
+  const nextSlide = (e) => {
+    e.stopPropagation();
+    setCurrentSlide((prev) => (prev + 1) % slides.length);
+    setIsPlaying(false);
+  };
+
+  const prevSlide = (e) => {
+    e.stopPropagation();
+    setCurrentSlide((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
+    setIsPlaying(false);
+  };
+
+  const handleVideoClick = (e) => {
+    e.stopPropagation();
+    if (videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.pause();
+      } else {
+        videoRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
+
+  const handleImageError = (e) => {
+    e.target.src = "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2075&q=80";
+  };
 
   return (
     <>
@@ -15,13 +60,59 @@ const PropertyCard = ({ property }) => {
       >
       {/* Image Section */}
       <div className="relative h-56 overflow-hidden">
-        <img
-          src={property.image || "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2075&q=80"}
-          alt={property.title}
-          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-          loading="lazy"
-          decoding="async"
-        />
+        {slides[currentSlide].type === 'image' ? (
+          <img
+            src={slides[currentSlide].url}
+            alt={property.title}
+            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+            loading="lazy"
+            decoding="async"
+            onError={handleImageError}
+          />
+        ) : (
+          <div className="w-full h-full relative bg-black" onClick={handleVideoClick}>
+            <video
+              ref={videoRef}
+              src={slides[currentSlide].url}
+              className="w-full h-full object-cover"
+              loop
+              playsInline
+            />
+            {!isPlaying && (
+              <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+                <PlayCircle className="text-white w-12 h-12 opacity-80" />
+              </div>
+            )}
+          </div>
+        )}
+        
+        {/* Navigation Arrows */}
+        {slides.length > 1 && (
+          <>
+            <button 
+              onClick={prevSlide}
+              className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/50 backdrop-blur-sm text-gray-800 p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white z-10 shadow-sm"
+            >
+              <ChevronLeft size={18} />
+            </button>
+            <button 
+              onClick={nextSlide}
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/50 backdrop-blur-sm text-gray-800 p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white z-10 shadow-sm"
+            >
+              <ChevronRight size={18} />
+            </button>
+            
+            {/* Dots Indicator */}
+            <div className="absolute bottom-16 left-1/2 -translate-x-1/2 flex gap-1 z-10">
+              {slides.map((_, idx) => (
+                <div 
+                  key={idx} 
+                  className={`h-1.5 rounded-full transition-all ${currentSlide === idx ? 'w-4 bg-white' : 'w-1.5 bg-white/50'}`}
+                />
+              ))}
+            </div>
+          </>
+        )}
         {/* Permanent gradient overlay for price and bottom icons */}
         <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/80 to-transparent"></div>
         
