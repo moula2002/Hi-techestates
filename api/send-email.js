@@ -111,7 +111,8 @@ export default async function handler(req, res) {
 
     // Send the email
     await transporter.sendMail({
-      from: `"Hi Tech Clients" <${process.env.SMTP_FROM || process.env.SMTP_USER}>`,
+      from: `"Hi Tech Clients" <notifications@hi-techestates.com>`,
+      replyTo: email, // So hitting 'reply' goes to the user who filled the form
       to: process.env.SMTP_TO_ADMIN || process.env.SMTP_USER, // Send to admin, default to self if not set
       subject: `New Enquiry from ${name} (${formSource})`,
       html: htmlContent,
