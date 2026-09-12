@@ -120,7 +120,27 @@ const Home = () => {
     }, 5000);
   };
 
+  const [showLocationError, setShowLocationError] = useState(false);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const locationInputRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (locationInputRef.current && !locationInputRef.current.contains(event.target)) {
+        setShowSuggestions(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   const handleSearch = () => {
+    if (searchParams.location && !dynamicLocations.some(loc => loc.toLowerCase() === searchParams.location.toLowerCase())) {
+      setShowLocationError(true);
+      setTimeout(() => setShowLocationError(false), 3000);
+      return;
+    }
+
     // Navigate to properties page with search params as query string
     const query = new URLSearchParams();
     if (searchParams.location) query.set('location', searchParams.location);
@@ -157,6 +177,10 @@ const Home = () => {
   // Dynamically extract options from fetched properties
   const dynamicLocations = [...new Set(apiProperties.map(p => p.location).filter(Boolean))].sort();
   const dynamicPropertyTypes = [...new Set([...apiProperties.map(p => p.type).filter(Boolean), 'Commercial', 'Plots/Land', 'New Launch'])].sort();
+
+  const filteredLocations = dynamicLocations.filter(loc =>
+    loc.toLowerCase().includes(searchParams.location.toLowerCase())
+  );
 
   return (
     <div className="w-full font-sans">
@@ -233,17 +257,57 @@ const Home = () => {
 
       {/* 2. Floating Search Bar */}
       <section className="relative z-20 max-w-7xl mx-auto px-4 -mt-12 mb-16" data-aos="fade-up" data-aos-delay="200">
-        <div className="bg-white rounded-lg shadow-xl p-6 flex flex-wrap lg:flex-nowrap gap-4 items-end border border-gray-100">
-          <div className="flex-1 w-full min-w-[140px]">
+        {/* Modern Toast Notification for Error */}
+        {showLocationError && (
+          <div className="fixed top-24 right-4 md:right-8 bg-white border-l-4 border-red-500 text-charcoal-800 px-6 py-4 rounded-lg shadow-2xl z-50 flex items-center gap-3 transition-all duration-300 transform translate-x-0">
+            <div className="bg-red-100 p-2 rounded-full">
+              <svg className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+            </div>
+            <div>
+              <p className="font-bold text-sm">Location Not Found</p>
+              <p className="text-xs text-gray-500">We couldn't find properties in that area.</p>
+            </div>
+          </div>
+        )}
+        <div className="bg-white rounded-lg shadow-xl p-6 flex flex-wrap lg:flex-nowrap gap-4 items-end border border-gray-100 relative">
+          <div className="flex-[2] w-full min-w-[250px] relative" ref={locationInputRef}>
             <label className="block text-xs font-bold text-charcoal-600 uppercase mb-2">Location</label>
-            <select
-              className="w-full p-3 border border-gray-200 rounded text-charcoal-700 focus:outline-none focus:border-primary-500 font-medium"
-              value={searchParams.location}
-              onChange={(e) => setSearchParams({ ...searchParams, location: e.target.value })}
-            >
-              <option value="">Location</option>
-              {dynamicLocations.map(loc => <option key={loc} value={loc}>{loc}</option>)}
-            </select>
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+              <input
+                type="text"
+                placeholder="Search Location..."
+                className="w-full pl-10 pr-3 py-3 border border-gray-200 rounded text-charcoal-700 focus:outline-none focus:border-primary-500 font-medium bg-white"
+                value={searchParams.location}
+                onChange={(e) => {
+                  setSearchParams({ ...searchParams, location: e.target.value });
+                  setShowSuggestions(true);
+                }}
+                onFocus={() => setShowSuggestions(true)}
+                onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+              />
+              
+              {/* Custom Suggestions Dropdown */}
+              {showSuggestions && filteredLocations.length > 0 && (
+                <ul className="absolute left-0 right-0 top-full mt-1 bg-white border border-gray-100 rounded-lg shadow-xl max-h-60 overflow-y-auto z-[60] py-2">
+                  {filteredLocations.map(loc => (
+                    <li
+                      key={loc}
+                      className="px-4 py-2 hover:bg-gray-50 cursor-pointer text-charcoal-700 transition-colors flex items-center gap-2"
+                      onClick={() => {
+                        setSearchParams({ ...searchParams, location: loc });
+                        setShowSuggestions(false);
+                      }}
+                    >
+                      <MapPin size={16} className="text-gray-400" />
+                      {loc}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
           </div>
           <div className="flex-1 w-full min-w-[140px]">
             <label className="block text-xs font-bold text-charcoal-600 uppercase mb-2">Category</label>
