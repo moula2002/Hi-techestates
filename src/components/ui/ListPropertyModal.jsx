@@ -24,60 +24,34 @@ const ListPropertyModal = ({ isOpen, onClose }) => {
 
   if (!isOpen) return null;
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setStatus('loading');
-    try {
-      const dbEndpoint = import.meta.env.DEV 
-        ? 'http://localhost:5000/api/enquiries' 
-        : 'https://hi-techserver-zd1d.onrender.com/api/enquiries';
-        
-      const endpoint = (import.meta.env.DEV || selectedFile)
-        ? dbEndpoint 
-        : '/api/send-email';
-        
-      const requestOptions = {
-        method: 'POST',
-      };
-
-      if (selectedFile || import.meta.env.DEV) {
-        const formDataToSend = new FormData();
-        formDataToSend.append('name', formData.name || 'Not Provided');
-        formDataToSend.append('email', 'Not Provided');
-        formDataToSend.append('phone', formData.phone || 'Not Provided');
-        formDataToSend.append('interestedIn', `List Property - ${formData.intent} ${formData.type}`);
-        formDataToSend.append('message', `Location: ${formData.location}\nPrice/Rent: ${formData.price}`);
-        formDataToSend.append('formSource', 'List Property Modal');
-        if (selectedFile) formDataToSend.append('image', selectedFile);
-        requestOptions.body = formDataToSend;
-      } else {
-        requestOptions.headers = { 'Content-Type': 'application/json' };
-        requestOptions.body = JSON.stringify({
-          name: formData.name || 'Not Provided',
-          email: 'Not Provided',
-          phone: formData.phone || 'Not Provided',
-          interestedIn: `List Property - ${formData.intent} ${formData.type}`,
-          message: `Location: ${formData.location}\nPrice/Rent: ${formData.price}`,
-          formSource: 'List Property Modal'
-        });
-      }
-
-      const response = await fetch(endpoint, requestOptions);
-      if (response.ok) {
-        setStatus('success');
-        setTimeout(() => {
-          setStatus('idle');
-          setFormData({ name: '', phone: '', intent: 'Sell', type: 'Apartment', location: '', price: '' });
-          setSelectedFile(null);
-          setImagePreview(null);
-          onClose();
-        }, 2000);
-      } else {
-        setStatus('error');
-      }
-    } catch (error) {
-      setStatus('error');
+    
+    // Construct the message text
+    let message = `*List Property Request*\n\n*Name:* ${formData.name || 'Not Provided'}\n*Phone:* ${formData.phone || 'Not Provided'}\n*Intent:* ${formData.intent}\n*Property Type:* ${formData.type}\n*Location:* ${formData.location}\n*Price/Rent:* ${formData.price}`;
+    
+    if (selectedFile) {
+        message += `\n\n*(Note: I have a property image to share, which I will attach to this chat.)*`;
     }
+    
+    // Encode the message for the URL
+    const encodedMessage = encodeURIComponent(message);
+    
+    // Default WhatsApp number
+    const whatsappNumber = '919900000494';
+    
+    // Open WhatsApp URL
+    window.open(`https://wa.me/${whatsappNumber}?text=${encodedMessage}`, '_blank');
+    
+    // Briefly show success state then close
+    setStatus('success');
+    setTimeout(() => {
+      setStatus('idle');
+      setFormData({ name: '', phone: '', intent: 'Sell', type: 'Apartment', location: '', price: '' });
+      setSelectedFile(null);
+      setImagePreview(null);
+      onClose();
+    }, 1500);
   };
 
   return (

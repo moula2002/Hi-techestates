@@ -232,7 +232,8 @@ const Contact = () => {
                     <h4 className="font-bold text-white mb-2 text-lg tracking-wide">Direct Line</h4>
                     <p className="text-gray-400 text-[15px] leading-relaxed font-medium">
                       +91 99000 00494 <br />
-                      +91 8550000494
+                      +91 8550000494 <br />
+                      080-49899309
                     </p>
                   </div>
                 </div>

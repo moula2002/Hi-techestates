@@ -26,7 +26,8 @@ const Properties = () => {
     type: queryParams.get('type') || 'All Type',
     category: queryParams.get('category') || '',
     bhk: queryParams.get('bhk') || '',
-    budget: queryParams.get('budget') || '',
+    minBudget: queryParams.get('minBudget') || '',
+    maxBudget: queryParams.get('maxBudget') || '',
     status: 'All', // Sale/Rent
     furnishing: '',
   });
@@ -72,10 +73,28 @@ const Properties = () => {
     if (filter.status !== 'All' && p.status !== filter.status) return false;
     if (filter.furnishing && p.furnishing !== filter.furnishing) return false;
     
-    // Simplistic Budget Filter (for mockup purposes)
-    if (filter.budget && p.price) {
-      if (filter.budget === 'Below 50 Lacs' && (!p.price.includes('Lacs') || parseInt(p.price.replace(/\D/g, '')) > 50)) return false;
-      if (filter.budget.includes('Cr') && p.price.includes('Lacs')) return false;
+    // Simplistic Budget Filter
+    if (p.price) {
+      const pPriceStr = p.price.toLowerCase();
+      let pValue = 0;
+      const num = parseFloat(pPriceStr.replace(/[^\d.]/g, ''));
+      if (pPriceStr.includes('cr')) pValue = num * 100;
+      else if (pPriceStr.includes('lac') || pPriceStr.includes('lakh')) pValue = num;
+      else if (pPriceStr.includes('k')) pValue = num / 100;
+      else if (num > 1000) pValue = num / 100000;
+
+      const parseDropdown = (val) => {
+        if (!val) return null;
+        const v = parseFloat(val.replace(/[^\d.]/g, ''));
+        if (val.includes('Cr')) return v * 100;
+        return v; // Lacs
+      };
+
+      const minB = parseDropdown(filter.minBudget);
+      const maxB = parseDropdown(filter.maxBudget);
+
+      if (minB !== null && pValue > 0 && pValue < minB) return false;
+      if (maxB !== null && pValue > 0 && pValue > maxB) return false;
     }
 
     return true;
@@ -156,7 +175,7 @@ const Properties = () => {
                   Filters
                 </h3>
                 <button 
-                  onClick={() => setFilter({location: '', type: 'All Type', category: '', bhk: '', budget: '', status: 'All', furnishing: '', newLaunch: false})}
+                  onClick={() => setFilter({location: '', type: 'All Type', category: '', bhk: '', minBudget: '', maxBudget: '', status: 'All', furnishing: '', newLaunch: false})}
                   className="text-xs text-primary-700 font-bold hover:text-primary-900 transition-colors uppercase tracking-widest bg-primary-50 px-3 py-1.5 rounded-lg border border-primary-100"
                 >
                   Clear All
@@ -254,16 +273,24 @@ const Properties = () => {
                 {/* Budget */}
                 <div className="pt-2">
                   <label className="block text-[11px] font-bold text-charcoal-500 uppercase tracking-widest mb-2 ml-1">Budget</label>
-                  <select 
-                    className="w-full p-4 bg-white border border-gray-200 rounded-xl text-sm text-charcoal-700 focus:outline-none focus:border-primary-400 focus:ring-1 focus:ring-primary-400 transition-all appearance-none cursor-pointer shadow-sm"
-                    value={filter.budget}
-                    onChange={(e) => setFilter({...filter, budget: e.target.value})}
-                  >
-                    <option value="" className="bg-white text-charcoal-700">Budget</option>
-                    {(filter.status === 'For Rent' || filter.status === 'For Lease' ? rentalBudgetRanges : budgetRanges).map(budget => (
-                      <option key={budget} value={budget} className="bg-white text-charcoal-700">{budget}</option>
-                    ))}
-                  </select>
+                  <div className="flex gap-2">
+                    <select 
+                      className="w-full p-4 bg-white border border-gray-200 rounded-xl text-sm text-charcoal-700 focus:outline-none focus:border-primary-400 focus:ring-1 focus:ring-primary-400 transition-all appearance-none cursor-pointer shadow-sm"
+                      value={filter.minBudget}
+                      onChange={(e) => setFilter({...filter, minBudget: e.target.value})}
+                    >
+                      <option value="" className="bg-white text-charcoal-700">No min</option>
+                      {['5 Lacs', '10 Lacs', '15 Lacs', '20 Lacs', '25 Lacs', '30 Lacs', '40 Lacs', '50 Lacs', '60 Lacs', '75 Lacs', '90 Lacs', '1 Cr', '1.5 Cr', '2 Cr', '3 Cr', '5 Cr', '10 Cr'].map(val => <option key={val} value={val} className="bg-white text-charcoal-700">{val}</option>)}
+                    </select>
+                    <select 
+                      className="w-full p-4 bg-white border border-gray-200 rounded-xl text-sm text-charcoal-700 focus:outline-none focus:border-primary-400 focus:ring-1 focus:ring-primary-400 transition-all appearance-none cursor-pointer shadow-sm"
+                      value={filter.maxBudget}
+                      onChange={(e) => setFilter({...filter, maxBudget: e.target.value})}
+                    >
+                      <option value="" className="bg-white text-charcoal-700">No max</option>
+                      {['5 Lacs', '10 Lacs', '15 Lacs', '20 Lacs', '25 Lacs', '30 Lacs', '40 Lacs', '50 Lacs', '60 Lacs', '75 Lacs', '90 Lacs', '1 Cr', '1.5 Cr', '2 Cr', '3 Cr', '5 Cr', '10 Cr'].map(val => <option key={val} value={val} className="bg-white text-charcoal-700">{val}</option>)}
+                    </select>
+                  </div>
                 </div>
 
                 {/* Furnishing */}

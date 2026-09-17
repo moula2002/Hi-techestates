@@ -74,7 +74,8 @@ const Home = () => {
     category: '',
     type: '',
     bhk: '',
-    budget: '',
+    minBudget: '',
+    maxBudget: '',
     newLaunch: false
   });
 
@@ -147,7 +148,8 @@ const Home = () => {
     if (searchParams.category) query.set('category', searchParams.category);
     if (searchParams.type) query.set('type', searchParams.type);
     if (searchParams.bhk) query.set('bhk', searchParams.bhk);
-    if (searchParams.budget) query.set('budget', searchParams.budget);
+    if (searchParams.minBudget) query.set('minBudget', searchParams.minBudget);
+    if (searchParams.maxBudget) query.set('maxBudget', searchParams.maxBudget);
     if (searchParams.newLaunch) query.set('newLaunch', 'true');
 
     navigate(`/properties?${query.toString()}`);
@@ -344,16 +346,26 @@ const Home = () => {
               {bhkOptions.map(bhk => <option key={bhk} value={bhk}>{bhk}</option>)}
             </select>
           </div>
-          <div className="flex-1 w-full min-w-[140px]">
-            <label className="block text-xs font-bold text-charcoal-600 uppercase mb-2">Budget</label>
-            <select
-              className="w-full p-3 border border-gray-200 rounded text-charcoal-700 focus:outline-none focus:border-primary-500 font-medium"
-              value={searchParams.budget}
-              onChange={(e) => setSearchParams({ ...searchParams, budget: e.target.value })}
-            >
-              <option value="">Budget</option>
-              {budgetRanges.map(budget => <option key={budget} value={budget}>{budget}</option>)}
-            </select>
+          <div className="flex-1 w-full min-w-[160px]">
+            <label className="block text-xs font-bold text-charcoal-600 uppercase mb-2 text-center">Budget</label>
+            <div className="flex gap-2">
+              <select
+                className="w-full py-3 px-1 border border-gray-200 rounded text-charcoal-700 focus:outline-none focus:border-primary-500 font-medium text-sm"
+                value={searchParams.minBudget}
+                onChange={(e) => setSearchParams({ ...searchParams, minBudget: e.target.value })}
+              >
+                <option value="">No Min</option>
+                {['5 Lacs', '10 Lacs', '15 Lacs', '20 Lacs', '25 Lacs', '30 Lacs', '40 Lacs', '50 Lacs', '60 Lacs', '75 Lacs', '90 Lacs', '1 Cr', '1.5 Cr', '2 Cr', '3 Cr', '5 Cr', '10 Cr'].map(val => <option key={val} value={val}>{val}</option>)}
+              </select>
+              <select
+                className="w-full py-3 px-1 border border-gray-200 rounded text-charcoal-700 focus:outline-none focus:border-primary-500 font-medium text-sm"
+                value={searchParams.maxBudget}
+                onChange={(e) => setSearchParams({ ...searchParams, maxBudget: e.target.value })}
+              >
+                <option value="">No Max</option>
+                {['5 Lacs', '10 Lacs', '15 Lacs', '20 Lacs', '25 Lacs', '30 Lacs', '40 Lacs', '50 Lacs', '60 Lacs', '75 Lacs', '90 Lacs', '1 Cr', '1.5 Cr', '2 Cr', '3 Cr', '5 Cr', '10 Cr'].map(val => <option key={val} value={val}>{val}</option>)}
+              </select>
+            </div>
           </div>
           <div className="flex items-center h-[50px] min-w-[120px] mb-1">
             <label className="flex items-center gap-2 cursor-pointer">

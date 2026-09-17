@@ -67,7 +67,7 @@ const Footer = () => {
               We build more than buildings, we build your dreams. South Bangalore's most trusted real estate consultancy.
             </p>
             <div className="flex space-x-4">
-              <a href="#" aria-label="Facebook" className="w-9 h-9 rounded-full border border-gray-400 flex items-center justify-center text-gray-300 hover:text-[#1877F2] hover:border-[#1877F2] hover:bg-white transition-colors">
+              <a href="https://www.facebook.com/profile.php?id=100065197703865" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="w-9 h-9 rounded-full border border-gray-400 flex items-center justify-center text-gray-300 hover:text-[#1877F2] hover:border-[#1877F2] hover:bg-white transition-colors">
                 <FacebookIcon />
               </a>
               <a href="#" aria-label="Twitter" className="w-9 h-9 rounded-full border border-gray-400 flex items-center justify-center text-gray-300 hover:text-[#1DA1F2] hover:border-[#1DA1F2] hover:bg-white transition-colors">
