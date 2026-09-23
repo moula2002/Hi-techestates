@@ -211,16 +211,16 @@ const Contact = () => {
 
               <div className="space-y-10">
                 <div className="flex items-start gap-6 group">
-                  <div className="mt-1 bg-white/5 p-4 rounded-2xl text-primary-400 group-hover:bg-primary-500 group-hover:text-white transition-colors duration-300 border border-white/10 shadow-[0_4px_20px_rgba(0,0,0,0.2)]">
+                  <a href="https://www.google.com/maps?q=12.889275550842285,77.6019287109375&z=17&hl=en" target="_blank" rel="noopener noreferrer" className="mt-1 bg-white/5 p-4 rounded-2xl text-primary-400 group-hover:bg-primary-500 group-hover:text-white transition-colors duration-300 border border-white/10 shadow-[0_4px_20px_rgba(0,0,0,0.2)] block">
                     <MapPin size={24} />
-                  </div>
+                  </a>
                   <div>
                     <h4 className="font-bold text-white mb-2 text-lg tracking-wide">Corporate Office</h4>
-                    <p className="text-gray-400 text-[15px] leading-relaxed font-medium">
+                    <a href="https://www.google.com/maps?q=12.889275550842285,77.6019287109375&z=17&hl=en" target="_blank" rel="noopener noreferrer" className="block text-gray-400 hover:text-white transition-colors text-[15px] leading-relaxed font-medium">
                       # 1, 1st Floor, 4th Main & Cross,<br />
                       Arekere, B.G Road,<br />
                       Bangalore - 560076
-                    </p>
+                    </a>
                   </div>
                 </div>
 
@@ -292,7 +292,7 @@ const Contact = () => {
             <div className="absolute inset-0 bg-charcoal-900/5 group-hover:opacity-0 transition-opacity duration-700 pointer-events-none z-10"></div>
 
             <iframe
-              src="https://maps.google.com/maps?q=Arekere,%20B.G%20Road,%20Bangalore&t=&z=15&ie=UTF8&iwloc=&output=embed"
+              src="https://maps.google.com/maps?q=12.889275550842285,77.6019287109375&z=17&output=embed"
               width="100%"
               height="100%"
               style={{ border: 0 }}

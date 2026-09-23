@@ -112,7 +112,7 @@ const Footer = () => {
             <ul className="space-y-4">
               <li className="flex items-start gap-3">
                 <MapPin className="text-gray-300 shrink-0 mt-1" size={18} />
-                <span className="text-sm text-gray-300"># 1, 1st Floor, 4th Main & Cross<br />Arekere, B.G Road,<br />Bangalore - 560076</span>
+                <a href="https://www.google.com/maps?q=12.889275550842285,77.6019287109375&z=17&hl=en" target="_blank" rel="noopener noreferrer" className="text-sm text-gray-300 hover:text-white transition-colors"># 1, 1st Floor, 4th Main & Cross<br />Arekere, B.G Road,<br />Bangalore - 560076</a>
               </li>
               <li className="flex items-start gap-3">
                 <Phone className="text-gray-300 shrink-0 mt-1" size={18} />
